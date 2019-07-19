@@ -14,18 +14,29 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-package main
+package main // import "github.com/percona/pmm-update/pmm-update"
 
 import (
 	"flag"
 	"log"
+	"os"
+	"os/exec"
 
 	"github.com/percona/pmm/version"
 )
+
+func run(name string, args ...string) error {
+	cmd := exec.Command(name, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
 
 func main() {
 	log.SetFlags(0)
 	log.Print(version.FullInfo())
 	log.SetPrefix("stdlog: ")
 	flag.Parse()
+
+	run("ls")
 }

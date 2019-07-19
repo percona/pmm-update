@@ -22,9 +22,6 @@ before_cache:
   # - go clean -cache
 
 env:
-  global:
-    - GOPATH=/home/travis/gopath/src/github.com/percona/pmm-update
-
   matrix:
     - PMM_SERVER_IMAGE=perconalab/pmm-server:dev-latest
 
