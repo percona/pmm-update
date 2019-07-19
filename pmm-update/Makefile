@@ -11,12 +11,12 @@ PMM_RELEASE_FULLCOMMIT ?= $(shell git rev-parse HEAD)
 PMM_RELEASE_BRANCH ?= $(shell git describe --always --contains --all)
 
 LD_FLAGS = -ldflags " \
-			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.ProjectName=pmm-update' \
-			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.Version=$(PMM_RELEASE_VERSION)' \
-			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.PMMVersion=$(PMM_RELEASE_VERSION)' \
-			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.Timestamp=$(PMM_RELEASE_TIMESTAMP)' \
-			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.FullCommit=$(PMM_RELEASE_FULLCOMMIT)' \
-			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.Branch=$(PMM_RELEASE_BRANCH)' \
+			-X 'github.com/percona/pmm-update/pmm-update/vendor/github.com/percona/pmm/version.ProjectName=pmm-update' \
+			-X 'github.com/percona/pmm-update/pmm-update/vendor/github.com/percona/pmm/version.Version=$(PMM_RELEASE_VERSION)' \
+			-X 'github.com/percona/pmm-update/pmm-update/vendor/github.com/percona/pmm/version.PMMVersion=$(PMM_RELEASE_VERSION)' \
+			-X 'github.com/percona/pmm-update/pmm-update/vendor/github.com/percona/pmm/version.Timestamp=$(PMM_RELEASE_TIMESTAMP)' \
+			-X 'github.com/percona/pmm-update/pmm-update/vendor/github.com/percona/pmm/version.FullCommit=$(PMM_RELEASE_FULLCOMMIT)' \
+			-X 'github.com/percona/pmm-update/pmm-update/vendor/github.com/percona/pmm/version.Branch=$(PMM_RELEASE_BRANCH)' \
 			"
 
 release:                        ## Build pmm-update release binary.

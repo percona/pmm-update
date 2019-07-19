@@ -2,10 +2,9 @@
 {
 	"dockerComposeFile": "../docker-compose.yml",
 	"service": "pmm-server",
-	"shutdownAction": "stopCompose",
 
 	// "/" burns CPU by file indexing
-	"workspaceFolder": "/pmm-update",
+	"workspaceFolder": "/root/go/src/github.com/percona/pmm-update",
 
 	"name": "pmm-update",
 	"extensions": [

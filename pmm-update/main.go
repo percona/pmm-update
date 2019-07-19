@@ -17,26 +17,78 @@
 package main // import "github.com/percona/pmm-update/pmm-update"
 
 import (
+	"bytes"
 	"flag"
+	"io"
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/percona/pmm/version"
+	"github.com/pkg/errors"
 )
 
-func run(name string, args ...string) error {
-	cmd := exec.Command(name, args...)
-	cmd.Stdout = os.Stdout
+func run(cmdLine string) ([]string, error) {
+	args := strings.Fields(cmdLine)
+	cmd := exec.Command(args[0], args[1:]...)
+	setSysProcAttr(cmd)
+	var stdout bytes.Buffer
+	cmd.Stdout = io.MultiWriter(os.Stdout, &stdout)
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	if err := cmd.Run(); err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return strings.Split(stdout.String(), "\n"), nil
+}
+
+func checkLatestVersions() (installed, remote version.Info, err error) {
+	var stdout []string
+	if stdout, err = run("yum list --showduplicates pmm-update"); err != nil {
+		return
+	}
+
+	for _, line := range stdout {
+		line = strings.TrimSpace(line)
+		if !strings.HasPrefix(line, "pmm-update.noarch") {
+			continue
+		}
+
+		parts := strings.Fields(line)
+		if len(parts) != 3 {
+			continue
+		}
+		switch {
+		case parts[2] == "@local":
+			installed, err = version.Parse(parts[1])
+			if err != nil {
+				err = errors.WithStack(err)
+				return
+			}
+		case strings.HasPrefix(parts[2], "pmm2-"):
+			r, err := version.Parse(parts[1])
+			if err != nil {
+				continue
+			}
+			if remote.Less(&r) {
+				remote = r
+			}
+		}
+	}
+
+	return
 }
 
 func main() {
 	log.SetFlags(0)
 	log.Print(version.FullInfo())
-	log.SetPrefix("stdlog: ")
+	log.SetPrefix("pmm-update: ")
 	flag.Parse()
 
-	run("ls")
+	installed, remote, err := checkLatestVersions()
+	if err != nil {
+		log.Fatalf("%+v", err)
+	}
+	log.Print(installed)
+	log.Print(remote)
 }
