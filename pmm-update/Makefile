@@ -66,7 +66,7 @@ run-race-cover: install-race    ## Run pmm-update with race detector and collect
 	go test -coverpkg="github.com/percona/pmm-update/..." \
 			-tags maincover \
 			$(LD_FLAGS) \
-			-race -c -o pmm-update.test ./pmm-update
+			-race -c -o pmm-update.test
 	./pmm-update.test -test.coverprofile=cover.out -test.run=TestMainCover $(RUN_FLAGS)
 
 _run:

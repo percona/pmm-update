@@ -26,7 +26,6 @@ env:
     - PMM_SERVER_IMAGE=perconalab/pmm-server:dev-latest
 
 before_install:
-  - cd src/github.com/percona/pmm-update
   - pwd
   - go env
 

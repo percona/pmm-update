@@ -3,7 +3,7 @@
 set -o errexit
 set -o xtrace
 
-yum install -y golang
+yum install -y golang mc tmux
 go env
 
 go get -u -v golang.org/x/tools/cmd/gopls
