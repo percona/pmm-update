@@ -6,7 +6,7 @@ services:
 
 go:
   - 1.12.x
-  - master
+  # TODO - master
 
 matrix:
   allow_failures:
@@ -26,6 +26,10 @@ env:
     - PMM_SERVER_IMAGE=perconalab/pmm-server:dev-latest
 
 before_install:
+  - cd src/github.com/percona/pmm-update
+  - pwd
+  - go env
+
   - docker-compose up -d
 
 install:
@@ -33,8 +37,11 @@ install:
   # - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   # - dep check
 
+  - pwd
+
 before_script:
-  - cd src/github.com/percona/pmm-update
+  - pwd
+
   # # ensure that generated files are not changed
   # - make init
   # - make gen
@@ -44,6 +51,7 @@ before_script:
 
 script:
   # for main_test.go
+  - pwd
   - make install
 
   # - make test-cover
