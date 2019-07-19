@@ -16,5 +16,16 @@
 
 package main
 
+import (
+	"flag"
+	"log"
+
+	"github.com/percona/pmm/version"
+)
+
 func main() {
+	log.SetFlags(0)
+	log.Print(version.FullInfo())
+	log.SetPrefix("stdlog: ")
+	flag.Parse()
 }

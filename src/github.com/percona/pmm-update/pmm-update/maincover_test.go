@@ -14,23 +14,14 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+// +build maincover
+
 package main
 
 import (
-	"os/exec"
-	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
-func TestPackages(t *testing.T) {
-	cmd := exec.Command("pmm-update", "-h")
-	b, err := cmd.CombinedOutput()
-	require.EqualError(t, err, "exit status 2")
-
-	out := string(b)
-	assert.False(t, strings.Contains(out, "-httptest.serve"), `pmm-update should not import package "net/http/httptest"`)
-	assert.False(t, strings.Contains(out, "-test.run"), `pmm-update should not import package "testing"`)
+func TestMainCover(*testing.T) {
+	main()
 }

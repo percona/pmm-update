@@ -22,6 +22,9 @@ before_cache:
   # - go clean -cache
 
 env:
+  global:
+    - GOPATH=/home/travis/gopath/src/github.com/percona/pmm-update
+
   matrix:
     - PMM_SERVER_IMAGE=perconalab/pmm-server:dev-latest
 
@@ -33,32 +36,29 @@ before_install:
   - docker-compose up -d
 
 install:
-  # # ensure that vendor/ is in sync with code and Gopkg.toml/lock
-  # - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   # - dep check
+  - dep ensure -v
 
   - pwd
 
 before_script:
-  - pwd
-
-  # # ensure that generated files are not changed
-  # - make init
+  - make init
   # - make gen
-  # - make format
+  - make format
   # - git status
   # - git diff --exit-code
 
 script:
   # for main_test.go
-  - pwd
   - make install
 
-  # - make test-cover
-  # - make test-crosscover
-  # - make test-race
+  - make test-cover
+  - make test-race
 
-  # - make check
+  - make run-race-cover
+
+  - make check
 
 after_success:
   # - curl https://codecov.io/bash > codecov
