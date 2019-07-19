@@ -1,0 +1,32 @@
+help:                           ## Display this help message.
+	@echo "Please use \`make <target>\` where <target> is one of:"
+	@grep '^[a-zA-Z]' $(MAKEFILE_LIST) | \
+		awk -F ':.*?## ' 'NF==2 {printf "  %-26s%s\n", $$1, $$2}'
+
+# `cut` is used to remove first `v` from `git describe` output
+PMM_RELEASE_PATH ?= bin
+PMM_RELEASE_VERSION ?= $(shell git describe --always --dirty | cut -b2-)
+PMM_RELEASE_TIMESTAMP ?= $(shell date '+%s')
+PMM_RELEASE_FULLCOMMIT ?= $(shell git rev-parse HEAD)
+PMM_RELEASE_BRANCH ?= $(shell git describe --always --contains --all)
+
+LD_FLAGS = -ldflags " \
+			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.ProjectName=pmm-update' \
+			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.Version=$(PMM_RELEASE_VERSION)' \
+			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.PMMVersion=$(PMM_RELEASE_VERSION)' \
+			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.Timestamp=$(PMM_RELEASE_TIMESTAMP)' \
+			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.FullCommit=$(PMM_RELEASE_FULLCOMMIT)' \
+			-X 'github.com/percona/pmm-update/vendor/github.com/percona/pmm/version.Branch=$(PMM_RELEASE_BRANCH)' \
+			"
+
+release:                        ## Build pmm-update release binary.
+	env CGO_ENABLED=0 go build -v $(LD_FLAGS) -o $(PMM_RELEASE_PATH)/pmm-update
+
+install:                        ## Install pmm-update binary.
+	go install $(LD_FLAGS) ./...
+
+env-up:                         ## Start development environment.
+	docker-compose up --force-recreate --abort-on-container-exit --renew-anon-volumes --remove-orphans
+
+env-down:                       ## Stop development environment.
+	docker-compose down --volumes --remove-orphans
