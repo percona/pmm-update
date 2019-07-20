@@ -1,7 +1,7 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
 	"dockerComposeFile": "../docker-compose.yml",
-	"service": "pmm-server",
+	"service": "pmm-update-server",
 
 	// "/" burns CPU by file indexing
 	"workspaceFolder": "/root/go/src/github.com/percona/pmm-update",
@@ -13,7 +13,8 @@
 		"bungcip.better-toml",
 	],
 	"settings": {
-		"go.useLanguageServer": true
+		"go.useLanguageServer": true,
+		"go.inferGopath": true,
 	},
 	"postCreateCommand": ".devcontainer/install-dev-tools.sh"
 }

@@ -17,6 +17,7 @@
 package main // import "github.com/percona/pmm-update/pmm-update"
 
 import (
+	"context"
 	"flag"
 	"log"
 
@@ -31,10 +32,9 @@ func main() {
 	log.SetPrefix("pmm-update: ")
 	flag.Parse()
 
-	installed, remote, err := yum.CheckLatestVersions()
+	versions, err := yum.CheckVersions(context.Background())
 	if err != nil {
 		log.Fatalf("%+v", err)
 	}
-	log.Print(installed)
-	log.Print(remote)
+	log.Printf("%+v", versions)
 }

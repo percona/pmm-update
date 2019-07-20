@@ -18,6 +18,7 @@ package yum
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"os"
 	"os/exec"
@@ -27,9 +28,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-func run(cmdLine string) ([]string, error) {
+func run(ctx context.Context, cmdLine string) ([]string, error) {
+	// TODO graceful cancelation with ctx
+
 	args := strings.Fields(cmdLine)
-	cmd := exec.Command(args[0], args[1:]...)
+	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	setSysProcAttr(cmd)
 	var stdout bytes.Buffer
 	cmd.Stdout = io.MultiWriter(os.Stdout, &stdout)
@@ -40,37 +43,30 @@ func run(cmdLine string) ([]string, error) {
 	return strings.Split(stdout.String(), "\n"), nil
 }
 
-func CheckLatestVersions() (installed, remote version.Info, err error) {
-	var stdout []string
-	if stdout, err = run("yum list --showduplicates pmm-update"); err != nil {
-		return
+func CheckVersions(ctx context.Context) (map[string]version.Info, error) {
+	stdout, err := run(ctx, "yum list --showduplicates pmm-update")
+	if err != nil {
+		return nil, err
 	}
 
+	res := make(map[string]version.Info)
 	for _, line := range stdout {
-		line = strings.TrimSpace(line)
-		if !strings.HasPrefix(line, "pmm-update.noarch") {
-			continue
-		}
-
-		parts := strings.Fields(line)
+		parts := strings.Fields(strings.TrimSpace(line))
 		if len(parts) != 3 {
 			continue
 		}
-		switch {
-		case parts[2] == "@local":
-			installed, err = version.Parse(parts[1])
-			if err != nil {
-				err = errors.WithStack(err)
-				return
-			}
-		case strings.HasPrefix(parts[2], "pmm2-"):
-			r, err := version.Parse(parts[1])
+		pack, ver, repo := parts[0], parts[1], parts[2]
+
+		if pack != "pmm-update.noarch" {
+			continue
+		}
+		if repo == "@local" || strings.HasPrefix(repo, "pmm2-") {
+			v, err := version.Parse(ver)
 			if err != nil {
 				continue
 			}
-			remote = r
+			res[repo] = v
 		}
 	}
-
-	return
+	return res, nil
 }

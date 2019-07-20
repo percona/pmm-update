@@ -30,6 +30,7 @@ before_install:
   - go env
 
   - docker-compose up -d
+  - docker exec pmm-update-server .devcontainer/install-dev-tools.sh
 
 install:
   - cd pmm-update
@@ -45,13 +46,12 @@ before_script:
   # - git diff --exit-code
 
 script:
-  # for main_test.go
-  - make install
+  - docker exec pmm-update-server make install test
 
-  - make test-cover
-  - make test-race
+  # - make test-cover
+  # - make test-race
 
-  - make run-race-cover
+  # - make run-race-cover
 
   - make check
 
