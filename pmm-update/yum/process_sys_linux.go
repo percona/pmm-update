@@ -14,14 +14,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-// +build !linux
-
-package main
+package yum
 
 import (
 	"os/exec"
+
+	"golang.org/x/sys/unix"
 )
 
 func setSysProcAttr(cmd *exec.Cmd) {
-	// nothing, see process_sys_linux.go
+	cmd.SysProcAttr = &unix.SysProcAttr{
+		Pdeathsig: unix.SIGKILL,
+	}
 }

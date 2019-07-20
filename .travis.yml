@@ -32,11 +32,10 @@ before_install:
   - docker-compose up -d
 
 install:
+  - cd pmm-update
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   # - dep check
   - dep ensure -v
-
-  - pwd
 
 before_script:
   - make init

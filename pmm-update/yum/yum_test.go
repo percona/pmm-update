@@ -14,16 +14,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-package main
+package yum
 
 import (
-	"os/exec"
+	"testing"
 
-	"golang.org/x/sys/unix"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-func setSysProcAttr(cmd *exec.Cmd) {
-	cmd.SysProcAttr = &unix.SysProcAttr{
-		Pdeathsig: unix.SIGKILL,
-	}
+func TestCheckLatestVersions(t *testing.T) {
+	installed, remote, err := CheckLatestVersions()
+	require.NoError(t, err)
+	assert.NotEmpty(t, installed)
+	assert.NotEmpty(t, remote)
 }

@@ -36,7 +36,7 @@ install:                        ## Install pmm-update binary.
 install-race:                   ## Install pmm-update binary with race detector.
 	go install $(LD_FLAGS) -race ./...
 
-TEST_FLAGS ?= -timeout=20s
+TEST_FLAGS ?= -timeout=30s
 
 test:                           ## Run tests.
 	go test $(TEST_FLAGS) ./...

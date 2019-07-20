@@ -8,7 +8,9 @@
 
 	"name": "pmm-update",
 	"extensions": [
-		"ms-vscode.go"
+		"ms-vscode.go",
+		"laurenttreguier.rpm-spec",
+		"bungcip.better-toml",
 	],
 	"settings": {
 		"go.useLanguageServer": true

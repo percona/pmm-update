@@ -14,27 +14,14 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-package main // import "github.com/percona/pmm-update/pmm-update"
+// +build !linux
+
+package yum
 
 import (
-	"flag"
-	"log"
-
-	"github.com/percona/pmm/version"
-
-	"github.com/percona/pmm-update/pmm-update/yum"
+	"os/exec"
 )
 
-func main() {
-	log.SetFlags(0)
-	log.Print(version.FullInfo())
-	log.SetPrefix("pmm-update: ")
-	flag.Parse()
-
-	installed, remote, err := yum.CheckLatestVersions()
-	if err != nil {
-		log.Fatalf("%+v", err)
-	}
-	log.Print(installed)
-	log.Print(remote)
+func setSysProcAttr(cmd *exec.Cmd) {
+	// nothing, see process_sys_linux.go
 }
