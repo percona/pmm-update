@@ -48,7 +48,7 @@ test-cover:                     ## Run tests and collect per-package coverage in
 	go test $(TEST_FLAGS) -coverprofile=cover.out -covermode=count ./...
 
 check:                          ## Run required checkers and linters.
-	go run .github/check-license.go
+	go run ../.github/check-license.go
 
 FILES = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 

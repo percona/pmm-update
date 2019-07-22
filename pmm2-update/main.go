@@ -32,9 +32,10 @@ func main() {
 	log.SetPrefix("pmm-update: ")
 	flag.Parse()
 
-	versions, err := yum.CheckVersions(context.Background())
+	installed, remote, err := yum.CheckVersions(context.Background(), "pmm-update")
 	if err != nil {
 		log.Fatalf("%+v", err)
 	}
-	log.Printf("%+v", versions)
+	log.Printf("%s", installed)
+	log.Printf("%+v", remote)
 }
