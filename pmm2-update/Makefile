@@ -67,7 +67,7 @@ run-race-cover: install-race    ## Run pmm2-update with race detector and collec
 			-tags maincover \
 			$(LD_FLAGS) \
 			-race -c -o pmm2-update.test
-	./pmm2-update.test -test.coverprofile=cover.out -test.run=TestMainCover $(RUN_FLAGS)
+	./pmm2-update.test -test.coverprofile=runcover.out -test.run=TestMainCover $(RUN_FLAGS)
 
 _run:
 	pmm2-update $(RUN_FLAGS)

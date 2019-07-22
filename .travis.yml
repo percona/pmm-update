@@ -44,20 +44,19 @@ before_script:
   - git diff --exit-code
 
 script:
-  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update/pmm2-update install test
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update/pmm2-update install
 
-  # - make test-cover
-  # - make test-race
-
-  # - make run-race-cover
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update/pmm2-update test-cover
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update/pmm2-update test-race
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update/pmm2-update run-race-cover
 
   - make check
 
 after_success:
-  # - curl https://codecov.io/bash > codecov
-  # - chmod +x codecov
-  # - ./codecov -f cover.out -F cover -X fix
-  # - ./codecov -f crosscover.out -F crosscover -X fix
+  - curl https://codecov.io/bash > codecov
+  - chmod +x codecov
+  - ./codecov -f cover.out -F cover -X fix
+  - ./codecov -f runcover.out -F runcover -X fix
 
 notifications:
   email: false
