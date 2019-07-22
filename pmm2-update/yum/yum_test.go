@@ -18,6 +18,7 @@ package yum
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -28,5 +29,10 @@ func TestCheckVersions(t *testing.T) {
 	installed, remote, err := CheckVersions(context.Background(), "pmm-update")
 	require.NoError(t, err)
 	assert.NotEmpty(t, installed)
-	assert.NotEmpty(t, remote)
+	require.Len(t, remote, 1)
+	labsRemote := remote["pmm2-laboratory"]
+	require.NotEmpty(t, labsRemote)
+
+	devLatest := os.Getenv("PMM_SERVER_IMAGE") == "perconalab/pmm-server:dev-latest"
+	assert.Equal(t, devLatest, installed == labsRemote, "installed: %q\nremote: %s", installed, labsRemote)
 }

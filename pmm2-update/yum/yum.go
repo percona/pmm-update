@@ -45,7 +45,7 @@ func run(ctx context.Context, cmdLine string) ([]string, error) {
 
 func CheckVersions(ctx context.Context, name string) (installed string, remote map[string]string, err error) {
 	var stdout []string
-	if stdout, err = run(ctx, "yum list all "+name); err != nil {
+	if stdout, err = run(ctx, "yum --showduplicates list all "+name); err != nil {
 		return
 	}
 
