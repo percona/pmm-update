@@ -27,11 +27,8 @@ env:
     - PMM_SERVER_IMAGE=perconalab/pmm-server:dev-latest
 
 before_install:
-  - pwd
-  - go env
-
   - docker-compose up -d
-  - docker exec pmm-update-server .devcontainer/install-dev-tools.sh
+  - docker exec pmm-update-server /root/go/src/github.com/percona/pmm-update/.devcontainer/install-dev-tools.sh
 
 install:
   - cd pmm-update
