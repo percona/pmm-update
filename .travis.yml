@@ -31,20 +31,20 @@ before_install:
   - docker exec pmm-update-server /root/go/src/github.com/percona/pmm-update/.devcontainer/install-dev-tools.sh
 
 install:
-  - cd pmm-update
+  - cd pmm2-update
+
+  # ensure that vendor/ is in sync with code and Gopkg.toml/lock
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  # - dep check
-  - dep ensure -v
+  - dep check
 
 before_script:
   - make init
-  # - make gen
   - make format
-  # - git status
-  # - git diff --exit-code
+  - git status
+  - git diff --exit-code
 
 script:
-  - docker exec pmm-update-server make install test
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update/pmm2-update install test
 
   # - make test-cover
   # - make test-race
