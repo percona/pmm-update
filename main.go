@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-package main // import "github.com/percona/pmm-update/pmm2-update"
+package main // import "github.com/percona/pmm-update"
 
 import (
 	"context"
@@ -23,7 +23,7 @@ import (
 
 	"github.com/percona/pmm/version"
 
-	"github.com/percona/pmm-update/pmm2-update/yum"
+	"github.com/percona/pmm-update/yum"
 )
 
 func main() {
