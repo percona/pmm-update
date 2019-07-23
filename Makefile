@@ -30,10 +30,10 @@ init:                           ## Installs tools to $GOPATH/bin (which is expec
 	go test -i ./...
 	go test -race -i ./...
 
-install:                        ## Install pmm2-update binary.
+install:                        ## Install pmm-update binary.
 	go install $(LD_FLAGS) ./...
 
-install-race:                   ## Install pmm2-update binary with race detector.
+install-race:                   ## Install pmm-update binary with race detector.
 	go install $(LD_FLAGS) -race ./...
 
 TEST_FLAGS ?= -timeout=30s -count=1
@@ -58,19 +58,19 @@ format:                         ## Format source code.
 
 RUN_FLAGS =
 
-run: install _run               ## Run pmm2-update.
+run: install _run               ## Run pmm-update.
 
-run-race: install-race _run     ## Run pmm2-update with race detector.
+run-race: install-race _run     ## Run pmm-update with race detector.
 
-run-race-cover: install-race    ## Run pmm2-update with race detector and collect coverage information.
+run-race-cover: install-race    ## Run pmm-update with race detector and collect coverage information.
 	go test -coverpkg="github.com/percona/pmm-update/..." \
 			-tags maincover \
 			$(LD_FLAGS) \
-			-race -c -o pmm2-update.test
-	./pmm2-update.test -test.coverprofile=runcover.out -test.run=TestMainCover $(RUN_FLAGS)
+			-race -c -o pmm-update.test
+	./pmm-update.test -test.coverprofile=runcover.out -test.run=TestMainCover $(RUN_FLAGS)
 
 _run:
-	pmm2-update $(RUN_FLAGS)
+	pmm-update $(RUN_FLAGS)
 
 env-up:                         ## Start development environment.
 	docker-compose up --force-recreate --abort-on-container-exit --renew-anon-volumes --remove-orphans

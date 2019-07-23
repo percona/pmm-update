@@ -26,9 +26,9 @@ import (
 )
 
 func TestPackages(t *testing.T) {
-	cmd := exec.Command("pmm2-update", "-h")
+	cmd := exec.Command("pmm-update", "-h")
 	b, err := cmd.CombinedOutput()
-	require.EqualError(t, err, "exit status 2")
+	require.EqualError(t, err, "exit status 2", "%s", b)
 
 	out := string(b)
 	assert.False(t, strings.Contains(out, "-httptest.serve"), `pmm-update should not import package "net/http/httptest"`)
