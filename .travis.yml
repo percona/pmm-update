@@ -57,4 +57,8 @@ after_success:
   - ./codecov -f runcover.out -F runcover -X fix
 
 notifications:
-  email: false
+  slack:
+    on_success: change
+    on_failure: always
+    rooms:
+      secure: wli+4QuiaV5Z75W2zXdy6OWmXgSCYJb49cOGy1Nqez6qWMxPar7f0uugd6t6CvABlrEeIbKwnE/J4MsmbASkTMS9EpMRR8/UslvnJeuOQ8lml7+9EUOGO5EskohnC5xKQyX+ujqfaRrb1Fv22xjCNLASvjLYSXMuyr2jn6ddd3/+YaJZ3Osx/EmXoTgvr+FiUmiqvNPUcGjIg4vhbFwzYwQA+k6KU+zPVYYlF+OOsVLDVy70gyuHnkfJ7YbbnVtBg++OwkBsppC5vwBJFAeX1iHg5m93bD6n9wTea/68bPNKg/1zA7ymqqNDZEmWQX15P74By3yIpY3FD38CywHorBWUWECTf+34nnl97tL23M5WuMERqtWsb5/oqoXwy9uObTQr3m9B0UzoClCoFjlHRXjZDom14k4yb2KeK9VWJErqv3ZdjWEVMQx0QtecsJE1829w6xYSdGHZ36g8HWaY/Lz6Or2ZgFn5l7+wkYsY9H1Dp46WuM+9nQkG9KkAfsMr4iOwm0+FnzrxuZ0TFKej4NNDeJvpRfD6uuFtGl0g5I6FJv9vKZUK66eacVEdlEm/J0VUxeYBP7td/3PE5phBbbKyoU3Qa55V1JXXkmrBmzQtjCaNRegPABPQTUWJKmUKG3uf3/1syS3y6kWjkOAxCUvqZiTVd4OfnezbN7O8jXU=
