@@ -8,6 +8,7 @@ set -o xtrace
 
 yum install -y golang mc tmux which bash-completion bash-completion-extras
 
+pwd
 go env
 
 go get golang.org/x/tools/cmd/gopls \
