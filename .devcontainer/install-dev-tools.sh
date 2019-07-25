@@ -8,7 +8,6 @@ set -o xtrace
 
 yum install -y golang mc tmux which bash-completion bash-completion-extras
 
-pwd
 go env
 
 go get golang.org/x/tools/cmd/gopls \
@@ -18,4 +17,5 @@ go get golang.org/x/tools/cmd/gopls \
 
 curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
+cd /root/go/src/github.com/percona/pmm-update
 make init
