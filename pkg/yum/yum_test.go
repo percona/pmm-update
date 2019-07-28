@@ -28,13 +28,22 @@ import (
 func TestCheckVersions(t *testing.T) {
 	v, err := CheckVersions(context.Background(), "pmm-update")
 	require.NoError(t, err)
-	assert.NotEmpty(t, v.Installed)
-	assert.Equal(t, "pmm2-laboratory", v.RemoteRepo)
+	assert.NotEmpty(t, v.InstalledRPMVersion)
+	assert.Empty(t, v.InstalledTime)
+	assert.Empty(t, v.LatestTime)
+	assert.Equal(t, "pmm2-laboratory", v.LatestRepo)
 
 	// the latest perconalab/pmm-server:dev-latest image always contains the latest pmm-update package version
-	assertFunc := assert.NotEqual
 	if os.Getenv("PMM_SERVER_IMAGE") == "perconalab/pmm-server:dev-latest" {
-		assertFunc = assert.Equal
+		assert.Equal(t, v.InstalledRPMVersion, v.LatestRPMVersion)
+		assert.Equal(t, v.InstalledTime, v.LatestTime)
+	} else {
+		assert.NotEqual(t, v.InstalledRPMVersion, v.LatestRPMVersion)
+		// TODO assert.True(t, v.InstalledTime.Before(v.LatestTime), "expected %s < %s", v.InstalledTime, v.LatestTime)
 	}
-	assertFunc(t, v.Installed, v.Remote, "installed: %q\nremote: %q", v.Installed, v.Remote)
+}
+
+func TestUpdatePackage(t *testing.T) {
+	err := UpdatePackage(context.Background(), "golang")
+	require.NoError(t, err)
 }

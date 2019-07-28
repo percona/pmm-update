@@ -17,49 +17,27 @@
 package yum
 
 import (
-	"bytes"
 	"context"
-	"io"
-	"os"
-	"os/exec"
 	"strings"
+	"time"
 
+	"github.com/percona/pmm/version"
 	"github.com/pkg/errors"
+
+	"github.com/percona/pmm-update/pkg/run"
 )
 
-// run runs command and returns stdout and stderr lines.
-// Both are also tee'd to os.Stderr for a progress reporting.
-func run(ctx context.Context, cmdLine string) ([]string, []string, error) {
-	// TODO when ctx is canceled, send SIGTERM, wait X seconds, and _then_ send SIGKILL;
-	// CommandContext sends SIGKILL as soon as ctx is canceled, do not use it
-
-	args := strings.Fields(cmdLine)
-	cmd := exec.CommandContext(ctx, args[0], args[1:]...) //nolint:gosec
-	setSysProcAttr(cmd)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = io.MultiWriter(os.Stderr, &stdout)
-	cmd.Stderr = io.MultiWriter(os.Stderr, &stderr)
-	err := cmd.Run()
-	return strings.Split(stdout.String(), "\n"), strings.Split(stderr.String(), "\n"), err
-}
-
-// Versions contains information about RPM package versions.
-type Versions struct {
-	Installed  string `json:"installed"`
-	Remote     string `json:"remote"`
-	RemoteRepo string `json:"remote_repo"`
-}
-
 // CheckVersions returns up-to-date versions information for a package with given name.
-func CheckVersions(ctx context.Context, name string) (*Versions, error) {
+func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult, error) {
 	// http://man7.org/linux/man-pages/man8/yum.8.html#LIST_OPTIONS
 
-	stdout, _, err := run(ctx, "yum --showduplicates list all "+name)
+	cmdLine := "yum --showduplicates list all " + name
+	stdout, _, err := run.Run(ctx, 30*time.Second, cmdLine)
 	if err != nil {
-		return nil, errors.Wrap(err, "`yum list` failed")
+		return nil, errors.Wrapf(err, "%#q failed", cmdLine)
 	}
 
-	var res Versions
+	var res version.UpdateCheckResult
 	for _, line := range stdout {
 		parts := strings.Fields(strings.TrimSpace(line))
 		if len(parts) != 3 {
@@ -71,16 +49,26 @@ func CheckVersions(ctx context.Context, name string) (*Versions, error) {
 			continue
 		}
 		if strings.HasPrefix(repo, "@") {
-			if res.Installed != "" {
+			if res.InstalledRPMVersion != "" {
 				return nil, errors.New("failed to parse `yum list` output")
 			}
-			res.Installed = ver
+			res.InstalledRPMVersion = ver
 		} else {
 			// always overwrite - the last item is the one we need
-			res.Remote = ver
-			res.RemoteRepo = repo
+			res.LatestRPMVersion = ver
+			res.LatestRepo = repo
 		}
 	}
 
 	return &res, nil
+}
+
+// UpdatePackage updates package with given name.
+func UpdatePackage(ctx context.Context, name string) error {
+	cmdLine := "yum update " + name
+	_, _, err := run.Run(ctx, 30*time.Second, cmdLine)
+	if err != nil {
+		return errors.Wrapf(err, "%#q failed", cmdLine)
+	}
+	return nil
 }
