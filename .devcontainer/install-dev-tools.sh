@@ -6,7 +6,7 @@
 set -o errexit
 set -o xtrace
 
-yum install -y golang mc tmux which bash-completion bash-completion-extras
+yum install -y golang mc tmux psmisc which bash-completion bash-completion-extras
 
 go env
 
