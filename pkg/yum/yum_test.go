@@ -29,16 +29,16 @@ func TestCheckVersions(t *testing.T) {
 	v, err := CheckVersions(context.Background(), "pmm-update")
 	require.NoError(t, err)
 	assert.NotEmpty(t, v.InstalledRPMVersion)
-	assert.Empty(t, v.InstalledTime)
 	assert.Empty(t, v.LatestTime)
 	assert.Equal(t, "pmm2-laboratory", v.LatestRepo)
 
 	// the latest perconalab/pmm-server:dev-latest image always contains the latest pmm-update package version
 	if os.Getenv("PMM_SERVER_IMAGE") == "perconalab/pmm-server:dev-latest" {
 		assert.Equal(t, v.InstalledRPMVersion, v.LatestRPMVersion)
-		assert.Equal(t, v.InstalledTime, v.LatestTime)
+		assert.False(t, v.UpdateAvailable)
 	} else {
 		assert.NotEqual(t, v.InstalledRPMVersion, v.LatestRPMVersion)
+		assert.True(t, v.UpdateAvailable)
 		// TODO assert.True(t, v.InstalledTime.Before(v.LatestTime), "expected %s < %s", v.InstalledTime, v.LatestTime)
 	}
 }
