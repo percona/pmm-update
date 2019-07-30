@@ -47,6 +47,10 @@ func Run(ctx context.Context, cancelTimeout time.Duration, cmdLine string) ([]st
 	cmd.Stdout = io.MultiWriter(os.Stderr, &stdout) // stdout to stderr
 	cmd.Stderr = io.MultiWriter(os.Stderr, &stderr)
 
+	if err := cmd.Start(); err != nil {
+		return nil, nil, err
+	}
+
 	go func() {
 		select {
 		case <-cmdCtx.Done():
@@ -59,7 +63,7 @@ func Run(ctx context.Context, cancelTimeout time.Duration, cmdLine string) ([]st
 		}
 	}()
 
-	err := cmd.Run()
+	err := cmd.Wait()
 	stdoutS := strings.Split(stdout.String(), "\n")
 	stderrS := strings.Split(stderr.String(), "\n")
 	return stdoutS, stderrS, err
