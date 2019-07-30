@@ -27,12 +27,16 @@ import (
 	"github.com/percona/pmm-update/pkg/run"
 )
 
+// TODO we can also use `rpm --query --xml` for detecting local version
+
+const yumCancelTimeout = 30 * time.Second
+
 // CheckVersions returns up-to-date versions information for a package with given name.
 func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult, error) {
 	// http://man7.org/linux/man-pages/man8/yum.8.html#LIST_OPTIONS
 
 	cmdLine := "yum --showduplicates list all " + name
-	stdout, _, err := run.Run(ctx, 30*time.Second, cmdLine)
+	stdout, _, err := run.Run(ctx, yumCancelTimeout, cmdLine)
 	if err != nil {
 		return nil, errors.Wrapf(err, "%#q failed", cmdLine)
 	}
@@ -60,13 +64,19 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 		}
 	}
 
+	if res.LatestRPMVersion != "" {
+		// FIXME decide if we need to compare versions in Go code at all,
+		// and if yes, how to do it correctly
+		res.UpdateAvailable = (res.InstalledRPMVersion != res.LatestRPMVersion)
+	}
+
 	return &res, nil
 }
 
 // UpdatePackage updates package with given name.
 func UpdatePackage(ctx context.Context, name string) error {
 	cmdLine := "yum update " + name
-	_, _, err := run.Run(ctx, 30*time.Second, cmdLine)
+	_, _, err := run.Run(ctx, yumCancelTimeout, cmdLine)
 	if err != nil {
 		return errors.Wrapf(err, "%#q failed", cmdLine)
 	}

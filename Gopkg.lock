@@ -19,14 +19,14 @@
 
 [[projects]]
   branch = "PMM-4379-update-api-stubs"
-  digest = "1:a655c121b06ba54e90f9e23d90df935b756aca42f6b91c7fbe40e01d91408efd"
+  digest = "1:2ad3d16750be70a30319461ad3c68480de1f1fcdc66e4c209f39661374e8b23b"
   name = "github.com/percona/pmm"
   packages = [
     "utils/pdeathsig",
     "version",
   ]
   pruneopts = "NUT"
-  revision = "ddc33bfe8a73a1b9890186969f8efd0f0033d149"
+  revision = "79b25ad4821fbafc4eff9db8f45f14a91956e9a7"
 
 [[projects]]
   digest = "1:14715f705ff5dfe0ffd6571d7d201dd8e921030f8070321a79380d8ca4ec1a24"
