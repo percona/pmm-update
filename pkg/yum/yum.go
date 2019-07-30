@@ -27,8 +27,9 @@ import (
 	"github.com/percona/pmm-update/pkg/run"
 )
 
-// TODO we can also use `rpm --query --xml` for detecting local version.
-// Also, yum --showduplicates --verbose info all pmm-update gives more info.
+// TODO switch to:
+// * yum --verbose info installed pmm-update
+// * yum --verbose info updates pmm-update
 
 const yumCancelTimeout = 30 * time.Second
 
@@ -59,7 +60,12 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 		if !strings.HasPrefix(pack, name+".") {
 			continue
 		}
-		if strings.HasPrefix(repo, "@") {
+
+		// From http://man7.org/linux/man-pages/man8/yum.8.html#LIST_OPTIONS
+		//   The format of the output of yum list is:
+		//     name.arch  [epoch:]version-release  repo or @installed-from-repo
+		//   Note that if the repo cannot be determined, "installed" is printed instead.
+		if strings.HasPrefix(repo, "@") || repo == "installed" {
 			if res.InstalledRPMVersion != "" {
 				return nil, errors.New("failed to parse `yum list` output")
 			}
