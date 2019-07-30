@@ -6,7 +6,13 @@
 set -o errexit
 set -o xtrace
 
-yum install -y golang mc tmux psmisc which bash-completion bash-completion-extras
+# to install man pages
+sed -i '/nodocs/d' /etc/yum.conf
+
+# reinstall with man pages
+yum reinstall yum rpm
+
+yum install -y golang mc tmux psmisc which bash-completion bash-completion-extras man man-pages
 
 go env
 

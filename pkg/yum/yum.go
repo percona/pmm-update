@@ -27,7 +27,8 @@ import (
 	"github.com/percona/pmm-update/pkg/run"
 )
 
-// TODO we can also use `rpm --query --xml` for detecting local version
+// TODO we can also use `rpm --query --xml` for detecting local version.
+// Also, yum --showduplicates --verbose info all pmm-update gives more info.
 
 const yumCancelTimeout = 30 * time.Second
 
@@ -48,6 +49,12 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 			continue
 		}
 		pack, ver, repo := parts[0], parts[1], parts[2]
+
+		// strip 1 epoch
+		// FIXME figure out why we need it
+		if strings.HasPrefix(ver, "1:") {
+			ver = strings.TrimPrefix(ver, "1:")
+		}
 
 		if !strings.HasPrefix(pack, name+".") {
 			continue
