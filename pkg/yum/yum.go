@@ -56,15 +56,14 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 	stdout, stderr, err := run.Run(ctx, yumCancelTimeout, cmdLine)
 	if err != nil {
 		if strings.Contains(strings.Join(stderr, "\n"), "Error: No matching Packages to list") {
+			// no update available, return the same values
 			res.LatestRPMVersion = res.InstalledRPMVersion
 			res.LatestRPMNiceVersion = res.InstalledRPMNiceVersion
 			res.LatestRepo = info["From repo"]
-			buildtime, err := parseInfoTime(info["Buildtime"])
-			if err == nil {
-				res.LatestTime = &buildtime
-			}
+			res.LatestTime = res.InstalledTime
 			return &res, nil
 		}
+
 		return nil, errors.Wrapf(err, "%#q failed", cmdLine)
 	}
 
