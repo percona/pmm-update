@@ -17,17 +17,19 @@
 package yum
 
 import (
+	"regexp"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 )
 
 // parseInfo parses `yum info` stdout for a single version of a single package.
-func parseInfo(b []byte) (map[string]string, error) {
+func parseInfo(lines []string) (map[string]string, error) {
 	res := make(map[string]string)
 	var prevKey string
 	var nameFound bool
-	for _, line := range strings.Split(string(b), "\n") {
+	for _, line := range lines {
 		// separate progress output from data
 		line = strings.TrimSpace(line)
 		if line == "" {
@@ -61,4 +63,35 @@ func parseInfo(b []byte) (map[string]string, error) {
 		prevKey = key
 	}
 	return res, nil
+}
+
+func parseInfoTime(s string) (time.Time, error) {
+	return time.Parse("Mon Jan 2 15:04:05 2006", s)
+}
+
+// fullVersion returns full (ugly) package version.
+func fullVersion(info map[string]string) string {
+	var res string
+	if e := info["Epoch"]; e != "" {
+		res = e + ":"
+	}
+	res += info["Version"]
+	res += "-" + info["Release"]
+	return res
+}
+
+// niceVersion returns nice user-visible package version.
+func niceVersion(info map[string]string) string {
+	// cut suffixes and the first digits section from full release
+	release := info["Release"]
+	for _, re := range []*regexp.Regexp{
+		regexp.MustCompile(`^(.*)\.el\d+$`),       // el7 suffix
+		regexp.MustCompile(`^(.*)\.[0-9a-f]{7}$`), // abbriviated commit suffix
+		regexp.MustCompile(`^(.*)\.\d{10}$`),      // timestamp suffix
+		regexp.MustCompile(`^\d+\.(.*)$`),         // first digits section
+	} {
+		release = re.ReplaceAllString(release, "$1")
+	}
+
+	return info["Version"] + "-" + release
 }

@@ -18,15 +18,15 @@
   version = "v1.0.2"
 
 [[projects]]
-  branch = "PMM-2.0"
-  digest = "1:07cb3e28ff7ea602bd77f757eced5d5be26603c72ce896fcedfeb4ccc34d9138"
+  branch = "PMM-4443-parse-times"
+  digest = "1:fe8b080049e50c303d6bd3bcc8435f8ba8af7b11806723d6ed3d3fc4850a1685"
   name = "github.com/percona/pmm"
   packages = [
     "utils/pdeathsig",
     "version",
   ]
   pruneopts = "NUT"
-  revision = "df931f31889ff5815f4b7298eb9de566c49aa0a9"
+  revision = "8702d9a11a5471fd5590924d745a4df39a77c995"
 
 [[projects]]
   digest = "1:14715f705ff5dfe0ffd6571d7d201dd8e921030f8070321a79380d8ca4ec1a24"

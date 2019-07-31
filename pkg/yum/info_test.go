@@ -17,7 +17,9 @@
 package yum
 
 import (
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -25,7 +27,7 @@ import (
 
 func TestParseInfo(t *testing.T) {
 	t.Run("Installed", func(t *testing.T) {
-		stdout := []byte(`
+		stdout := strings.Split(`
 			Loading "fastestmirror" plugin
 			Loading "ovl" plugin
 			Config time: 0.005
@@ -52,7 +54,7 @@ func TestParseInfo(t *testing.T) {
 			Description : pmm-managed manages configuration of PMM server components (Prometheus,
 						: Grafana, etc.) and exposes API for that.  Those APIs are used by pmm-admin tool.
 						: See the PMM docs for more information.
-		`)
+		`, "\n")
 		expected := map[string]string{
 			"Name":         "pmm-managed",
 			"Arch":         "x86_64",
@@ -77,10 +79,15 @@ func TestParseInfo(t *testing.T) {
 		actual, err := parseInfo(stdout)
 		require.NoError(t, err)
 		assert.Equal(t, expected, actual)
+		buildtime, err := parseInfoTime(actual["Buildtime"])
+		require.NoError(t, err)
+		assert.Equal(t, time.Date(2019, 7, 30, 11, 2, 19, 0, time.UTC), buildtime)
+		assert.Equal(t, "2.0.0-9.beta5.1907301101.74f8a67.el7", fullVersion(actual))
+		assert.Equal(t, "2.0.0-beta5", niceVersion(actual))
 	})
 
 	t.Run("Updates", func(t *testing.T) {
-		stdout := []byte(`
+		stdout := strings.Split(`
 			Loading "fastestmirror" plugin
 			Loading "ovl" plugin
 			Config time: 0.017
@@ -114,7 +121,7 @@ func TestParseInfo(t *testing.T) {
 			URL         : https://github.com/percona/pmm-update
 			License     : AGPLv3
 			Description : Tool for updating packages and OS configuration for PMM Server
-		`)
+		`, "\n")
 		expected := map[string]string{
 			"Name":        "pmm-update",
 			"Arch":        "noarch",
@@ -133,11 +140,16 @@ func TestParseInfo(t *testing.T) {
 		actual, err := parseInfo(stdout)
 		require.NoError(t, err)
 		assert.Equal(t, expected, actual)
+		buildtime, err := parseInfoTime(actual["Buildtime"])
+		require.NoError(t, err)
+		assert.Equal(t, time.Date(2019, 7, 30, 12, 23, 10, 0, time.UTC), buildtime)
+		assert.Equal(t, "2.0.0-9.beta5.1907301223.90149dd.el7", fullVersion(actual))
+		assert.Equal(t, "2.0.0-beta5", niceVersion(actual))
 	})
 
 	t.Run("Available", func(t *testing.T) {
 		// yum --verbose --showduplicates info available pmm-update, abbrivated
-		stdout := []byte(`
+		stdout := strings.Split(`
 			Loading "fastestmirror" plugin
 			Loading "ovl" plugin
 			Config time: 0.007
@@ -181,7 +193,7 @@ func TestParseInfo(t *testing.T) {
 			Description : Tool for updating packages and OS configuration for PMM Server
 
 			…
-		`)
+		`, "\n")
 		expected := map[string]string{
 			"Name":        "pmm-update",
 			"Arch":        "noarch",
@@ -200,11 +212,16 @@ func TestParseInfo(t *testing.T) {
 		actual, err := parseInfo(stdout)
 		assert.EqualError(t, err, "second `Name` encountered")
 		assert.Equal(t, expected, actual)
+		buildtime, err := parseInfoTime(actual["Buildtime"])
+		require.NoError(t, err)
+		assert.Equal(t, time.Date(2019, 7, 16, 10, 9, 1, 0, time.UTC), buildtime)
+		assert.Equal(t, "PMM-7.4358.1907161009.7685dba.el7", fullVersion(actual))
+		assert.Equal(t, "PMM-4358", niceVersion(actual)) // yes, that one is broken
 	})
 
 	t.Run("Empty", func(t *testing.T) {
 		// "Error: No matching Packages to list" goes to stderr.
-		stdout := []byte(`
+		stdout := strings.Split(`
 			Loading "fastestmirror" plugin
 			Loading "ovl" plugin
 			Config time: 0.007
@@ -224,7 +241,7 @@ func TestParseInfo(t *testing.T) {
 			up:obs time: 0.004
 			up:condense time: 0.000
 			updates time: 0.469
-		`)
+		`, "\n")
 		actual, err := parseInfo(stdout)
 		require.NoError(t, err)
 		assert.Empty(t, actual)
