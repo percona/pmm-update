@@ -25,7 +25,7 @@ import (
 	"github.com/percona/pmm-update/pkg/run"
 )
 
-const ansibleCancelTimeout = 3 * time.Minute
+const ansibleCancelTimeout = 180 * time.Second // must be less than stopwaitsecs in supervisord config
 
 // RunPlaybookOpts contains ansible-playbook options.
 type RunPlaybookOpts struct {

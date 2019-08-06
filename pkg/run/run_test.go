@@ -26,8 +26,6 @@ import (
 
 func TestRun(t *testing.T) {
 	t.Run("Terminated", func(t *testing.T) {
-		t.Parallel()
-
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
