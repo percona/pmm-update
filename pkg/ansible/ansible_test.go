@@ -29,20 +29,11 @@ func TestAnsible(t *testing.T) {
 	require.NoError(t, err)
 
 	t.Run("SyntaxCheck", func(t *testing.T) {
-		t.Parallel()
-
 		err := RunPlaybook(context.Background(), playbook, &RunPlaybookOpts{
 			ExtraFlags: []string{"--syntax-check"}},
 		)
 		require.NoError(t, err)
 	})
 
-	t.Run("Check", func(t *testing.T) {
-		t.Parallel()
-
-		err := RunPlaybook(context.Background(), playbook, &RunPlaybookOpts{
-			ExtraFlags: []string{"--check"}},
-		)
-		require.NoError(t, err)
-	})
+	// playbooks are tested by `make check`
 }

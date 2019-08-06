@@ -65,7 +65,8 @@ func performStage1SelfUpdate(ctx context.Context) {
 	after := v.InstalledRPMVersion
 
 	if before != after {
-		logrus.Infof("%s changed from to %q to %q.", name, before, after)
+		// exit with non-zero code to let supervisord restart `pmm-update -perform` from the start
+		logrus.Infof("%s changed from to %q to %q. Exiting.", name, before, after)
 		os.Exit(1)
 	}
 	logrus.Infof("%s version %q not changed.", name, before)
