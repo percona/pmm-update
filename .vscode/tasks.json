@@ -7,6 +7,9 @@
             "label": "make",
             "type": "shell",
             "command": "make install test run-race-cover",
+            "presentation": {
+                "clear": true
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true

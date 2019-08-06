@@ -47,9 +47,6 @@ test-race:                      ## Run tests with race detector.
 test-cover:                     ## Run tests and collect per-package coverage information.
 	go test $(TEST_FLAGS) -coverprofile=cover.out -covermode=count ./...
 
-test-ansible:
-	ansible-playbook --inventory='localhost,' --syntax-check -vvvv ansible/**/*.yml
-
 check:                          ## Run required checkers and linters.
 	go run .github/check-license.go
 
@@ -59,7 +56,7 @@ format:                         ## Format source code.
 	gofmt -w -s $(FILES)
 	goimports -local github.com/percona/pmm-update -l -w $(FILES)
 
-RUN_FLAGS = -check
+RUN_FLAGS ?=
 
 run: install _run               ## Run pmm-update.
 
@@ -70,7 +67,8 @@ run-race-cover: install-race    ## Run pmm-update with race detector and collect
 			-tags maincover \
 			$(LD_FLAGS) \
 			-race -c -o pmm-update.test
-	./pmm-update.test -test.count=1 -test.v -test.coverprofile=runcover.out -test.run=TestMainCover $(RUN_FLAGS)
+	rm -f *.runcover.out
+	./pmm-update.test -test.count=1 -test.v -test.coverprofile=$(shell mktemp --tmpdir=. XXX.runcover.out) -test.run=TestMainCover $(RUN_FLAGS)
 
 _run:
 	pmm-update $(RUN_FLAGS)

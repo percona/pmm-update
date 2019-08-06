@@ -46,9 +46,9 @@ script:
 
   - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update test-cover
   - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update test-race
-  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update run-race-cover
 
-  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update test-ansible
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update run-race-cover RUN_FLAGS='-debug -check'
+  - docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update run-race-cover RUN_FLAGS='-debug -perform -playbook=/root/go/src/github.com/percona/pmm-update/playbook/tasks/update.yml'
 
   - make check
 
@@ -56,7 +56,7 @@ after_success:
   - curl https://codecov.io/bash > codecov
   - chmod +x codecov
   - ./codecov -f cover.out -F cover -X fix
-  - ./codecov -f runcover.out -F runcover -X fix
+  - ./codecov -f *.runcover.out -F runcover -X fix
 
 notifications:
   slack:

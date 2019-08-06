@@ -36,7 +36,7 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 	var res version.UpdateCheckResult
 
 	cmdLine := "yum --verbose info installed " + name
-	stdout, _, err := run.Run(ctx, yumCancelTimeout, cmdLine)
+	stdout, _, err := run.Run(ctx, yumCancelTimeout, cmdLine, nil)
 	if err != nil {
 		return nil, errors.Wrapf(err, "%#q failed", cmdLine)
 	}
@@ -53,7 +53,7 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 	}
 
 	cmdLine = "yum --verbose info updates " + name
-	stdout, stderr, err := run.Run(ctx, yumCancelTimeout, cmdLine)
+	stdout, stderr, err := run.Run(ctx, yumCancelTimeout, cmdLine, nil)
 	if err != nil {
 		if strings.Contains(strings.Join(stderr, "\n"), "Error: No matching Packages to list") {
 			// no update available, return the same values
@@ -85,8 +85,8 @@ func CheckVersions(ctx context.Context, name string) (*version.UpdateCheckResult
 
 // UpdatePackage updates package with given name.
 func UpdatePackage(ctx context.Context, name string) error {
-	cmdLine := "yum update " + name
-	_, _, err := run.Run(ctx, yumCancelTimeout, cmdLine)
+	cmdLine := "yum update --assumeyes " + name
+	_, _, err := run.Run(ctx, yumCancelTimeout, cmdLine, nil)
 	if err != nil {
 		return errors.Wrapf(err, "%#q failed", cmdLine)
 	}
