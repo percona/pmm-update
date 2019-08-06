@@ -50,9 +50,9 @@ test-cover:                     ## Run tests and collect per-package coverage in
 check:                          ## Run required checkers and linters.
 	go run .github/check-license.go
 
-	ansible-playbook --syntax-check playbook/tasks/update.yml
-	ansible-playbook --check playbook/tasks/update.yml
-	ansible-lint playbook/tasks/update.yml
+	ansible-playbook --syntax-check ansible/playbook/tasks/update.yml
+	ansible-playbook --check ansible/playbook/tasks/update.yml
+	ansible-lint ansible/playbook/tasks/update.yml
 
 FILES = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
