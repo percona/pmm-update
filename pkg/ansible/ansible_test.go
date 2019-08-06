@@ -25,7 +25,7 @@ import (
 )
 
 func TestAnsible(t *testing.T) {
-	playbook, err := filepath.Abs(filepath.Join("..", "..", "playbook", "tasks", "update.yml"))
+	playbook, err := filepath.Abs(filepath.Join("..", "..", "ansible", "playbook", "tasks", "update.yml"))
 	require.NoError(t, err)
 
 	t.Run("SyntaxCheck", func(t *testing.T) {
