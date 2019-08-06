@@ -6,7 +6,7 @@
         {
             "label": "make",
             "type": "shell",
-            "command": "make install test run-race-cover",
+            "command": "make install test run-race-cover RUN_FLAGS='-check'",
             "presentation": {
                 "clear": true
             },
