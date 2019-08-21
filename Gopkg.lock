@@ -53,27 +53,27 @@
   version = "v1.4.2"
 
 [[projects]]
-  digest = "1:7096df4a9258067bb9ff5da62864a645d38dd94cd3f273ff4ab54d0de548a348"
+  digest = "1:85adecf1dbfae5769cc62a8bcea6498f8e9f0e2452e4e6686eb36fa4428a5a6e"
   name = "github.com/stretchr/testify"
   packages = [
     "assert",
     "require",
   ]
   pruneopts = "NUT"
-  revision = "221dbe5ed46703ee255b1da0dec05086f5035f62"
-  version = "v1.4.0"
+  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
+  version = "v1.3.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:4296892af119aaeedd6437125dbe67686a9e3043a6e54956fb8425a61d93d764"
+  digest = "1:9c684a8c6bb9501591c1ac600e7669fdf4683b1a08be53e17e98e4660985c000"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "NUT"
-  revision = "fde4db37ae7ad8191b03d30d27f258b5291ae4e3"
+  revision = "cbf593c0f2f39034e9104bbf77e2ec7c48c98fc5"
 
 [[projects]]
   branch = "master"
-  digest = "1:906610f323ad17b0437a3e000bae9c58e0a4f82dec370820b971b90d55ff28a6"
+  digest = "1:b5826300a2721c58777c59fe8f64a0063aa1706f25aadd286df99f2025b93476"
   name = "golang.org/x/tools"
   packages = [
     "cmd/goimports",
@@ -90,15 +90,7 @@
     "internal/semver",
   ]
   pruneopts = "NUT"
-  revision = "85edb9ef328312eeb9315a7707cbb661702d17f9"
-
-[[projects]]
-  digest = "1:18108594151654e9e696b27b181b953f9a90b16bf14d253dd1b397b025a1487f"
-  name = "gopkg.in/yaml.v2"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
-  version = "v2.2.2"
+  revision = "e9bb7d36c0606a2c422dffe30db7d628ebeb9302"
 
 [solve-meta]
   analyzer-name = "dep"
