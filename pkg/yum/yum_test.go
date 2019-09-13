@@ -19,6 +19,7 @@ package yum
 import (
 	"context"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -54,22 +55,37 @@ func TestCheck(t *testing.T) {
 	assert.True(t, time.Since(*res.Latest.BuildTime) < 60*24*time.Hour, "LatestTime = %s", res.Latest.BuildTime)
 	assert.NotEmpty(t, res.Latest.Repo)
 
-	// We assume that the latest perconalab/pmm-server:dev-latest image always contains the latest
-	// pmm-update package version. That is true for Travis CI. If this test fails locally,
-	// run "docker pull perconalab/pmm-server:dev-latest" and recreate devcontainer.
-	if os.Getenv("PMM_SERVER_IMAGE") == "perconalab/pmm-server:dev-latest" {
-		t.Log("Assuming the latest pmm-update version.")
-		assert.False(t, res.UpdateAvailable, "update should not be available")
-		assert.Equal(t, res.Installed, res.Latest, "version should be the same (latest)")
-		assert.Equal(t, *res.Installed.BuildTime, *res.Latest.BuildTime, "build times should be the same")
-		assert.Equal(t, "local", res.Latest.Repo)
+	var updateAvailable bool
+	if e := os.Getenv("PMM_UPDATE_AVAILABLE"); e != "" {
+		// PMM_UPDATE_AVAILABLE is set by Travis CI build matrix, use it.
+		updateAvailable, err = strconv.ParseBool(e)
+		require.NoError(t, err)
 	} else {
+		// We assume that the latest percona/pmm-server:2 and perconalab/pmm-server:dev-latest images
+		// always contains the latest pmm-update package versions.
+		// If this test fails, re-pull them and recreate devcontainer.
+		switch os.Getenv("PMM_SERVER_IMAGE") {
+		case "percona/pmm-server:2", "perconalab/pmm-server:dev-latest":
+			updateAvailable = false
+		case "":
+			t.Fatal("PMM_SERVER_IMAGE not set")
+		default:
+			updateAvailable = true
+		}
+	}
+	if updateAvailable {
 		t.Log("Assuming pmm-update update is available.")
 		assert.True(t, res.UpdateAvailable, "update should be available")
 		assert.NotEqual(t, res.Installed.Version, res.Latest.Version, "versions should not be the same")
 		assert.NotEqual(t, res.Installed.FullVersion, res.Latest.FullVersion, "versions should not be the same")
 		assert.NotEqual(t, *res.Installed.BuildTime, *res.Latest.BuildTime, "build times should not be the same (%s)", *res.Installed.BuildTime)
 		assert.Equal(t, "pmm2-laboratory", res.Latest.Repo)
+	} else {
+		t.Log("Assuming the latest pmm-update version.")
+		assert.False(t, res.UpdateAvailable, "update should not be available")
+		assert.Equal(t, res.Installed, res.Latest, "version should be the same (latest)")
+		assert.Equal(t, *res.Installed.BuildTime, *res.Latest.BuildTime, "build times should be the same")
+		assert.Equal(t, "local", res.Latest.Repo)
 	}
 }
 
