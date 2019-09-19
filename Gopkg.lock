@@ -18,15 +18,15 @@
   version = "v1.0.2"
 
 [[projects]]
-  branch = "PMM-2.0"
-  digest = "1:cf5abc277bdf0ead5dea9dc6b6f74c797a963da6528dd632c266e6fa327ea5f9"
+  branch = "PMM-4444-whats-new"
+  digest = "1:a2cbb4ec60b03648fa3ea2c0fbafd4260905ddd873990d0351b4e95382143969"
   name = "github.com/percona/pmm"
   packages = [
     "utils/pdeathsig",
     "version",
   ]
   pruneopts = "NUT"
-  revision = "526cb007df6485cf67de791d2bed8e11a207d54b"
+  revision = "5de3bfbc2573709d56d3a57641d54991d76328ff"
 
 [[projects]]
   digest = "1:14715f705ff5dfe0ffd6571d7d201dd8e921030f8070321a79380d8ca4ec1a24"
