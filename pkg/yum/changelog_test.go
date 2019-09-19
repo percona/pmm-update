@@ -24,6 +24,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+//nolint:lll
 func TestParseChangeLog(t *testing.T) {
 	stdout := strings.Split(`
 		Loaded plugins: changelog, fastestmirror, ovl
