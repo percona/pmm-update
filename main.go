@@ -95,7 +95,7 @@ func perform(ctx context.Context, playbook string, opts *ansible.RunPlaybookOpts
 	performStage1SelfUpdate(ctx)
 	performStage2Ansible(ctx, playbook, opts)
 
-	// that string is expected by pmm-managed as an additional failsafe
+	// that string is expected by various automated tests
 	logrus.Info("PMM Server update finished!")
 }
 
