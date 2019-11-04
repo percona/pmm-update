@@ -41,6 +41,7 @@
 
     - name: Check nginx configuration
       command: nginx -t
+      changed_when: False
 
 
     # restart pmm-managed first as it may update supervisord configuration on start
