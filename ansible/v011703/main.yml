@@ -73,7 +73,7 @@
       with_items:
         - pmm-server-1.17.3
       register: pmm_server_update
-      failed_when: "pmm_server_update | failed and 'Error in PREUN scriptlet in rpm package pmm-server' not in pmm_server_update.msg"
+      failed_when: "pmm_server_update is failed and 'Error in PREUN scriptlet in rpm package pmm-server' not in pmm_server_update.msg"
 
     - name: NGINX                      | Disable password-page
       when: supervisorctl.stat.exists
