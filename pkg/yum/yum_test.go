@@ -36,7 +36,7 @@ func TestInstalled(t *testing.T) {
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
 	assert.True(t, strings.HasPrefix(res.Installed.FullVersion, "2."), "%s", res.Installed.FullVersion)
 	require.NotEmpty(t, res.Installed.BuildTime)
-	assert.True(t, res.Installed.BuildTime.After(gaReleaseDate), "InstalledTime = %s", res.Installed.BuildTime)
+	assert.True(t, res.Installed.BuildTime.After(gaReleaseDate), "Installed.BuildTime = %s", res.Installed.BuildTime)
 	assert.Equal(t, "local", res.Installed.Repo)
 }
 
@@ -47,13 +47,13 @@ func TestCheck(t *testing.T) {
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
 	assert.True(t, strings.HasPrefix(res.Installed.FullVersion, "2."), "%s", res.Installed.FullVersion)
 	require.NotEmpty(t, res.Installed.BuildTime)
-	assert.True(t, res.Installed.BuildTime.After(gaReleaseDate), "InstalledTime = %s", res.Installed.BuildTime)
+	assert.True(t, res.Installed.BuildTime.After(gaReleaseDate), "Installed.BuildTime = %s", res.Installed.BuildTime)
 	assert.Equal(t, "local", res.Installed.Repo)
 
 	assert.True(t, strings.HasPrefix(res.Latest.Version, "2."), "%s", res.Latest.Version)
 	assert.True(t, strings.HasPrefix(res.Latest.FullVersion, "2."), "%s", res.Latest.FullVersion)
 	require.NotEmpty(t, res.Latest.BuildTime)
-	assert.True(t, res.Latest.BuildTime.After(gaReleaseDate), "LatestTime = %s", res.Latest.BuildTime)
+	assert.True(t, res.Latest.BuildTime.After(gaReleaseDate), "Latest.BuildTime = %s", res.Latest.BuildTime)
 	assert.NotEmpty(t, res.Latest.Repo)
 
 	// We assume that the latest percona/pmm-server:2 and perconalab/pmm-server:dev-latest images
