@@ -27,7 +27,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var gaReleaseDate = time.Date(2019, 9, 18, 0, 0, 0, time.UTC)
+var gaReleaseDate = time.Date(2019, 9, 18, 0, 0, 0, 0, time.UTC) //nolint
 
 func TestInstalled(t *testing.T) {
 	res, err := Installed(context.Background(), "pmm-update")
