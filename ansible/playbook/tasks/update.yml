@@ -63,7 +63,6 @@
       changed_when: False
 
     - name: Enable external snapshorts in Grafana
-      when: not grafana_db.stat.exists
       ini_file:
         dest: /etc/grafana/grafana.ini
         section: snapshots
@@ -71,7 +70,6 @@
         value: true
 
     - name: Set snapshot server URL in Grafana
-      when: not grafana_db.stat.exists
       ini_file:
         dest: /etc/grafana/grafana.ini
         section: snapshots
@@ -79,7 +77,6 @@
         value: https://snapshots-g635.percona.com
 
     - name: Set name for snapshot server in Grafana
-      when: not grafana_db.stat.exists
       ini_file:
         dest: /etc/grafana/grafana.ini
         section: snapshots
