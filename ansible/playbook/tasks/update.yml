@@ -67,7 +67,7 @@
         dest: /etc/grafana/grafana.ini
         section: snapshots
         option: external_enabled
-        value: true
+        value: "true"
 
     - name: Set snapshot server URL in Grafana
       ini_file:
