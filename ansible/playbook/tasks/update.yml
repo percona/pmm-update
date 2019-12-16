@@ -102,6 +102,9 @@
     - name: Check reread results
       debug: var=reread_result.stdout_lines
 
+    - name: Test sleep
+      command: sleep 65
+
     - name: Restart services
       command: supervisorctl {{ item.1 }} {{ item.0 }}
       changed_when: True
