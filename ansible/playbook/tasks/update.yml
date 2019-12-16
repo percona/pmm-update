@@ -103,7 +103,7 @@
       debug: var=reread_result.stdout_lines
 
     - name: Test sleep
-      command: sleep 65
+      command: sleep 305
 
     - name: Restart services
       command: supervisorctl {{ item.1 }} {{ item.0 }}
