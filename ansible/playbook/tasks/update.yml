@@ -30,18 +30,18 @@
     - name: Check reread results
       debug: var=reread_result.stdout_lines
 
+    - name: Remove old packages
+      yum:
+        state: absent
+        name:
+          - mariadb-libs  # https://jira.percona.com/browse/PMM-5215
+
     # split download and update to produce a bit more of progress output
     - name: Download pmm2 packages
       yum:
         name: "{{ pmm_packages }}"
         state: latest
         download_only: yes
-
-    # we need to remove mariadb-libs rpm to avoid 'obsolete' issue during 'yum update'
-    - name: Remove MariaDB Client
-      yum:
-        name: mariadb-libs
-        state: absent
 
     - name: Update pmm2 packages
       yum:
