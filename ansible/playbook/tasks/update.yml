@@ -37,6 +37,12 @@
         state: latest
         download_only: yes
 
+    # we need to remove mariadb-libs rpm to avoid 'obsolete' issue during 'yum update'
+    - name: Remove MariaDB Client
+      yum:
+        name: mariadb-libs
+        state: absent
+
     - name: Update pmm2 packages
       yum:
         name: "{{ pmm_packages }}"
