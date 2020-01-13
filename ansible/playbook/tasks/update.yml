@@ -61,7 +61,8 @@
         db: postgres
         name: pg_stat_statements
 
-    - name: Remove 'errexit' option from 'resize-xfs' script for ami/ovf images
+    # https://jira.percona.com/browse/PMM-5271
+    - name: Check volume size
       when: ansible_virtualization_type != "docker"
       replace:
         dest: /var/lib/cloud/scripts/per-boot/resize-xfs
