@@ -133,6 +133,9 @@
       command: supervisorctl start dashboard-upgrade
       changed_when: True
 
+    - name: Rename Grafana community panels 
+      command: /usr/share/percona-dashboards/fix-panels.py
+
     - name: Update/restart other services
       command: supervisorctl update
       register: update_result
