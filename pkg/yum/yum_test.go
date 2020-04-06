@@ -67,17 +67,17 @@ func TestCheck(t *testing.T) {
 		updateAvailable = true
 	}
 
-    if image == "percona/pmm-server:2" {
-        skipTest = true
-    }
+	if image == "percona/pmm-server:2" {
+		skipTest = true
+	}
 
 	if updateAvailable {
 		t.Log("Assuming pmm-update update is available.")
 		assert.True(t, res.UpdateAvailable, "update should be available")
 
-		if skipTest {
-            assert.True(t, strings.HasPrefix(res.LatestNewsURL, "https://per.co.na/pmm/2."), "latest_news_url = %q", res.LatestNewsURL)
-        }
+		if !(skipTest) {
+			assert.True(t, strings.HasPrefix(res.LatestNewsURL, "https://per.co.na/pmm/2."), "latest_news_url = %q", res.LatestNewsURL)
+		}
 
 		assert.NotEqual(t, res.Installed.Version, res.Latest.Version, "versions should not be the same")
 		assert.NotEqual(t, res.Installed.FullVersion, res.Latest.FullVersion, "versions should not be the same")
