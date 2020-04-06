@@ -59,16 +59,26 @@ func TestCheck(t *testing.T) {
 	// We assume that the latest perconalab/pmm-server:dev-latest image
 	// always contains the latest pmm-update package versions.
 	// If this test fails, re-pull them and recreate devcontainer.
-	var updateAvailable bool
+	var updateAvailable, skipTest bool
 	image := os.Getenv("PMM_SERVER_IMAGE")
 	require.NotEmpty(t, image)
+
 	if image != "perconalab/pmm-server:dev-latest" {
 		updateAvailable = true
 	}
+
+    if image == "percona/pmm-server:2" {
+        skipTest = true
+    }
+
 	if updateAvailable {
 		t.Log("Assuming pmm-update update is available.")
 		assert.True(t, res.UpdateAvailable, "update should be available")
-		assert.True(t, strings.HasPrefix(res.LatestNewsURL, "https://per.co.na/pmm/2."), "latest_news_url = %q", res.LatestNewsURL)
+
+		if skipTest {
+            assert.True(t, strings.HasPrefix(res.LatestNewsURL, "https://per.co.na/pmm/2."), "latest_news_url = %q", res.LatestNewsURL)
+        }
+
 		assert.NotEqual(t, res.Installed.Version, res.Latest.Version, "versions should not be the same")
 		assert.NotEqual(t, res.Installed.FullVersion, res.Latest.FullVersion, "versions should not be the same")
 		assert.NotEqual(t, *res.Installed.BuildTime, *res.Latest.BuildTime, "build times should not be the same (%s)", *res.Installed.BuildTime)
