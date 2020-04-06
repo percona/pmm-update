@@ -41,7 +41,7 @@ before_install:
   - docker-compose up -d
   - docker exec pmm-update-server /root/go/src/github.com/percona/pmm-update/.devcontainer/install-dev-tools.sh
   - docker exec pmm-update-server sed -i'' -e 's^/release/^/laboratory/^' /etc/yum.repos.d/pmm2-server.repo
-  - docker exec pmm-update-server yum clean all 
+  - docker exec pmm-update-server yum --enablerepo=pmm2-server clean metadata 
 
 install:
   # ensure that vendor/ is in sync with code and Gopkg.toml/lock
