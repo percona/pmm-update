@@ -56,13 +56,13 @@ func TestCheck(t *testing.T) {
 	assert.True(t, res.Latest.BuildTime.After(gaReleaseDate), "Latest.BuildTime = %s", res.Latest.BuildTime)
 	assert.NotEmpty(t, res.Latest.Repo)
 
-	// We assume that the latest percona/pmm-server:2 and perconalab/pmm-server:dev-latest images
+	// We assume that the latest perconalab/pmm-server:dev-latest image
 	// always contains the latest pmm-update package versions.
 	// If this test fails, re-pull them and recreate devcontainer.
 	var updateAvailable bool
 	image := os.Getenv("PMM_SERVER_IMAGE")
 	require.NotEmpty(t, image)
-	if image != "percona/pmm-server:2" && image != "perconalab/pmm-server:dev-latest" {
+	if image != "perconalab/pmm-server:dev-latest" {
 		updateAvailable = true
 	}
 	if updateAvailable {
