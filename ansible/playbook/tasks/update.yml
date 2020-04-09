@@ -118,7 +118,7 @@
       debug: var=reread_result.stdout_lines
 
     - name: Create working directory for Alertmanager
-      file: path=/srv/alertmanager state=directory owner=pmm group=pmm
+      file: path=/srv/alertmanager/data state=directory owner=pmm group=pmm
 
     # TODO: Will need to add alertmanager to the list
     #       after feature release
