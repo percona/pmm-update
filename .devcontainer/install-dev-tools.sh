@@ -17,6 +17,7 @@ sed -i'' -e 's^/release/^/laboratory/^' /etc/yum.repos.d/pmm2-server.repo
 percona-release enable original testing
 
 # reinstall with man pages
+yum install -y yum rpm
 yum reinstall -y yum rpm
 
 yum install -y gcc git make pkgconfig glibc-static \
