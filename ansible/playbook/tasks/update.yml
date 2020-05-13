@@ -99,6 +99,9 @@
         value: Share with Percona
 
     - name: Create working directory for Alertmanager
+      file: path=/srv/alertmanager state=directory owner=pmm group=pmm
+
+    - name: Create data directory for Alertmanager
       file: path=/srv/alertmanager/data state=directory owner=pmm group=pmm
 
     # restart pmm-managed first as it may update supervisord configuration on start
