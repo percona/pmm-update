@@ -25,7 +25,7 @@
       when: ansible_virtualization_type != "docker"
       copy:
         src: supervisord.service
-        dest: /etc/systemd/system/
+        dest: /usr/lib/systemd/system/supervisord.service
         mode: 0644
 
     # See https://github.com/Supervisor/supervisor/issues/1264 for explanation
