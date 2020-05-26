@@ -36,7 +36,6 @@ mkdir /root/go/bin
 go env
 
 curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s
 
 # use modules to install (in the background) tagged releases
 cd $(mktemp -d)
@@ -46,6 +45,7 @@ env GOPROXY=https://proxy.golang.org go get -v \
     golang.org/x/tools/gopls@latest &
 
 cd /root/go/src/github.com/percona/pmm-update
+curl https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s
 make init
 
 fg || true
