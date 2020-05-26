@@ -36,6 +36,7 @@ mkdir /root/go/bin
 go env
 
 curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s
 
 # use modules to install (in the background) tagged releases
 cd $(mktemp -d)
