@@ -54,7 +54,7 @@ check:                          ## Run required checkers and linters.
 	ansible-playbook --check ansible/playbook/tasks/update.yml
 	ansible-lint ansible/playbook/tasks/update.yml
 
-check-all: check                ## Run golang ci linter to check new changes from master.
+check-all: check                ## Run all linters for new code.
 	golangci-lint run -c=.golangci.yml --new-from-rev=PMM-2.0
 
 FILES = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
