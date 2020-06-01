@@ -28,19 +28,8 @@
         dest: /usr/lib/systemd/system/supervisord.service
         mode: 0644
 
-    - name: Check if old supervisord service confiuration exists
-      when: ansible_virtualization_type != "docker"
-      stat: path=/etc/systemd/system/supervisord.service checksum_algorithm=md5
-      register: is_old_supervisord
-
-    - name: Check and write in log if old supervisord service confiuration was modified.
-      when: ansible_virtualization_type != "docker" and is_old_supervisord.stat.exists and is_old_supervisord.stat.checksum != "9c618e7860d822053193faca9240ed9f"
-      fail:
-        msg: '/etc/systemd/system/supervisord.service was modified - please ensure it is compatible with updates in /etc/systemd/system/supervisord.service'
-      ignore_errors: yes
-
     - name: Remove old supervisord service confiuration
-      when: ansible_virtualization_type != "docker" and is_old_supervisord.stat.exists and is_old_supervisord.stat.checksum == "9c618e7860d822053193faca9240ed9f"
+      when: ansible_virtualization_type != "docker"
       file:
         path: /etc/systemd/system/supervisord.service
         state: absent
