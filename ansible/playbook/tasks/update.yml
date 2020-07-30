@@ -64,6 +64,7 @@
       yum:
         name: "{{ pmm_packages }}"
         state: latest
+        enablerepo: local
 
     - name: Update system packages
       yum:
