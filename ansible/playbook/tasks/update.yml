@@ -58,13 +58,11 @@
         name: "{{ pmm_packages }}"
         state: latest
         download_only: yes
-        enablerepo: local
 
     - name: Update pmm2 packages
       yum:
         name: "{{ pmm_packages }}"
         state: latest
-        enablerepo: local
 
     - name: Update system packages
       yum:
