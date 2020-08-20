@@ -19,7 +19,7 @@
       - percona-clickhouse-server
       - pmm2-client
       - dbaas-controller
-      - percona-kubectl
+      - dbaas-kubectl
 
   tasks:
     # Replace forking type with simple. New config will be applied after next reboot.
