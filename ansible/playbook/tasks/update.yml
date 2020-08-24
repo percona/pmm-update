@@ -123,7 +123,7 @@
     - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
       ini_file:
         dest: /etc/grafana/grafana.ini
-        section: snapshots
+        section: plugins 
         option: allow_loading_unsigned_plugins
         value: vertamedia-clickhouse-datasource
 
