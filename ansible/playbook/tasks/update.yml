@@ -29,6 +29,7 @@
       - atk 
       - adwaita-cursor-theme 
       - adwaita-icon-theme 
+      - alsa-lib
       - at 
       - at-spi2-atk 
       - at-spi2-core 
