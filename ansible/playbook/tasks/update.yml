@@ -231,8 +231,18 @@
       command: /usr/share/percona-dashboards/fix-panels.py
       changed_when: False
 
+    - name: Check if Grafana Image Renderer plugin has already installed     
+      stat: path=/var/lib/grafana/plugins/grafana-image-renderer
+      register: gird
+
+    - name: Update Grafana Image Renderer plugin
+      command: grafana-cli plugins update grafana-image-renderer
+      when: gird.stat.exists and gird.stat.isdir
+      changed_when: False
+
     - name: Install Grafana Image Renderer plugin
       command: grafana-cli plugins install grafana-image-renderer
+      when: not gird.stat.exists
       changed_when: False
 
     - name: Start Grafana dashboards update
