@@ -19,6 +19,7 @@
       - percona-clickhouse-server
       - pmm2-client
       - dbaas-tools
+
     pmm_rendering_dependencies:
       - libXcomposite
       - libXdamage
@@ -123,6 +124,7 @@
         name: "{{ pmm_packages }}"
         state: latest
 
+    # https://grafana.com/docs/grafana/latest/administration/image_rendering/#grafana-image-renderer-plugin-and-remote-rendering-service
     - name: Install rendering plugin dependencies
       yum:
         name: "{{ pmm_rendering_dependencies }}"
@@ -227,16 +229,16 @@
 
     - name: Check if Grafana Image Renderer plugin has already installed
       stat: path=/var/lib/grafana/plugins/grafana-image-renderer
-      register: gird
+      register: image_renderer_path
 
     - name: Update Grafana Image Renderer plugin
       command: grafana-cli plugins update grafana-image-renderer
-      when: gird.stat.exists and gird.stat.isdir
+      when: image_renderer_path.stat.exists and image_renderer_path.stat.isdir
       changed_when: False
 
     - name: Install Grafana Image Renderer plugin
       command: grafana-cli plugins install grafana-image-renderer
-      when: not gird.stat.exists
+      when: not image_renderer_path.stat.exists
       changed_when: False
 
     - name: Start Grafana dashboards update
