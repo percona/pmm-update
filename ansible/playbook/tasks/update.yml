@@ -21,9 +21,22 @@
       - dbaas-tools
       - pmm2-client
   pre_tasks:
+    - name: detect /srv/pmm-distribution
+      stat:
+        path: /srv/pmm-distribution
+      no_log: yes
+      register: srv_pmm_distribution
+
     - name: detect containers
       set_fact:
         is_container: '{{ lookup("file", "/srv/pmm-distribution") == "docker" }}'
+      no_log: yes
+      when: srv_pmm_distribution.stat.exists
+
+    - name: force container
+      set_fact:
+        is_container: True
+      when: is_container is undefined
 
   tasks:
     # Replace forking type with simple. New config will be applied after next reboot.
