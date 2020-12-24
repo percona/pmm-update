@@ -54,6 +54,14 @@ func check(ctx context.Context) {
 	}
 }
 
+func clean(ctx context.Context) {
+	err := yum.Clean(ctx, "all")
+	if err != nil {
+		logrus.Tracef("%+v", err)
+		logrus.Fatalf("Clean failed: %s", err)
+	}
+}
+
 func performStage1SelfUpdate(ctx context.Context) {
 	const name = "pmm-update"
 	v, err := yum.Installed(ctx, name)
@@ -105,6 +113,7 @@ func perform(ctx context.Context, playbook string, opts *ansible.RunPlaybookOpts
 var (
 	installedF = flag.Bool("installed", false, "Return installed version")
 	checkF     = flag.Bool("check", false, "Check for updates")
+	cleanF     = flag.Bool("clean", false, "Clean cache")
 	performF   = flag.Bool("perform", false, "Perform update")
 	playbookF  = flag.String("playbook", "", "Ansible playbook for -perform")
 	debugF     = flag.Bool("debug", false, "Enable debug logging")
@@ -136,8 +145,11 @@ func main() {
 	if *performF {
 		modes++
 	}
+	if *cleanF {
+		modes++
+	}
 	if modes != 1 {
-		logrus.Fatalf("Please select a mode: -current, -check, or -perform.")
+		logrus.Fatalf("Please select a mode: -current, -check, -clean, or -perform.")
 	}
 
 	// handle termination signals
@@ -156,6 +168,8 @@ func main() {
 		installed(ctx)
 	case *checkF:
 		check(ctx)
+	case *cleanF:
+		clean(ctx)
 	case *performF:
 		if *playbookF == "" {
 			logrus.Fatalf("-playbook flag must be set.")

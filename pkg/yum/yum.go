@@ -117,3 +117,13 @@ func Update(ctx context.Context, name string) error {
 	}
 	return nil
 }
+
+// Clean cleans cache.
+func Clean(ctx context.Context, name string) error {
+	cmdLine := "yum clean --assumeyes --verbose " + name
+	_, _, err := run.Run(ctx, yumInfoCancelTimeout, cmdLine, nil)
+	if err != nil {
+		return errors.Wrapf(err, "%#q failed", cmdLine)
+	}
+	return nil
+}

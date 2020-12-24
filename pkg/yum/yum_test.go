@@ -94,3 +94,8 @@ func TestUpdate(t *testing.T) {
 	err := Update(context.Background(), "make")
 	require.NoError(t, err)
 }
+
+func TestClean(t *testing.T) {
+	err := Clean(context.Background(), "all")
+	require.NoError(t, err)
+}
