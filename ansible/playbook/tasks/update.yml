@@ -69,6 +69,7 @@
         state: absent
         name:
           - mariadb-libs # https://jira.percona.com/browse/PMM-5215
+          - percona-qan-app #
 
     # Split download and update to produce a bit more of progress output.
 
@@ -90,6 +91,12 @@
         security: yes
 
     # Fix things that should be fixed before restarts.
+
+    - name: Remove old packages
+      yum:
+        state: absent
+        name:
+          - percona-qan-app # https://jira.percona.com/browse/PMM-6766
 
     - name: Check pg_stat_statements extension
       postgresql_ext:
