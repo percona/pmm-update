@@ -69,7 +69,6 @@
         state: absent
         name:
           - mariadb-libs # https://jira.percona.com/browse/PMM-5215
-          - percona-qan-app #
 
     # Split download and update to produce a bit more of progress output.
 
