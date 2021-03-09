@@ -48,8 +48,7 @@ before_install:
 install: skip
 
 before_script:
-  - mkdir -p bin
-  - make init
+  #- make init It-s already run from install-dev-tools.sh
   - make format
   - git status
   - git diff --exit-code

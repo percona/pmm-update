@@ -25,6 +25,7 @@ release:                        ## Build pmm-update release binary.
 init:                           ## Installs development tools
 	go build -modfile=tools/go.mod -o bin/golangci-lint github.com/golangci/golangci-lint/cmd/golangci-lint
 	go build -modfile=tools/go.mod -o bin/goimports golang.org/x/tools/cmd/goimports
+	go build -modfile=tools/go.mod -o bin/reviewdog github.com/reviewdog/reviewdog/cmd/reviewdog
 
 	go install ./...
 	go test ./...
