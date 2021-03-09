@@ -22,13 +22,13 @@ LD_FLAGS = -ldflags " \
 release:                        ## Build pmm-update release binary.
 	env CGO_ENABLED=0 go build -v $(LD_FLAGS) -o $(PMM_RELEASE_PATH)/pmm-update
 
-init:                           ## Installs tools to $GOPATH/bin (which is expected to be in $PATH).
-	curl https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin
+init:                           ## Installs development tools
+	go build -modfile=tools/go.mod -o bin/golangci-lint github.com/golangci/golangci-lint/cmd/golangci-lint
+	go build -modfile=tools/go.mod -o bin/goimports golang.org/x/tools/cmd/goimports
 
-	go install ./vendor/golang.org/x/tools/cmd/goimports
-
-	go test -i ./...
-	go test -race -i ./...
+	go install ./...
+	go test ./...
+	go test -race ./...
 
 install:                        ## Install pmm-update binary.
 	go install $(LD_FLAGS) ./...
@@ -61,7 +61,7 @@ FILES = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
 format:                         ## Format source code.
 	gofmt -w -s $(FILES)
-	goimports -local github.com/percona/pmm-update -l -w $(FILES)
+	bin/goimports -local github.com/percona/pmm-update -l -w $(FILES)
 
 RUN_FLAGS ?=
 
@@ -87,5 +87,5 @@ env-down:                       ## Stop development environment.
 	docker-compose down --volumes --remove-orphans
 
 ci-reviewdog:                   ## Runs reviewdog checks.
-	golangci-lint run -c=.golangci-required.yml --out-format=line-number | bin/reviewdog -f=golangci-lint -level=error -reporter=github-pr-check
-	golangci-lint run -c=.golangci.yml --out-format=line-number | bin/reviewdog -f=golangci-lint -level=error -reporter=github-pr-review
+	bin/golangci-lint run -c=.golangci-required.yml --out-format=line-number | bin/reviewdog -f=golangci-lint -level=error -reporter=github-pr-check
+	bin/golangci-lint run -c=.golangci.yml --out-format=line-number | bin/reviewdog -f=golangci-lint -level=error -reporter=github-pr-review
