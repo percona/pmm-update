@@ -35,8 +35,6 @@ update-alternatives --set gofmt /usr/local/go/bin/gofmt
 mkdir /root/go/bin
 go env
 
-curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-
 # use modules to install (in the background) tagged releases
 cd $(mktemp -d)
 go mod init tools
