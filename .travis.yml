@@ -45,8 +45,6 @@ before_install:
   - docker-compose up -d
   - docker exec pmm-update-server /root/go/src/github.com/percona/pmm-update/.devcontainer/install-dev-tools.sh
 
-install:
-
 before_script:
   - make init
   - make format
