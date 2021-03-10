@@ -3,6 +3,7 @@
 # See https://code.visualstudio.com/docs/remote/remote-overview
 # and https://code.visualstudio.com/docs/remote/containers.
 
+set -m
 set -o errexit
 set -o xtrace
 
