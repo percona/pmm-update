@@ -189,7 +189,6 @@
           - grafana
           - qan-api2
           - pmm-agent
-          - dbaas-controller
         - ["stop", "remove", "add"]
 
     - name: Restart dbaas-controller
