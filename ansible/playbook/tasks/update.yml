@@ -97,6 +97,11 @@
         name:
           - percona-qan-app # https://jira.percona.com/browse/PMM-6766
 
+    - name: Remove redundant ansible roles # https://jira.percona.com/browse/PMM-7827
+      file:
+        path: /opt/ansible/roles/phpmyadmin
+        state: absent
+
     - name: Check pg_stat_statements extension
       postgresql_ext:
         db: postgres
