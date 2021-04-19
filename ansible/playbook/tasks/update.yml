@@ -33,9 +33,22 @@
       no_log: yes
       when: srv_pmm_distribution.stat.exists
 
+    - name: check whether /etc/supervisord.d/dbaas-controller.ini contains "autostart = true"
+      command: grep -Fxq "autostart = true" /etc/supervisord.d/dbaas-controller.ini
+      register: check_autostart_dbaas
+      check_mode: no
+      ignore_errors: yes
+      changed_when: no
+      no_log: yes
+
     - name: set dbaas toggle
       set_fact:
-        is_dbaas_on: "{{ lookup('env', 'PERCONA_TEST_DBAAS') == '1' }}"
+        is_dbaas_on: check_autostart_dbaas.rc == 0
+      no_log: yes
+
+    - name: set a toggle based on deprecated DBaaS env PERCONA_DBAAS_TEST
+      set_fact:
+        is_old_dbaas_on: "{{ lookup('env', 'PERCONA_TEST_DBAAS') == '1' }}"
       no_log: yes
 
     - name: force container
@@ -68,6 +81,15 @@
 
     - name: Check reread results
       debug: var=reread_result.stdout_lines
+
+    - name: Ensure "environment=ENABLE_DBAAS=1" is in section "[program:pmm-managed]" when DBaaS was turned on using deprecated PERCONA_DBAAS_TEST=1
+      ini_file:
+        path: /etc/supervisord.d/pmm.ini
+        section: program:pmm-managed
+        option: environment
+        value: ENABLE_DBAAS=1
+        no_extra_spaces: yes
+      when: is_old_dbaas_on
 
     - name: Remove old packages
       yum:
