@@ -8,6 +8,8 @@ github.com/percona/pmm v2.12.1-0.20201202114955-5089534cb973+incompatible h1:Q+z
 github.com/percona/pmm v2.12.1-0.20201202114955-5089534cb973+incompatible/go.mod h1:nN14kK4Dfl2Ub1k05aOnAHv7SmLEQtCsYX+DEfLgrkU=
 github.com/percona/pmm v2.15.2-0.20210408121032-ab1dbcacb092+incompatible h1:dfxxlZXAkfI9kd0Bi9flBoM+fQtvP+kLzb9wPvRcyWo=
 github.com/percona/pmm v2.15.2-0.20210408121032-ab1dbcacb092+incompatible/go.mod h1:nN14kK4Dfl2Ub1k05aOnAHv7SmLEQtCsYX+DEfLgrkU=
+github.com/percona/pmm v2.16.1-0.20210504105121-a4754fe1ba99+incompatible h1:FlIRUCkc6bQfco4M0mHkYIr5bMJwhkZbVZqcgDYsf/g=
+github.com/percona/pmm v2.16.1-0.20210504105121-a4754fe1ba99+incompatible/go.mod h1:nN14kK4Dfl2Ub1k05aOnAHv7SmLEQtCsYX+DEfLgrkU=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
