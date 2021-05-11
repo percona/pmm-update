@@ -74,6 +74,7 @@
         state: absent
         name:
           - mariadb-libs # https://jira.percona.com/browse/PMM-5215
+          - logrotate # https://jira.percona.com/browse/PMM-7627
 
     # Split download and update to produce a bit more of progress output.
 
