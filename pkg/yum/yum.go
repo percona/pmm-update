@@ -61,7 +61,7 @@ func Installed(ctx context.Context, name string) (*version.UpdateInstalledResult
 	}, nil
 }
 
-// getReleaseTime returns date and time when repo was updated (packages published or repo got rebuilt)
+// getReleaseTime returns date and time when repo was updated (packages published or repo got rebuilt).
 func getReleaseTime(ctx context.Context, repo string) (string, error) {
 	cmdLine := "yum repoinfo " + repo
 	stdout, _, err := run.Run(ctx, yumInfoCancelTimeout, cmdLine, nil)
@@ -114,7 +114,7 @@ func Check(ctx context.Context, name string) (*version.UpdateCheckResult, error)
 		Repo:        info["Repo"],
 	}
 
-	//replace Buildtime with repo release time to show time of release
+	// replace Buildtime with repo release time to show time of release
 	repoUpdated, err := getReleaseTime(ctx, info["Repo"])
 	if err != nil {
 		return nil, err
