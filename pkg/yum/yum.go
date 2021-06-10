@@ -113,7 +113,7 @@ func Check(ctx context.Context, name string) (*version.UpdateCheckResult, error)
 		FullVersion: fullVersion(info),
 		Repo:        info["Repo"],
 	}
-	
+
 	//replace Buildtime with repo release time to show time of release
 	repoUpdated, err := getReleaseTime(ctx, info["Repo"])
 	if err != nil {

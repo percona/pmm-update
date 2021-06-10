@@ -317,18 +317,18 @@ func TestParseInfo(t *testing.T) {
 			…
 		`, "\n")
 		expected := map[string]string{
-			"Repo-id":          "pmm2-server",
-			"Repo-name":        "PMM Server YUM repository - x86_64",
-			"Repo-status":      "enabled",
-			"Repo-revision":    "1622561436",
-			"Repo-updated":     "Tue Jun  1 15:30:45 2021",
-			"Repo-pkgs":        "237",
-			"Repo-size":        "2.4 G",
-			"Repo-baseurl":     "https://repo.percona.com/pmm2-components/yum/release/7/RPMS/x86_64/",
-			"Repo-expire":      "21600 second(s) (last: Thu Jun 10 16:08:12 2021)",
-			"Filter":           "read-only:present",
-			"Repo-filename":    "/etc/yum.repos.d/pmm2-server.repo",
-			"repolist":         "237",
+			"Repo-id":       "pmm2-server",
+			"Repo-name":     "PMM Server YUM repository - x86_64",
+			"Repo-status":   "enabled",
+			"Repo-revision": "1622561436",
+			"Repo-updated":  "Tue Jun  1 15:30:45 2021",
+			"Repo-pkgs":     "237",
+			"Repo-size":     "2.4 G",
+			"Repo-baseurl":  "https://repo.percona.com/pmm2-components/yum/release/7/RPMS/x86_64/",
+			"Repo-expire":   "21600 second(s) (last: Thu Jun 10 16:08:12 2021)",
+			"Filter":        "read-only:present",
+			"Repo-filename": "/etc/yum.repos.d/pmm2-server.repo",
+			"repolist":      "237",
 		}
 		actual, err := parseInfo(stdout, "Repo-id")
 		require.NoError(t, err)
