@@ -13,8 +13,8 @@ curl -sS https://dl.google.com/go/go1.15.6.linux-amd64.tar.gz -o /tmp/golang.tar
 # to install man pages
 sed -i '/nodocs/d' /etc/yum.conf
 
-# enable laboratory repository with latest development packages
-sed -i'' -e 's^/release/^/laboratory/^' /etc/yum.repos.d/pmm2-server.repo
+# enable experimental repository with latest development packages
+sed -i'' -e 's^/release/^/experimental/^' /etc/yum.repos.d/pmm2-server.repo
 percona-release enable original testing
 
 # reinstall with man pages

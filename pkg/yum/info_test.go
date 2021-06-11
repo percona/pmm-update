@@ -293,7 +293,7 @@ func TestParseInfo(t *testing.T) {
 	})
 
 	t.Run("RepoInfo", func(t *testing.T) {
-		// yum repoinfo pmm2-server
+		// yum repoinfo pmm2-server.
 		stdout := strings.Split(`
 			Loaded plugins: changelog, fastestmirror, ovl
 			Loading mirror speeds from cached hostfile
