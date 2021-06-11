@@ -22,7 +22,7 @@ yum install -y yum rpm
 yum reinstall -y yum rpm
 
 yum install -y gcc git make pkgconfig glibc-static \
-    ansible-lint \
+    ansible-lint ansible \
     mc tmux psmisc lsof which iproute \
     bash-completion bash-completion-extras \
     man man-pages
