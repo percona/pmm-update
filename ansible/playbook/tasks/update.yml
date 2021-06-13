@@ -239,3 +239,6 @@
 
     - name: Check supervisord log
       debug: var=maintail_result.stdout_lines
+
+    - name: Cleanup yum cache
+      command: yum clean all
