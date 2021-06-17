@@ -111,7 +111,6 @@
         enabled: no
       when: not is_docker
 
-
     - name: Remove old packages
       yum:
         state: absent
