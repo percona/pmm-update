@@ -109,7 +109,7 @@
         name: pmm-agent
         state: stopped
         enabled: no
-      when: ansible_virtualization_type != "docker"
+      when: not is_container
 
 
     - name: Remove old packages
