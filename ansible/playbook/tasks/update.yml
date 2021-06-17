@@ -109,6 +109,8 @@
         name: pmm-agent
         state: stopped
         enabled: no
+      when: ansible_virtualization_type != "docker"
+
 
     - name: Remove old packages
       yum:
