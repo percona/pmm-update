@@ -104,6 +104,12 @@
 
     # Fix things that should be fixed before restarts.
 
+    - name: Stop systemd pmm-agent service, if running
+      systemd:
+        name: pmm-agent
+        state: stopped
+        enabled: no
+
     - name: Remove old packages
       yum:
         state: absent
