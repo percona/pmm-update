@@ -151,6 +151,18 @@
         option: allow_loading_unsigned_plugins
         value: vertamedia-clickhouse-datasource
 
+    - name: Clickhouse logger         | Configure clickhouse logger
+      blockinfile:
+        path: /etc/clickhouse-server/config.yml
+        marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+        marker_begin: "<logger>"
+        marker_end: "</logger>"
+        block: |-
+          <!-- Possible levels: https://github.com/pocoproject/poco/blob/develop/Foundation/include/Poco/Logger.h#L105 -->
+          <level>trace</level>
+          <console>1</console>
+        state: present
+
     # Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
     # https://jira.percona.com/browse/PMM-7024
