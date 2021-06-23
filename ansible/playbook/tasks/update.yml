@@ -20,6 +20,8 @@
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
+  roles:
+    - nginx
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
