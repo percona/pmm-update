@@ -3,14 +3,14 @@
       yum_repository:
         name: nginx
         description: nginx repo
-        baseurl: http://nginx.org/packages/mainline/centos/7/$basearch/
+        baseurl: http://nginx.org/packages/centos/7/$basearch/
         gpgcheck: no
         enabled: yes
 
     - name: Install nginx rpm          | Install nginx rpm
       yum:
         name:
-          - nginx-1.20.0
+          - nginx-1.20.1
         state: installed
 
     - name: NGINX SSL Certificate      | Add script to generate ssl certificate
