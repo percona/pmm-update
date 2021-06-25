@@ -1,0 +1,43 @@
+---
+- name: Remove old clickhouse packages
+  yum:
+    state: absent
+    name:
+      - percona-clickhouse-client
+      - percona-clickhouse-server
+
+- name: Clickhouse                | Disable clickhouse-server in systemd
+  when: ansible_virtualization_type != "docker"
+  service: name=clickhouse-server state=stopped enabled=no
+
+- name: Create directories        | Create dirs
+  file: path={{ item }} state=directory owner=root group=pmm
+  with_items:
+    - /srv/clickhouse
+
+- name: Install by YUM | Ensure clickhouse repo GPG key imported
+  rpm_key:
+    state: present
+    key: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
+
+- name: Install by YUM | Ensure clickhouse repo installed
+  yum_repository:
+    name: clickhouse
+    file: clickhouse
+    description: "Clickhouse repo"
+    baseurl: "https://repo.clickhouse.tech/rpm/stable/x86_64/"
+    enabled: yes
+    gpgcheck: 1
+    gpgkey: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
+
+
+- name: Install by YUM | Ensure clickhouse package installed
+  yum:
+    name: latest
+    state: installed
+
+- name: Cickhouse                 | Create ClickHouse database
+  command: clickhouse-client --host 127.0.0.1 --query="CREATE DATABASE IF NOT EXISTS pmm"
+
+- name: Cickhouse                 | Show ClickHouse database
+  command: clickhouse-client --host 127.0.0.1 --query="SHOW DATABASES"

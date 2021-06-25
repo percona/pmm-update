@@ -1,6 +1,5 @@
 ---
 # This playbook contains tasks executed during PMM Server update.
-
 - hosts: localhost
   become: yes
   gather_facts: yes
@@ -15,8 +14,6 @@
       - pmm-server
       - pmm-managed
       - pmm-update
-      - percona-clickhouse-client
-      - percona-clickhouse-server
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
@@ -42,7 +39,8 @@
       set_fact:
         is_container: True
       when: is_container is undefined
-
+  roles:
+    - nginx
   tasks:
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
