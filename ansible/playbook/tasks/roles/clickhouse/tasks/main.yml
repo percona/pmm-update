@@ -5,6 +5,8 @@
     name:
       - percona-clickhouse-client
       - percona-clickhouse-server
+      - percona-clickhouse-common-static
+      - percona-clickhouse-server-common
 
 - name: Clickhouse                | Disable clickhouse-server in systemd
   when: ansible_virtualization_type != "docker"
