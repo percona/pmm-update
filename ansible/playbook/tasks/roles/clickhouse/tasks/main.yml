@@ -33,7 +33,10 @@
 
 - name: Install by YUM | Ensure clickhouse package installed
   yum:
-    name: latest
+    name: 
+      - clickhouse-client
+      - clickhouse-server
+      - clickhouse-common-static
     state: installed
 
 - name: Restart clickhouse
