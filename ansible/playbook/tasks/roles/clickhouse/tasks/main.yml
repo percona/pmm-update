@@ -8,21 +8,21 @@
       - percona-clickhouse-common-static
       - percona-clickhouse-server-common
 
-- name: Clickhouse                | Disable clickhouse-server in systemd
+- name: Disable clickhouse-server in systemd
   when: ansible_virtualization_type != "docker"
   service: name=clickhouse-server state=stopped enabled=no
 
-- name: Create directories        | Create dirs
+- name: Create clickhouse data directory
   file: path={{ item }} state=directory owner=root group=pmm
   with_items:
     - /srv/clickhouse
 
-- name: Install by YUM | Ensure clickhouse repo GPG key imported
+- name: Ensure clickhouse repo GPG key imported
   rpm_key:
     state: present
     key: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
 
-- name: Install by YUM | Ensure clickhouse repo installed
+- name: Ensure clickhouse repo installed
   yum_repository:
     name: clickhouse
     file: clickhouse
@@ -33,13 +33,19 @@
     gpgkey: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
 
 
-- name: Install by YUM | Ensure clickhouse package installed
+- name: Ensure clickhouse package installed
   yum:
     name: 
       - clickhouse-client
       - clickhouse-server
       - clickhouse-common-static
     state: installed
+
+- name: Copy clickhouse config to image
+  copy:
+    src: config.xml
+    dest: /etc/clickhouse-server/config.xml
+    mode: 0600
 
 - name: Restart clickhouse
   command: supervisorctl {{ item }} clickhouse
