@@ -35,9 +35,9 @@
 - name: Ensure clickhouse package installed
   yum:
     name: 
-      - clickhouse-client
-      - clickhouse-server
-      - clickhouse-common-static
+      - clickhouse-client=21.6.5.37-2
+      - clickhouse-server=21.6.5.37-2
+      - clickhouse-common-static=21.6.5.37-2
     state: installed
     update_cache: yes
 
