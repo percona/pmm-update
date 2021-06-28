@@ -9,13 +9,18 @@
       - percona-clickhouse-server-common
 
 - name: Disable clickhouse-server in systemd
-  when: ansible_virtualization_type != "docker"
-  service: name=clickhouse-server state=stopped enabled=no
+  when: not is_container
+  service:
+    name: clickhouse-server
+    state: stopped
+    enabled: no
 
 - name: Create clickhouse data directory
-  file: path={{ item }} state=directory owner=root group=pmm
-  with_items:
-    - /srv/clickhouse
+  file: 
+    path: "/srv/clickhouse" 
+    state: directory
+    owner: root
+    group: pmm
 
 - name: Ensure clickhouse repo GPG key imported
   rpm_key:
@@ -35,11 +40,11 @@
 - name: Ensure clickhouse package installed
   yum:
     name:
-      - clickhouse-client-21.6.5.37-2
-      - clickhouse-server-21.6.5.37-2
-      - clickhouse-common-static-21.6.5.37-2
+      - clickhouse-client-{{ clickhouse_version}}
+      - clickhouse-server-{{ clickhouse_version}}
+      - clickhouse-common-static-{{ clickhouse_version}}
     state: installed
-  ignore_errors: '{{ ansible_check_mode }}' # We don't have clickhouse repo when we run ansible --check
+  ignore_errors: '{{ ansible_check_mode }}' # We don't have clickhouse repo when we run ansible with --check
 
 - name: Copy clickhouse config to image
   copy:
