@@ -20,7 +20,7 @@
 - name: Ensure clickhouse repo GPG key imported
   rpm_key:
     state: present
-    key: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
+    key: "https://repo.clickhouse.tech/CLICKHOUSE-KEY.GPG"
 
 - name: Ensure clickhouse repo installed
   yum_repository:
@@ -30,14 +30,14 @@
     baseurl: "https://repo.clickhouse.tech/rpm/stable/x86_64/"
     enabled: yes
     gpgcheck: 1
-    gpgkey: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
+    gpgkey: "https://repo.clickhouse.tech/CLICKHOUSE-KEY.GPG"
 
 - name: Ensure clickhouse package installed
   yum:
     name:
-      - clickhouse-client=21.6.5.37-2
-      - clickhouse-server=21.6.5.37-2
-      - clickhouse-common-static=21.6.5.37-2
+      - clickhouse-client-21.6.5.37-2
+      - clickhouse-server-21.6.5.37-2
+      - clickhouse-common-static-21.6.5.37-2
     state: installed
   ignore_errors: '{{ ansible_check_mode }}' # We don't have clickhouse repo when we run ansible --check
 
