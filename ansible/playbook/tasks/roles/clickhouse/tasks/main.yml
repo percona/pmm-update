@@ -34,12 +34,12 @@
 
 - name: Ensure clickhouse package installed
   yum:
-    name: 
+    name:
       - clickhouse-client=21.6.5.37-2
       - clickhouse-server=21.6.5.37-2
       - clickhouse-common-static=21.6.5.37-2
     state: installed
-    update_cache: yes
+  ignore_errors: '{{ ansible_check_mode }}' # We don't have clickhouse repo when we run ansible --check
 
 - name: Copy clickhouse config to image
   copy:
@@ -64,6 +64,8 @@
 
 - name: Cickhouse                 | Create ClickHouse database
   command: clickhouse-client --host 127.0.0.1 --query="CREATE DATABASE IF NOT EXISTS pmm"
+  changed_when: False
 
 - name: Cickhouse                 | Show ClickHouse database
   command: clickhouse-client --host 127.0.0.1 --query="SHOW DATABASES"
+  changed_when: False
