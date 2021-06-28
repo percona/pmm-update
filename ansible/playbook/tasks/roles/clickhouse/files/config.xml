@@ -23,7 +23,7 @@
         -->
         <level>trace</level>
         <log>/srv/logs/clickhouse-server.log</log>
-        <errorlog>/srv/logs/clickhouse-server.err.log</errorlog>        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
+        <errorlog>/srv/logs/clickhouse-server.err.log</errorlog>
         <!-- Rotation policy
              See https://github.com/pocoproject/poco/blob/poco-1.9.4-release/Foundation/include/Poco/FileChannel.h#L54-L85
           -->
@@ -156,7 +156,7 @@
     <!-- <listen_host>::</listen_host> -->
 
     <!-- Same for hosts without support for IPv6: -->
-    <!-- <listen_host>0.0.0.0</listen_host> -->
+    <listen_host>0.0.0.0</listen_host>
 
     <!-- Default values - try listen localhost on IPv4 and IPv6. -->
     <!--
