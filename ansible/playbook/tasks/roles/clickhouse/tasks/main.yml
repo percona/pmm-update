@@ -32,7 +32,6 @@
     gpgcheck: 1
     gpgkey: "https://repo.clickhouse.tech//CLICKHOUSE-KEY.GPG"
 
-
 - name: Ensure clickhouse package installed
   yum:
     name: 
@@ -40,6 +39,7 @@
       - clickhouse-server
       - clickhouse-common-static
     state: installed
+    update_cache: yes
 
 - name: Copy clickhouse config to image
   copy:
