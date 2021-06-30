@@ -19,11 +19,15 @@
         dest: /var/lib/cloud/scripts/per-boot/
         mode: 0755
 
-    - name: NGINX                       | Copy nginx.conf to image
+    - name: NGINX                       | Copy nginx configs
       copy:
-        src: nginx.conf
-        dest: /etc/nginx/nginx.conf
+        src: {{ item }}
+        dest: /etc/nginx/{{ item }}
         mode: 0644
+      loop:
+        - "nginx.conf"
+        - "conf.d/pmm-ssl.conf"
+        - "conf.d/pmm.conf"
 
     - name: NGINX SSL Certificate      | Check certificate file
       stat: path=/srv/nginx/certificate.crt
