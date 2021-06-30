@@ -21,7 +21,7 @@
 
     - name: NGINX                       | Copy nginx configs
       copy:
-        src: {{ item }}
+        src: "{{ item }}"
         dest: /etc/nginx/{{ item }}
         mode: 0644
       loop:
