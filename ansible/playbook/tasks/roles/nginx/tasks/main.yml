@@ -8,7 +8,7 @@
     gpgcheck: no
     enabled: no
 
-- name: Creates directories for nginx
+- name: Create directories for nginx
   file:
     path: "{{ item }}"
     state: directory
