@@ -8,10 +8,17 @@
     gpgcheck: no
     enabled: no
 
+- name: Creates directories for nginx
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /usr/share/pmm-server/static/
+    - /etc/nginx/conf.d/
+
 - name: Install nginx rpm          | Install nginx rpm
   yum:
-    name:
-      - nginx-1.20.1
+    name: nginx-1.20.1
     state: installed
 
 - name: NGINX SSL Certificate      | Add script to generate ssl certificate
@@ -31,7 +38,8 @@
     - "conf.d/pmm.conf"
 
 - name: NGINX SSL Certificate      | Check certificate file
-  stat: path=/srv/nginx/certificate.crt
+  stat: 
+    path: /srv/nginx/certificate.crt
   register: certificate_file
 
 - name: NGINX SSL Certificate      | Generate certificate
@@ -46,6 +54,12 @@
 - name: Check nginx configuration
   command: nginx -t
   changed_when: False
+
+- name: copy local-rss.xml file
+  copy: 
+    src: local-rss.xml
+    dest: /usr/share/pmm-server/static/
+    mode: 0644
 
 - name: Restart nginx
   command: supervisorctl {{ item }} nginx
