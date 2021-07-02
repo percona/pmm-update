@@ -195,7 +195,7 @@
       command: supervisorctl {{ item.1 }} {{ item.0 }}
       changed_when: True
       with_nested:
-          - postgresql
+        - - postgresql
           - alertmanager
           - clickhouse
           - grafana
