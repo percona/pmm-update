@@ -243,3 +243,4 @@
       command: yum clean all
       register: yum_clean_result
       changed_when: "'Cleaning repos' in yum_clean_result.stdout"
+      warn: False
