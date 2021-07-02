@@ -195,12 +195,12 @@
       command: supervisorctl {{ item.1 }} {{ item.0 }}
       changed_when: True
       with_nested:
-          - postgresql
-          - alertmanager
-          - clickhouse
-          - grafana
-          - qan-api2
-          - pmm-agent
+        - postgresql
+        - alertmanager
+        - clickhouse
+        - grafana
+        - qan-api2
+        - pmm-agent
         - ["stop", "remove", "add"]
 
     - name: Restart dbaas-controller
@@ -243,3 +243,4 @@
       command: yum clean all
       register: yum_clean_result
       changed_when: "'Cleaning repos' in yum_clean_result.stdout"
+      warn: False
