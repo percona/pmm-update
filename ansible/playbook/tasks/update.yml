@@ -157,17 +157,6 @@
         option: allow_loading_unsigned_plugins
         value: vertamedia-clickhouse-datasource
 
-    - name: Clickhouse logger         | Configure clickhouse logger
-      replace:
-        path: /etc/clickhouse-server/config.xml
-        regexp: '<logger>[\s\S]*</logger>'
-        replace: |-
-          <logger>
-                  <!-- Possible levels: https://github.com/pocoproject/poco/blob/develop/Foundation/include/Poco/Logger.h#L105 -->
-                  <level>trace</level>
-                  <console>1</console>
-              </logger>
-
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
     # https://jira.percona.com/browse/PMM-7024
@@ -207,7 +196,6 @@
         - - nginx
           - postgresql
           - alertmanager
-          - clickhouse
           - grafana
           - qan-api2
           - pmm-agent
