@@ -23,8 +23,8 @@
     enabled: no
 
 - name: Create clickhouse data directory
-  file: 
-    path: "/srv/clickhouse" 
+  file:
+    path: "/srv/clickhouse"
     state: directory
     owner: root
     group: pmm
@@ -70,6 +70,11 @@
     delay: 30
     timeout: 60
 
+
+# Why we use Ordinary engine in next query?
+# TLDR: Clickhouse changed default engine and there is officially no way to migrate other than...renaming the table.
+# https://github.com/ClickHouse/ClickHouse/issues/6787
+# TODO we need to think about migration in future
 - name: Cickhouse                 | Create ClickHouse database
   command: clickhouse-client --host 127.0.0.1 --query="CREATE DATABASE IF NOT EXISTS pmm ENGINE = Ordinary"
   changed_when: False
