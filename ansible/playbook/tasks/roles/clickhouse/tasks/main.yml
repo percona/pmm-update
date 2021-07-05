@@ -71,7 +71,7 @@
     timeout: 60
 
 - name: Cickhouse                 | Create ClickHouse database
-  command: clickhouse-client --host 127.0.0.1 --query="CREATE DATABASE IF NOT EXISTS pmm"
+  command: clickhouse-client --host 127.0.0.1 --query="CREATE DATABASE IF NOT EXISTS pmm ENGINE = Ordinary"
   changed_when: False
 
 - name: Cickhouse                 | Show ClickHouse database
