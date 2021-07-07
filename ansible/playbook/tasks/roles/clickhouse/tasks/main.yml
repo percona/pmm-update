@@ -29,12 +29,12 @@
     owner: root
     group: pmm
 
-- name: Ensure clickhouse repo GPG key imported
+- name: Import clickhouse repo GPG key
   rpm_key:
     state: present
     key: "https://repo.clickhouse.tech/CLICKHOUSE-KEY.GPG"
 
-- name: Ensure clickhouse repo installed
+- name: Install clickhouse repo 
   yum_repository:
     name: clickhouse
     file: clickhouse
@@ -44,7 +44,7 @@
     gpgcheck: 1
     gpgkey: "https://repo.clickhouse.tech/CLICKHOUSE-KEY.GPG"
 
-- name: Ensure clickhouse package installed
+- name: Install clickhouse package
   yum:
     name:
       - clickhouse-client-{{ clickhouse_version}}
