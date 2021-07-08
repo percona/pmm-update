@@ -34,7 +34,7 @@
     state: present
     key: "https://repo.clickhouse.tech/CLICKHOUSE-KEY.GPG"
 
-- name: Install clickhouse repo 
+- name: Install clickhouse repo
   yum_repository:
     name: clickhouse
     file: clickhouse
