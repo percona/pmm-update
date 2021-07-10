@@ -65,14 +65,12 @@
 - name: Remove cap_ipc_lock from clickhouse binary
   capabilities:
     path: /usr/bin/clickhouse
-    capability: "cap_ipc_lock"
     state: absent
-
-- name: Remove cap_net_admin from clickhouse binary
-  capabilities:
-    path: /usr/bin/clickhouse
-    capability: "cap_net_admin"
-    state: absent
+    capability: "{{ item}}"
+  loop:
+    - cap_ipc_lock
+    - cap_sys_nice
+    - cap_net_admin
 
 - name: Start clickhouse
   command: supervisorctl add clickhouse
