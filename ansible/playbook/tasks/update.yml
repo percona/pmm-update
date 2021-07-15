@@ -18,6 +18,7 @@
       - pmm2-client
   roles:
     - nginx
+    - clickhouse
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
@@ -40,8 +41,6 @@
       set_fact:
         is_docker: True
       when: is_docker is undefined
-  roles:
-    - clickhouse
   tasks:
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
