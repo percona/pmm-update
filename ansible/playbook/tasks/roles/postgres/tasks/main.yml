@@ -14,6 +14,8 @@
     db: pmm-managed
     query: SHOW SERVER_ENCODING;
   register: postgres_encoding
+  become_user: postgres
+  become_method: su
 
 - name: change encoding pmm-managed database
   include_tasks: encoding.yml
