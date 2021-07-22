@@ -96,6 +96,10 @@
         exclude:
           - nginx
 
+    - name: Run postgres-related tasks
+      include_role:
+        name: postgres
+
     - name: Install nginx
       include_role:
         name: nginx

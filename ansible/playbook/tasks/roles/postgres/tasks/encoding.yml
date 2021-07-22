@@ -1,0 +1,58 @@
+
+- name: Stop pmm-managed before change encoding
+  command: supervisorctl stop pmm-managed
+
+- name: Change encoding from 
+  block:
+    - name: dump pmm-managed database
+      become: true
+      become_user: postgres
+      become_method: su
+      postgresql_db:
+        name: pmm-managed
+        state: dump
+        target: /srv/backup/postges/pmm-managed.sql
+
+    - name: Disable template1 as template
+      postgresql_query:
+        query: UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+
+    - name: Remove template1
+      postgresql_db:
+        name: template1
+        state: absent
+
+    - name: Create new template1 database with UTF-8
+      postgresql_db:
+        encoding: UTF-8
+        name: template1
+        state: present
+        template: template0
+
+    - name: Enable template1 as template
+      postgresql_query:
+        query: UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+
+    - name: Remove pmm-managed database
+      postgresql_db:
+        name: pmm-managed
+        state: absent
+
+    - name: Recreate pmm-managed database with UTF-8
+      postgresql_db:
+        encoding: UTF-8
+        name: pmm-managed
+        state: present
+
+    - name: Restore pmm-managed database
+      postgresql_db:
+        encoding: UTF-8
+        name: pmm-managed
+        state: restore
+        target: /srv/backup/postges/pmm-managed.sql
+  become: true
+  become_user: postgres
+  become_method: su
+
+- name: Start pmm-managed
+  command: supervisorctl stop pmm-managed

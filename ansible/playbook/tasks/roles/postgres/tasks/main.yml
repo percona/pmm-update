@@ -1,0 +1,20 @@
+---
+# This playbook contains tasks executed during PMM Server update.
+
+- name: Create buckup dir
+  file:
+    path: /srv/backup/postges
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: '0700'
+
+- name: Get postgres encoding
+  postgresql_query:
+    db: pmm-managed
+    query: SHOW SERVER_ENCODING;
+  register: postgres_encoding
+
+- name: change encoding pmm-managed database
+  include_tasks: encoding.yml
+  when: "'SQL_ASCII' == postgres_encoding.query_result[0].server_encoding"
