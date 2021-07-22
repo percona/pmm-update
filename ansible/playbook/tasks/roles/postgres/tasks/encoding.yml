@@ -7,7 +7,7 @@
   block:
     - name: Disable connections to pmm-managed database
       postgresql_query:
-        query: REVOKE CONNECT ON DATABASE `pmm-managed` FROM PUBLIC;
+        query: REVOKE CONNECT ON DATABASE "pmm-managed" FROM PUBLIC;
 
     - name: Kill old connections to pmm-managed
       postgresql_query:
