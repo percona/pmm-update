@@ -1,8 +1,9 @@
 
 - name: Stop pmm-managed before change encoding
   command: supervisorctl stop pmm-managed
+  changed_when: True
 
-- name: Change encoding from 
+- name: Change encoding from SQL_ASCII to UTF-8
   block:
     - name: dump pmm-managed database
       become: true
@@ -62,3 +63,4 @@
 
 - name: Start pmm-managed
   command: supervisorctl stop pmm-managed
+  changed_when: True
