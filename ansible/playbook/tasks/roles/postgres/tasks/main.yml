@@ -17,6 +17,9 @@
   become_user: postgres
   become_method: su
 
+- debug:
+    var: postgres_encoding.query_result
+
 - name: change encoding pmm-managed database
   include_tasks: encoding.yml
   when: "'SQL_ASCII' == postgres_encoding.query_result[0].server_encoding"
