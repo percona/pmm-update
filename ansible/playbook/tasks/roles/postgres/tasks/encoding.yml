@@ -9,15 +9,15 @@
       postgresql_query:
         query: REVOKE CONNECT ON DATABASE "pmm-managed" FROM PUBLIC;
 
-    - name: Kill old connections to pmm-managed
+    - name: Terminate all connections to pmm-managed
       postgresql_query:
-        query: select pg_terminate_backend(pid) from pg_stat_activity where datname='pmm-managed';
+        query: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='pmm-managed';
 
     - name: Dump pmm-managed database
       postgresql_db:
         name: pmm-managed
         state: dump
-        target: /srv/backup/postges/pmm-managed.sql
+        target: /srv/backup/postgres/pmm-managed.sql
 
     - name: Disable template1 as template
       postgresql_query:
@@ -61,7 +61,7 @@
         lc_ctype: en_US.UTF-8
         name: pmm-managed
         state: restore
-        target: /srv/backup/postges/pmm-managed.sql
+        target: /srv/backup/postgres/pmm-managed.sql
 
     - name: Return connections to pmm-managed database
       postgresql_query:
@@ -72,5 +72,5 @@
   become_method: su
 
 - name: Start pmm-managed
-  command: supervisorctl stop pmm-managed
+  command: supervisorctl start pmm-managed
   changed_when: True
