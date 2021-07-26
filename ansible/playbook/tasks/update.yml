@@ -115,7 +115,7 @@
         yum:
           name: pmm2-client
           state: latest
-    #  TODO END 
+    # TODO END
 
     - name: Update system packages
       yum:
