@@ -18,6 +18,7 @@
       - percona-clickhouse-server
       - dbaas-controller
       - dbaas-tools
+      - pmm2-client
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
