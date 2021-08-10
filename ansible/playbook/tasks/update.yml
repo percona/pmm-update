@@ -1,6 +1,5 @@
 ---
 # This playbook contains tasks executed during PMM Server update.
-
 - hosts: localhost
   become: yes
   gather_facts: yes
@@ -14,8 +13,6 @@
       - pmm-server
       - pmm-managed
       - pmm-update
-      - percona-clickhouse-client
-      - percona-clickhouse-server
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
@@ -41,7 +38,6 @@
       set_fact:
         is_docker: True
       when: is_docker is undefined
-
   tasks:
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
@@ -84,6 +80,7 @@
         state: absent
       register: experimetal_repo_existed
 
+
     - name: Cleanup yum metadata
       command: yum clean metadata
       register: yum_clean_result
@@ -94,7 +91,6 @@
                             # The handler looks bad in this case
 
     # Split download and update to produce a bit more of progress output.
-
     - name: Download pmm2 packages
       yum:
         name: "{{ pmm_packages }}"
@@ -111,6 +107,16 @@
         name: "*"
         state: latest
         security: yes
+        exclude:
+          - nginx
+
+    - name: Install nginx
+      include_role:
+        name: nginx
+
+    - name: Install clickhouse
+      include_role:
+        name: clickhouse
 
     # Fix things that should be fixed before restarts.
 
@@ -126,6 +132,9 @@
         state: absent
         name:
           - percona-qan-app # https://jira.percona.com/browse/PMM-6766
+          - mariadb-libs # https://jira.percona.com/browse/PMM-5215
+          - logrotate # https://jira.percona.com/browse/PMM-7627
+          - screen
 
     - name: Check pg_stat_statements extension
       postgresql_ext:
@@ -139,13 +148,6 @@
         dest: /var/lib/cloud/scripts/per-boot/resize-xfs
         regexp: "set -o errexit"
         replace: ""
-
-    - name: Update nginx configuration
-      file: name=/etc/nginx/conf.d/default.conf state=absent
-
-    - name: Check nginx configuration
-      command: nginx -t
-      changed_when: False
 
     - name: Enable external snapshots in Grafana
       ini_file:
@@ -174,17 +176,6 @@
         section: plugins
         option: allow_loading_unsigned_plugins
         value: vertamedia-clickhouse-datasource
-
-    - name: Clickhouse logger         | Configure clickhouse logger
-      replace:
-        path: /etc/clickhouse-server/config.xml
-        regexp: '<logger>[\s\S]*</logger>'
-        replace: |-
-          <logger>
-                  <!-- Possible levels: https://github.com/pocoproject/poco/blob/develop/Foundation/include/Poco/Logger.h#L105 -->
-                  <level>trace</level>
-                  <console>1</console>
-              </logger>
 
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
@@ -222,10 +213,8 @@
       command: supervisorctl {{ item.1 }} {{ item.0 }}
       changed_when: True
       with_nested:
-        - - nginx
-          - postgresql
+        - - postgresql
           - alertmanager
-          - clickhouse
           - grafana
           - qan-api2
           - pmm-agent
@@ -266,6 +255,7 @@
 
     - name: Check supervisord log
       debug: var=maintail_result.stdout_lines
+
 
     - name: Cleanup yum cache
       command: yum clean all
