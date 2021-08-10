@@ -80,7 +80,6 @@
         state: absent
       register: experimetal_repo_existed
 
-
     - name: Cleanup yum metadata
       command: yum clean metadata
       register: yum_clean_result
