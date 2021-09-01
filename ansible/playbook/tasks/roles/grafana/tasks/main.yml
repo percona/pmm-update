@@ -1,0 +1,77 @@
+---
+- name: Create directories        | Create '/srv/grafana' dir
+  file:
+    path: /srv/grafana
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: '0775'
+
+- name: Grafana                    | Check data dir
+  stat: path=/srv/grafana/grafana.db
+  register: grafana_db
+
+- name: Grafana                    | Disable Anonymous access
+  when: not grafana_db.stat.exists
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: auth.anonymous
+    option: enabled
+    value: 'false'
+
+- name: Grafana                   | Enable gzip for grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: server
+    option: enable_gzip
+    value: "true"
+
+- name: Enable external snapshots in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: snapshots
+    option: external_enabled
+    value: "true"
+
+- name: Set snapshot server URL in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: snapshots
+    option: external_snapshot_url
+    value: https://snapshots-g710.percona.com
+
+- name: Set name for snapshot server in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: snapshots
+    option: external_snapshot_name
+    value: Share with Percona
+
+- name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: plugins
+    option: allow_loading_unsigned_plugins
+    value: vertamedia-clickhouse-datasource
+
+# set folder names of panels to format that's supported by grafana-cli
+- name: Rename Grafana community panels
+  command: /usr/share/percona-dashboards/fix-panels.py
+  changed_when: False
+
+- name: Start Grafana dashboards update
+  command: supervisorctl start dashboard-upgrade
+  changed_when: True
+
+- name: Grafana                   | Wait for dashboards
+  wait_for:
+    path: /srv/grafana/PERCONA_DASHBOARDS_VERSION
+    state: present
+
+- name: Grafana                   | Add community panels
+  unarchive:
+    src: "{{ item }}"
+    dest: /var/lib/grafana/plugins
+    remote_src: yes
+  with_fileglob:
+    - "/usr/share/percona-dashboards/panels/*.zip"

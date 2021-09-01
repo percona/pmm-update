@@ -109,6 +109,10 @@
         exclude:
           - nginx
 
+    - name: Install grafana
+      include_role:
+        name: grafana
+
     - name: Install nginx
       include_role:
         name: nginx
@@ -147,34 +151,6 @@
         dest: /var/lib/cloud/scripts/per-boot/resize-xfs
         regexp: "set -o errexit"
         replace: ""
-
-    - name: Enable external snapshots in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: snapshots
-        option: external_enabled
-        value: "true"
-
-    - name: Set snapshot server URL in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: snapshots
-        option: external_snapshot_url
-        value: https://snapshots-g710.percona.com
-
-    - name: Set name for snapshot server in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: snapshots
-        option: external_snapshot_name
-        value: Share with Percona
-
-    - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: plugins
-        option: allow_loading_unsigned_plugins
-        value: vertamedia-clickhouse-datasource
 
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
@@ -228,14 +204,6 @@
         - "remove"
         - "add"
 
-    # set folder names of panels to format that's supported by grafana-cli
-    - name: Rename Grafana community panels
-      command: /usr/share/percona-dashboards/fix-panels.py
-      changed_when: False
-
-    - name: Start Grafana dashboards update
-      command: supervisorctl start dashboard-upgrade
-      changed_when: True
 
     - name: Update/restart other services
       command: supervisorctl update
