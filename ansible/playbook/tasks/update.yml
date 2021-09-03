@@ -29,9 +29,9 @@
       no_log: yes
       when: srv_pmm_distribution.stat.exists
 
-    - name: set dbaas toggle
-      set_fact:
-        is_dbaas_on: "{{ lookup('env', 'PERCONA_TEST_DBAAS') == '1' }}"
+    - name: set dbaas-controller pid
+      shell: pidof dbaas-controller
+      register: dbaas_controller_pid_check
       no_log: yes
 
     - name: force container
@@ -222,7 +222,7 @@
     - name: Restart dbaas-controller
       command: supervisorctl {{ item }} dbaas-controller
       changed_when: True
-      when: is_dbaas_on
+      when: dbaas_controller_pid_check.stdout != ''
       loop:
         - "stop"
         - "remove"
