@@ -30,7 +30,7 @@
       when: srv_pmm_distribution.stat.exists
 
     - name: set dbaas-controller pid
-      shell: pidof dbaas-controller
+      shell: pgrep dbaas-controller
       register: dbaas_controller_pid_check
       #no_log: yes
 
