@@ -222,7 +222,7 @@
     - name: Restart dbaas-controller
       command: supervisorctl {{ item }} dbaas-controller
       changed_when: True
-      when: "'stdout' in dbaas_controller_pid_check.results"
+      when: "'stdout' in dbaas_controller_pid_check"
       loop:
         - "stop"
         - "remove"
