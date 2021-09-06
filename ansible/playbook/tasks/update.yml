@@ -32,7 +32,7 @@
     - name: set dbaas-controller pid
       shell: pidof dbaas-controller
       register: dbaas_controller_pid_check
-      no_log: yes
+      #no_log: yes
 
     - name: force container
       set_fact:
