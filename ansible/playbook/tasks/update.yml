@@ -169,6 +169,13 @@
         option: external_snapshot_name
         value: Share with Percona
 
+    - name: Set Grafana folder for plugins on /srv partition
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: paths
+        option: plugins
+        value: /srv/grafana/plugins
+
     - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
       ini_file:
         dest: /etc/grafana/grafana.ini
@@ -227,6 +234,16 @@
         - "stop"
         - "remove"
         - "add"
+
+    - name: Check if grafana plugins folder is new
+      find:
+        paths: '/srv/grafana/plugins'
+      register: grafanaPluginFolderEmpty
+
+    # move grafana plugins to /srv partition
+    - name: Copy plugins to /srv
+      copy: src=/var/lib/grafana/plugins/ dest=/srv/grafana/plugins/ remote_src=yes directory_mode=yes
+      when: grafanaPluginFolderEmpty.matched == 0
 
     # set folder names of panels to format that's supported by grafana-cli
     - name: Rename Grafana community panels
