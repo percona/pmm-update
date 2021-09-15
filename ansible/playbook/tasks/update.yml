@@ -176,6 +176,11 @@
         option: plugins
         value: /srv/grafana/plugins
 
+    - name: Set Grafana folder for plugins on /srv partition for all users
+      lineinfile:
+        path: /etc/bashrc
+        line: 'export GF_PLUGIN_DIR=/srv/grafana/plugins'
+
     - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
       ini_file:
         dest: /etc/grafana/grafana.ini
@@ -238,6 +243,7 @@
     - name: Check if grafana plugins folder is new
       find:
         paths: '/srv/grafana/plugins'
+        file_type: directory
       register: grafanaPluginFolderEmpty
 
     # move grafana plugins to /srv partition
