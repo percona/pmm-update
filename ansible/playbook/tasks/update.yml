@@ -234,7 +234,12 @@
 
     # move grafana plugins to /srv partition
     - name: Copy plugins to /srv
-      copy: src=/var/lib/grafana/plugins/ dest=/srv/grafana/plugins/ remote_src=yes directory_mode=yes
+      copy:
+        src: /var/lib/grafana/plugins/
+        dest: /srv/grafana/plugins/
+        remote_src: yes
+        directory_mode: yes
+        mode: '0775'
       when: grafanaPluginFolderEmpty.matched == 0
 
     # set folder names of panels to format that's supported by grafana-cli
