@@ -242,6 +242,11 @@
         mode: '0775'
       when: grafanaPluginFolderEmpty.matched == 0
 
+    - name: Delete old folder for grafana plugins
+      file:
+        state: absent
+        path: /var/lib/grafana/plugins/
+
     # set folder names of panels to format that's supported by grafana-cli
     - name: Rename Grafana community panels
       command: /usr/share/percona-dashboards/fix-panels.py
