@@ -232,7 +232,7 @@
         file_type: directory
       register: grafanaPluginFolderEmpty
 
-    # move grafana plugins to /srv partition
+    # copy grafana plugins to /srv partition
     - name: Copy plugins to /srv
       copy:
         src: /var/lib/grafana/plugins/
