@@ -30,7 +30,7 @@ import (
 const (
 	yumInfoCancelTimeout   = 30 * time.Second  // must be _much_ less than stopwaitsecs in supervisord config
 	yumUpdateCancelTimeout = 120 * time.Second // must be less than stopwaitsecs in supervisord config
-	changeLogURLPath = "https://per.co.na/pmm/"
+	changeLogURLPath       = "https://per.co.na/pmm/"
 )
 
 // http://man7.org/linux/man-pages/man8/yum.8.html#LIST_OPTIONS
