@@ -1,0 +1,32 @@
+---
+# This playbook contains tasks executed during initialization PMM Server
+- hosts: localhost
+  become: yes
+  gather_facts: yes§
+  tasks:
+    - name: Create grafana database
+      postgresql_db:
+        name: grafana
+        state: present
+
+    - name: Create grafana user
+      postgresql_user:
+        db: grafana
+        name: grafana
+        password: 'grafana'
+        priv: 'ALL'
+        expires: infinity
+        state: present
+
+    - name: Download sqlite->postgres migrator
+      get_url:
+        url: "https://github.com/wbh1/grafana-sqlite-to-postgres/releases/download/v2.0.1/grafana-migrate_linux_amd64-v2.0.1"
+        dest: /usr/bin/grafana-migrator
+
+    - name: Make migrate executable
+      file:
+        dest: /usr/bin/grafana-migrator
+        mode: +x
+
+    - name: Run grafana migrator
+      command: grafana-migrator /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
