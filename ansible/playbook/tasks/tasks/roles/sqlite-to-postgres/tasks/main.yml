@@ -1,0 +1,97 @@
+---
+- name: Create Grafana backup dir
+  file:
+    path: "{{ grafana_backup_dir }}"
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: '0700'
+
+- name: Stop grafana before upgrade
+  supervisorctl:
+    name: 'grafana'
+    state: stopped
+
+- name: Create grafana database
+  postgresql_db:
+    name: grafana
+    state: present
+
+- name: Create grafana user
+  postgresql_user:
+    db: grafana
+    name: grafana
+    password: 'grafana'
+    priv: 'ALL'
+    expires: infinity
+    state: present
+
+- name: Download sqlite->postgres migrator
+  get_url:
+    url: "https://github.com/wbh1/grafana-sqlite-to-postgres/releases/download/v2.0.1/grafana-migrate_linux_amd64-v2.0.1"
+    dest: /usr/bin/grafana-migrator
+
+- name: Make migrate executable
+  file:
+    dest: /usr/bin/grafana-migrator
+    mode: +x
+
+- name: Enable postgres in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: type
+    value: "postgres"
+
+- name: Set database user for grafana in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: user
+    value: "grafana"
+
+- name: Set database user for grafana in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: password
+    value: "grafana"
+
+- name: Set database host for grafana in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: host
+    value: "localhost"
+
+- name: Restart grafana
+  supervisorctl:
+    name: grafana
+    state: restarted
+
+- name: wait grafana initiazation
+  pause:
+    seconds: 10
+
+- name: Stop grafana before upgrade
+  supervisorctl:
+    name: 'grafana'
+    state: stopped
+
+- name: Run grafana migrator
+  command: grafana-migrator /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
+
+- name: start grafana again
+  supervisorctl:
+    name: grafana
+    state: started
+
+- name: create backup for SQLite Grafana database
+  copy:
+    src: /srv/grafana/grafana.db
+    dest: "{{ grafana_backup_dir }}/grafana.db"
+
+- name: Remove SQLite Grafana database
+  file:
+    path: /srv/grafana/grafana.db
+    state: absent
