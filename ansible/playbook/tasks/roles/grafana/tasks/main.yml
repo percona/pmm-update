@@ -1,0 +1,94 @@
+---
+- name: Create directories        | Create '/srv/grafana' dir
+  file:
+    path: /srv/grafana
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: '0775'
+
+- name: Grafana                    | Check data dir
+  stat: path=/srv/grafana/grafana.db
+  register: grafana_db
+
+- name: Grafana                    | Disable Anonymous access
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: auth.anonymous
+    option: enabled
+    value: 'false'
+
+- name: Grafana                   | Enable gzip for grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: server
+    option: enable_gzip
+    value: "true"
+
+- name: Enable external snapshots in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: snapshots
+    option: external_enabled
+    value: "true"
+
+- name: Set snapshot server URL in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: snapshots
+    option: external_snapshot_url
+    value: https://snapshots-g710.percona.com
+
+- name: Set name for snapshot server in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: snapshots
+    option: external_snapshot_name
+    value: Share with Percona
+
+- name: Enable postgres in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: type
+    value: "postgres"
+
+- name: Set database user for grafana in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: user
+    value: "grafana"
+
+- name: Set database user for grafana in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: password
+    value: "grafana"
+
+- name: Set database host for grafana in Grafana config
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: database
+    option: host
+    value: "localhost"
+
+- name: Set Grafana folder for plugins on /srv partition
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: paths
+    option: plugins
+    value: /srv/grafana/plugins
+
+- name: Set Grafana folder for plugins on /srv partition for all users
+  lineinfile:
+    path: /etc/bashrc
+    line: 'export GF_PLUGIN_DIR=/srv/grafana/plugins'
+
+- name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: plugins
+    option: allow_loading_unsigned_plugins
+    value: vertamedia-clickhouse-datasource

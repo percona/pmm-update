@@ -36,34 +36,6 @@
     dest: /usr/bin/grafana-migrator
     mode: +x
 
-- name: Enable postgres in Grafana config
-  ini_file:
-    dest: /etc/grafana/grafana.ini
-    section: database
-    option: type
-    value: "postgres"
-
-- name: Set database user for grafana in Grafana config
-  ini_file:
-    dest: /etc/grafana/grafana.ini
-    section: database
-    option: user
-    value: "grafana"
-
-- name: Set database user for grafana in Grafana config
-  ini_file:
-    dest: /etc/grafana/grafana.ini
-    section: database
-    option: password
-    value: "grafana"
-
-- name: Set database host for grafana in Grafana config
-  ini_file:
-    dest: /etc/grafana/grafana.ini
-    section: database
-    option: host
-    value: "localhost"
-
 - name: Restart grafana
   supervisorctl:
     name: grafana

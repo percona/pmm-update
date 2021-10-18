@@ -34,6 +34,16 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
+    # Start the services
+
+    - name: Supervisord start        | Start supervisord service for AMI/OVF
+      when: ansible_virtualization_type != "docker"
+      service: name=supervisord state=started enabled=yes
+
+    - name: Supervisord start         | Start supervisord for docker
+      when: ansible_virtualization_type == "docker"
+      shell: supervisord -c /etc/supervisord.conf &
+
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
       when: not is_docker
@@ -154,46 +164,6 @@
         regexp: "set -o errexit"
         replace: ""
 
-    - name: Enable external snapshots in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: snapshots
-        option: external_enabled
-        value: "true"
-
-    - name: Set snapshot server URL in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: snapshots
-        option: external_snapshot_url
-        value: https://snapshots-g710.percona.com
-
-    - name: Set name for snapshot server in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: snapshots
-        option: external_snapshot_name
-        value: Share with Percona
-
-    - name: Set Grafana folder for plugins on /srv partition
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: paths
-        option: plugins
-        value: /srv/grafana/plugins
-
-    - name: Set Grafana folder for plugins on /srv partition for all users
-      lineinfile:
-        path: /etc/bashrc
-        line: 'export GF_PLUGIN_DIR=/srv/grafana/plugins'
-
-    - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: plugins
-        option: allow_loading_unsigned_plugins
-        value: vertamedia-clickhouse-datasource
-
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
     # https://jira.percona.com/browse/PMM-7024
@@ -242,6 +212,14 @@
         mode: '0775'
       when: grafanaPluginFolderEmpty.matched == 0
 
+    - name: Grafana                   | Add community panels
+      unarchive:
+        src: "{{ item }}"
+        dest: /srv/grafana/plugins
+        remote_src: yes
+      with_fileglob:
+        - "/usr/share/percona-dashboards/panels/*.zip"
+
     # set folder names of panels to format that's supported by grafana-cli
     - name: Rename Grafana community panels
       command: /usr/share/percona-dashboards/fix-panels.py
@@ -273,7 +251,6 @@
 
     - name: Check supervisord log
       debug: var=maintail_result.stdout_lines
-
 
     - name: Cleanup yum cache
       command: yum clean all
