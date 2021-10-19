@@ -26,10 +26,16 @@
     expires: infinity
     state: present
 
+- name: Check if migrator exist (docker-way upgrade)
+  stat:
+    path: /usr/bin/grafana-migrator
+  register: migrator
+
 - name: Download sqlite->postgres migrator
   get_url:
     url: "https://github.com/wbh1/grafana-sqlite-to-postgres/releases/download/v2.0.1/grafana-migrate_linux_amd64-v2.0.1"
     dest: /usr/bin/grafana-migrator
+  when: not migrator.stat.exists
 
 - name: Make migrate executable
   file:
@@ -62,6 +68,9 @@
   copy:
     src: /srv/grafana/grafana.db
     dest: "{{ grafana_backup_dir }}/grafana.db"
+    owner: grafana
+    group: grafana
+    mode: '0700'
 
 - name: Remove SQLite Grafana database
   file:

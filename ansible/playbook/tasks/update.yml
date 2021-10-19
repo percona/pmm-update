@@ -17,6 +17,9 @@
       - dbaas-tools
       - pmm2-client
   pre_tasks:
+    - name: Run init.yml playbook before upgrade
+      import_playbook: init.yml
+
     - name: detect /srv/pmm-distribution
       stat:
         path: /srv/pmm-distribution
@@ -34,15 +37,27 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
-    # Start the services
+    - name: Create grafana config
+      include_role:
+        name: grafana
 
+    # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF
       when: ansible_virtualization_type != "docker"
-      service: name=supervisord state=started enabled=yes
+      service:
+        name: supervisord
+        state: started
+        enabled: yes
+
+    - name: Check that supervisor socket exists
+      stat:
+        path: /var/run/supervisor/supervisor.sock
+      register: is_supervisor_run
 
     - name: Supervisord start         | Start supervisord for docker
       when: ansible_virtualization_type == "docker"
       shell: supervisord -c /etc/supervisord.conf &
+      when: not is_supervisor_run.stat.exists
 
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
@@ -76,7 +91,6 @@
 
     - name: Check reread results
       debug: var=reread_result.stdout_lines
-
 
     # see https://jira.percona.com/browse/PMM-8492 for details about a issue
     - name: Delete experimental repo file in 2.16 version
