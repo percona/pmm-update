@@ -21,7 +21,7 @@
   postgresql_user:
     db: grafana
     name: grafana
-    password: 'grafana'
+    password: grafana
     priv: 'ALL'
     expires: infinity
     state: present

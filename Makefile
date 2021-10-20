@@ -61,11 +61,6 @@ check-all: check                ## Run all linters for new code.
 
 FILES = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
-copy-playbooks:					## Copy playbooks to image
-	docker cp ansible/playbook/tasks/ pmm-update-server:/root/go/src/github.com/percona/pmm-update/ansible/playbook/tasks/
-	docker cp ansible/playbook/tasks/update.yml pmm-update-server:/root/go/src/github.com/percona/pmm-update/ansible/playbook/tasks/
-	docker cp ansible/playbook/tasks/init.yml pmm-update-server:/root/go/src/github.com/percona/pmm-update/ansible/playbook/tasks/
-
 format:                         ## Format source code.
 	gofmt -w -s $(FILES)
 	$(BIN_PATH)/goimports -local github.com/percona/pmm-update -l -w $(FILES)
