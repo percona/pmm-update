@@ -54,9 +54,13 @@
       register: is_supervisor_run
 
     - name: Supervisord start         | Start supervisord for docker
-      when: ansible_virtualization_type == "docker"
+      when: ansible_virtualization_type == "docker" and not is_supervisor_run.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
-      when: not is_supervisor_run.stat.exists
+
+    - name: Grafana                   | Wait for dashboards
+      wait_for:
+        path: /srv/grafana/PERCONA_DASHBOARDS_VERSION
+        state: present
 
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
