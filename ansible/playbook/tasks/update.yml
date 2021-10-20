@@ -1,5 +1,7 @@
 ---
 # This playbook contains tasks executed during PMM Server update.
+- name: Run init.yml playbook before upgrade
+  import_playbook: init.yml
 - hosts: localhost
   become: yes
   gather_facts: yes
@@ -17,9 +19,6 @@
       - dbaas-tools
       - pmm2-client
   pre_tasks:
-    - name: Run init.yml playbook before upgrade
-      import_playbook: init.yml
-
     - name: detect /srv/pmm-distribution
       stat:
         path: /srv/pmm-distribution

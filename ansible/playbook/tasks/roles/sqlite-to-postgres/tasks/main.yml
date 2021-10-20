@@ -42,12 +42,16 @@
     dest: /usr/bin/grafana-migrator
     mode: +x
 
-- name: Restart grafana
+- name: Create actual grafana config
+  include_role:
+    name: grafana
+
+- name: Start grafana again
   supervisorctl:
     name: grafana
-    state: restarted
+    state: started
 
-- name: wait grafana initiazation
+- name: wait grafana database initiazation
   pause:
     seconds: 10
 
