@@ -1,20 +1,4 @@
 ---
-- name: Create directories        | Create '/srv/grafana' dir
-  file:
-    path: /srv/grafana
-    state: directory
-    owner: grafana
-    group: grafana
-    mode: '0775'
-
-- name: Create directories        | Create '/srv/grafana/plugins' dir
-  file:
-    path: /srv/grafana/plugins
-    state: directory
-    owner: grafana
-    group: grafana
-    mode: '0775'
-
 - name: Grafana                    | Disable Anonymous access
   ini_file:
     dest: /etc/grafana/grafana.ini
