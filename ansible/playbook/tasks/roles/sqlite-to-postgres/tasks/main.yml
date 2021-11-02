@@ -27,24 +27,6 @@
     state: present
   when: not ansible_check_mode
 
-
-- name: Check if migrator exist (docker-way upgrade)
-  stat:
-    path: /usr/bin/grafana-migrator
-  register: migrator
-
-- name: Download sqlite->postgres migrator
-  get_url:
-    url: "https://github.com/wbh1/grafana-sqlite-to-postgres/releases/download/v2.0.1/grafana-migrate_linux_amd64-v2.0.1"
-    dest: /usr/bin/grafana-migrator
-  when: not migrator.stat.exists
-
-- name: Make migrate executable
-  file:
-    dest: /usr/bin/grafana-migrator
-    mode: +x
-  when: not ansible_check_mode
-
 - name: Create actual grafana config
   include_role:
     name: grafana
@@ -64,7 +46,7 @@
     state: stopped
 
 - name: Run grafana migrator
-  command: grafana-migrator /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
+  command: grafana-migrate /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
   register: migrator_output
   changed_when: "'All done' in migrator_output.stdout"
 
