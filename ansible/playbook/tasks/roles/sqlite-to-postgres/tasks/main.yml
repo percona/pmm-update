@@ -45,6 +45,11 @@
     name: 'grafana'
     state: stopped
 
+- name: Install grafana-migrate
+  yum:
+    name: "grafana-db-migrator"
+    state: latest
+
 - name: Run grafana migrator
   command: grafana-migrate /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
   register: migrator_output
