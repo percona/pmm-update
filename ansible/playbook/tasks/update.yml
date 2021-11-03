@@ -59,11 +59,6 @@
       include_role:
         name: initialization
 
-    - name: Grafana                   | Wait for dashboards
-      wait_for:
-        path: /srv/grafana/PERCONA_DASHBOARDS_VERSION
-        state: present
-
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
       when: not is_docker
