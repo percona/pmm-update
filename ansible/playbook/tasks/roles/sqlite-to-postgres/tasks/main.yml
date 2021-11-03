@@ -12,11 +12,6 @@
     name: 'grafana'
     state: stopped
 
-- name: Create grafana database
-  postgresql_db:
-    name: grafana
-    state: present
-
 - name: Create grafana user
   postgresql_user:
     db: grafana

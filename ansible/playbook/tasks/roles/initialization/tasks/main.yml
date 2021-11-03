@@ -31,7 +31,13 @@
     path: /srv/grafana/grafana.db
   register: sqlite_grafana_exists
 
+- name: Create grafana database
+  postgresql_db:
+    name: grafana
+    state: present
+  register: database_exists
+
 - name:
   include_role:
     name: sqlite-to-postgres
-  when: sqlite_grafana_exists.stat.exists
+  when: database_exists.changed
