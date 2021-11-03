@@ -226,14 +226,6 @@
         mode: '0775'
       when: grafanaPluginFolderEmpty.matched == 0
 
-    - name: Grafana                   | Add community panels
-      unarchive:
-        src: "{{ item }}"
-        dest: /srv/grafana/plugins
-        remote_src: yes
-      with_fileglob:
-        - "/usr/share/percona-dashboards/panels/*.zip"
-
     # set folder names of panels to format that's supported by grafana-cli
     - name: Rename Grafana community panels
       command: /usr/share/percona-dashboards/fix-panels.py
