@@ -1,5 +1,5 @@
 ---
-- name: Create Postgres buckup dir
+- name: Create Postgres backup dir
   file:
     path: /srv/backup/postgres
     state: directory
