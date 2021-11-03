@@ -1,7 +1,5 @@
 ---
 # This playbook contains tasks executed during PMM Server update.
-- name: Run init.yml playbook before upgrade
-  import_playbook: init.yml
 - hosts: localhost
   become: yes
   gather_facts: yes
@@ -56,6 +54,10 @@
     - name: Supervisord start         | Start supervisord for docker
       when: ansible_virtualization_type == "docker" and not is_supervisor_run.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
+
+    - name: Run initialization playbook
+      include_role:
+        name: initialization
 
     - name: Grafana                   | Wait for dashboards
       wait_for:
