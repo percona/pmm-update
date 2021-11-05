@@ -55,7 +55,7 @@
     name: grafana
     state: started
 
-- name: create backup for SQLite Grafana database
+- name: Create backup for SQLite Grafana database
   copy:
     src: /srv/grafana/grafana.db
     dest: "{{ grafana_backup_dir }}/grafana.db"
