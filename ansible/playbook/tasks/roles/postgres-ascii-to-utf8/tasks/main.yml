@@ -7,7 +7,7 @@
     group: postgres
     mode: '0700'
 
-- name: Stop pmm-managed before change encoding
+- name: Stop pmm-managed before changing encoding
   command: supervisorctl stop pmm-managed
   changed_when: True
 
