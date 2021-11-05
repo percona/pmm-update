@@ -46,7 +46,7 @@
     state: latest
 
 - name: Run grafana migrator
-  command: grafana-migrate /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
+  command: grafana-db-migrator /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
   register: migrator_output
   changed_when: "'All done' in migrator_output.stdout"
 
