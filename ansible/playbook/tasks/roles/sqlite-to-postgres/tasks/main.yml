@@ -50,7 +50,7 @@
   register: migrator_output
   changed_when: "'All done' in migrator_output.stdout"
 
-- name: start grafana again
+- name: Start grafana again
   supervisorctl:
     name: grafana
     state: started
