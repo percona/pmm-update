@@ -31,7 +31,7 @@
     name: grafana
     state: started
 
-- name: wait grafana database initiazation
+- name: Wait for grafana database initialization
   pause:
     seconds: 10
 
