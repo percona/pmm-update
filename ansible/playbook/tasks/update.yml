@@ -49,7 +49,7 @@
     - name: Check that supervisor socket exists
       stat:
         path: /var/run/supervisor/supervisor.sock
-      register: is_supervisor_run
+      register: is_supervisor_running
 
     - name: Supervisord start         | Start supervisord for docker
       when: ansible_virtualization_type == "docker" and not is_supervisor_run.stat.exists
