@@ -52,7 +52,7 @@
       register: is_supervisor_running
 
     - name: Supervisord start         | Start supervisord for docker
-      when: ansible_virtualization_type == "docker" and not is_supervisor_run.stat.exists
+      when: ansible_virtualization_type == "docker" and not is_supervisor_running.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
 
     - name: Run initialization playbook
