@@ -31,7 +31,7 @@
     name: grafana
     state: started
 
-- name: Check if initail data were created
+- name: Check if initial data were created
   postgresql_query:
     db: grafana
     query: SELECT 1 FROM org WHERE id=1
