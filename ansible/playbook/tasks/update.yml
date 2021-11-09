@@ -34,7 +34,7 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
-    - name: Copy grafana plugins provisioning files
+    - name: Copy grafana plugin provisioning files
       copy:
         src: plugins.yml
         dest: /usr/share/grafana/conf/provisioning/plugins/default.yml
