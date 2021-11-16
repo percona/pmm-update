@@ -34,15 +34,38 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
-    - name: Copy grafana plugin provisioning files
+    - name: Copy grafana provisioning files
       copy:
-        src: plugins.yml
-        dest: /usr/share/grafana/conf/provisioning/plugins/default.yml
+        src: "{{ item.source }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - { source: datasources.yml, dest: /usr/share/grafana/conf/provisioning/datasources/default.yml }
+        - { source: plugins.yml, dest: /usr/share/grafana/conf/provisioning/plugins/default.yml }
+        - { source: dashboards.yml, dest: /usr/share/grafana/conf/provisioning/dashboards/default.yml }
 
-    - name: Copy grafana datasources provisioning files
-      copy:
-        src: datasources.yml
-        dest: /usr/share/grafana/conf/provisioning/datasources/default.yml
+    - name: Set snapshot server URL in Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: dashboards
+        option: default_home_dashboard_path
+        value: /usr/share/percona-dashboards/pmm-app/dist/dashboards/Home_Dashboard.json
+
+    # Start the services
+    - name: Supervisord start        | Start supervisord service for AMI/OVF
+      when: ansible_virtualization_type != "docker"
+      service:
+        name: supervisord
+        state: started
+        enabled: yes
+
+    - name: Check that supervisor socket exists
+      stat:
+        path: /var/run/supervisor/supervisor.sock
+      register: is_supervisor_running
+
+    - name: Supervisord start         | Start supervisord for docker
+      when: ansible_virtualization_type == "docker" and not is_supervisor_running.stat.exists
+      shell: supervisord -c /etc/supervisord.conf &
 
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
