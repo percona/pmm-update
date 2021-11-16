@@ -48,7 +48,7 @@
         dest: /etc/grafana/grafana.ini
         section: dashboards
         option: default_home_dashboard_path
-        value: /usr/share/percona-dashboards/pmm-app/dist/dashboards/Home_Dashboard.json
+        value: /srv/grafana/plugins/pmm-app/dist/dashboards/Insight/Home_Dashboard.json
 
     # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF
