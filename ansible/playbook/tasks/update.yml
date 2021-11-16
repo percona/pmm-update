@@ -268,7 +268,7 @@
     # copy grafana plugins to /srv partition
     - name: Copy plugins to /srv
       copy:
-        src: /var/lib/grafana/plugins/
+        src: /usr/share/percona-dashboards/panels/
         dest: /srv/grafana/plugins/
         remote_src: yes
         directory_mode: yes
@@ -278,7 +278,10 @@
     - name: Delete old folder for grafana plugins
       file:
         state: absent
-        path: /var/lib/grafana/plugins/
+        path: "{{ item }}"
+      loop:
+        - /usr/share/percona-dashboards/panels
+        - /var/lib/grafana/plugins/
 
     - name: Start Grafana dashboards update
       command: supervisorctl start dashboard-upgrade
