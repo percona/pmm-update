@@ -287,7 +287,6 @@
         state: absent
         path: "{{ item }}"
       loop:
-        - /usr/share/percona-dashboards/panels
         - /var/lib/grafana/plugins/
 
     - name: Start Grafana dashboards update
