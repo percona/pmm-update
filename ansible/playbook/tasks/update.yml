@@ -43,7 +43,12 @@
         - { source: plugins.yml, dest: /usr/share/grafana/conf/provisioning/plugins/default.yml }
         - { source: dashboards.yml, dest: /usr/share/grafana/conf/provisioning/dashboards/default.yml }
 
-    - name: Set snapshot server URL in Grafana
+    - name: Remove percona-dashboard without architecture
+      yum:
+        name: percona-dashboards.*noarch
+        state: absent
+
+    - name: Set home dashboard for Grafana
       ini_file:
         dest: /etc/grafana/grafana.ini
         section: dashboards
@@ -116,6 +121,8 @@
       tags:
         - skip_ansible_lint # '503 Tasks that run when changed should likely be handlers'.
                             # The handler looks bad in this case
+
+
 
     # Split download and update to produce a bit more of progress output.
     - name: Download pmm2 packages
