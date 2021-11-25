@@ -39,6 +39,11 @@
     dest: /srv/grafana/plugins/
   delegate_to: "{{ inventory_hostname }}"
 
+- name: Restart grafana with a new plugin
+  community.general.supervisorctl:
+    name: grafana
+    state: restarted
+
 - name: Copy file with image version
   copy:
     src: /usr/share/percona-dashboards/VERSION
