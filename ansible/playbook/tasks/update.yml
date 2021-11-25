@@ -36,9 +36,10 @@
   tasks:
     - name: Create provisioning directory
       file:
-        path: "/usr/share/grafana/conf/provisioning/{{ item }}/"
+        path: "/usr/share/grafana/conf/provisioning/{{ item }}"
         owner: grafana
         group: grafana
+        state: directory
       loop:
         - datasources
         - plugins
@@ -46,7 +47,7 @@
 
     - name: Copy grafana provisioning files
       copy:
-        src: "{{ item }}".yml
+        src: "{{ item }}.yml"
         dest: "/usr/share/grafana/conf/provisioning/{{ item }}/default.yml"
         owner: grafana
         group: grafana
