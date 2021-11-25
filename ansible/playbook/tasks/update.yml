@@ -34,14 +34,26 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
+    - name: Create provisioning directory
+      file:
+        path: "/usr/share/grafana/conf/provisioning/{{ item }}/"
+        owner: grafana
+        group: grafana
+      loop:
+        - datasources
+        - plugins
+        - dashboards
+
     - name: Copy grafana provisioning files
       copy:
-        src: "{{ item.source }}"
-        dest: "{{ item.dest }}"
+        src: "{{ item }}".yml
+        dest: "/usr/share/grafana/conf/provisioning/{{ item }}/default.yml"
+        owner: grafana
+        group: grafana
       loop:
-        - { source: datasources.yml, dest: /usr/share/grafana/conf/provisioning/datasources/default.yml }
-        - { source: plugins.yml, dest: /usr/share/grafana/conf/provisioning/plugins/default.yml }
-        - { source: dashboards.yml, dest: /usr/share/grafana/conf/provisioning/dashboards/default.yml }
+        - datasources
+        - plugins
+        - dashboards
 
     - name: Remove percona-dashboard without architecture
       yum:
