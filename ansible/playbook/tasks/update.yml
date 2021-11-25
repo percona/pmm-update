@@ -90,6 +90,11 @@
       when: ansible_virtualization_type == "docker" and not is_supervisor_running.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
 
+    - name: Grafana                   | Wait for dashboards
+      wait_for:
+        path: /srv/grafana/PERCONA_DASHBOARDS_VERSION
+        state: present
+
     - name: Run initialization playbook
       include_role:
         name: initialization
