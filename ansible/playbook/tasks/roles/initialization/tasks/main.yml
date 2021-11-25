@@ -39,8 +39,8 @@
     dest: /srv/grafana/plugins/
   delegate_to: "{{ inventory_hostname }}"
 
-- name: Restart grafana with a new plugin
-  community.general.supervisorctl:
+- name: Restart grafana with new plugins
+  supervisorctl:
     name: grafana
     state: restarted
 
