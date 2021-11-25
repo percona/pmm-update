@@ -8,7 +8,7 @@
       - percona-grafana
       - percona-victoriametrics
       - percona-qan-api2
-      - percona-dashboards
+      -
       - percona-alertmanager
       - pmm-server
       - pmm-managed
@@ -34,6 +34,12 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
+    # we need install this package here because it contain VERSION file
+    - name: Update percona-dashboards package
+      yum:
+        name: percona-dashboards
+        state: latest
+
     - name: Create provisioning directory
       file:
         path: "/usr/share/grafana/conf/provisioning/{{ item }}"
