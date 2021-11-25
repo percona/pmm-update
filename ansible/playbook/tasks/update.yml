@@ -84,6 +84,10 @@
       when: ansible_virtualization_type == "docker" and not is_supervisor_running.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
 
+    - name: Run initialization playbook
+      include_role:
+        name: initialization
+
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
       when: not is_docker
