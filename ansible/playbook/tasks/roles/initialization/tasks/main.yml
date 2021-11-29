@@ -39,6 +39,21 @@
     dest: /srv/grafana/plugins/
   delegate_to: "{{ inventory_hostname }}"
 
+- name: Remove old DBaaS dashboard (Before provisioning times)
+  command: sqlite3 /srv/grafana/grafana.db "DELETE FROM dashboard WHERE title = 'DBaaS' AND slug = 'dbaas';"
+
+- name: Remove old PMM Inventory (Before provisioning times)
+  command: sqlite3 /srv/grafana/grafana.db "DELETE FROM dashboard WHERE title = 'PMM Inventory' AND slug = 'pmm-inventory';"
+
+- name: Remove old PMM Add Instance dashboard (Before provisioning times)
+  command: sqlite3 /srv/grafana/grafana.db "DELETE FROM dashboard WHERE title = 'PMM Add Instance' AND slug = 'pmm-add-instance';"
+
+- name: Remove old PMM Database Checks dashboard (Before provisioning times)
+  command: sqlite3 /srv/grafana/grafana.db "DELETE FROM dashboard WHERE title = 'PMM Database Checks' AND slug = 'pmm-database-checks';"
+
+- name: Remove old PMM Settings dashboard (Before provisioning times)
+  command: sqlite3 /srv/grafana/grafana.db "DELETE FROM dashboard WHERE title = 'PMM Settings' AND slug = 'pmm-settings';"
+
 - name: Restart grafana with new plugins
   supervisorctl:
     name: grafana
