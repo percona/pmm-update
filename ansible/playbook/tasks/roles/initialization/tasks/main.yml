@@ -33,6 +33,12 @@
   meta: end_play
   when: pmm_current_version is version(pmm_image_version, '>=')
 
+- name: Synchronization plugins (old version before 2.22.0)
+  synchronize:
+    src: /var/lib/grafana/plugins/
+    dest: /srv/grafana/plugins/
+  delegate_to: "{{ inventory_hostname }}"
+
 - name: Synchronization plugin
   synchronize:
     src: /usr/share/percona-dashboards/panels/
