@@ -84,14 +84,14 @@ jobs:
 
       - name: Run install
         run: |
-          docker exec pmm-update-server make -C ${{ env.WORKING_DIR }} ci-reviewdog
-          docker exec pmm-update-server make -C ${{ env.WORKING_DIR }} install
+          docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update ci-reviewdog
+          docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update install
 
       - name: Run checks
-        run: docker exec pmm-update-server make -C ${{ env.WORKING_DIR }} check
+        run: docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update check
 
       - name: Run race cover
-        run: docker exec pmm-update-server make -C ${{ env.WORKING_DIR }} run-race-cover RUN_FLAGS='-debug -check'
+        run: docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update run-race-cover RUN_FLAGS='-debug -check'
 
       - name: Run codecov
         run: |
