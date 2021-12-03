@@ -36,9 +36,9 @@ jobs:
     env:
       GOPATH: ${{ github.workspace }}
       WORKING_DIR: ${{ github.workspace }}/src/github.com/percona/pmm-update
-      REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }} # use GITHUB_TOKEN because only it has access to GitHub Checks API
-      CI_REPO_OWNER: percona
-      CI_REPO_NAME: pmm-update
+#      REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }} # use GITHUB_TOKEN because only it has access to GitHub Checks API
+#      CI_REPO_OWNER: percona
+#      CI_REPO_NAME: pmm-update
 
     defaults:
       run:
@@ -87,7 +87,9 @@ jobs:
 
       - name: Run install
         run: |
-          docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update ci-reviewdog
+# use GITHUB_TOKEN because only it has access to GitHub Checks API
+          bin/golangci-lint run -c=.golangci-required.yml --out-format=line-number | env REVIEWDOG_GITHUB_API_TOKEN=${{ secrets.GITHUB_TOKEN }} bin/reviewdog -f=golangci-lint -level=error -reporter=github-pr-check
+          bin/golangci-lint run -c=.golangci.yml --out-format=line-number | env REVIEWDOG_GITHUB_API_TOKEN=${{ secrets.GITHUB_TOKEN }} bin/reviewdog -f=golangci-lint -level=error -reporter=github-pr-review
           docker exec pmm-update-server make -C /root/go/src/github.com/percona/pmm-update install
 
       - name: Run checks
@@ -103,42 +105,42 @@ jobs:
           ./codecov -f cover.out -F cover -X fix
           ./codecov -f *.runcover.out -F runcover -X fix
 
-  workflow_success:
-    needs: [build]
-    name: Slack Notification success
-    runs-on: ubuntu-latest
-    env:
-      SLACK_WEBHOOK: ${{ secrets.SLACK_TOKEN }}
-      SLACK_CHANNEL: "pmm-ci"
-      SLACK_USERNAME: "PR pipelines bot"
-      SLACK_ICON_EMOJI: ":chestnut:"
-      SLACK_COLOR: "#00FF00"
-      SLACK_TITLE: "Finished ${{ github.event.repository.name }} workflow"
-      SLACK_MESSAGE: "${{ github.event.inputs.repo || github.repository }}:${{ github.event.inputs.branch || github.head_ref }}"
-      SLACK_FOOTER: "Please check the Actions URL ^"
-
-    steps:
-      - uses: percona-platform/checkout@v2
-      - uses: percona-platform/setup-node@v2
-      - name: Slack Notification
-        uses: percona-platform/action-slack-notify@v2
-
-  workflow_failure:
-    if: ${{ failure() }}
-    needs: [build]
-    name: Slack Notification failure
-    runs-on: ubuntu-latest
-    env:
-      SLACK_WEBHOOK: ${{ secrets.SLACK_TOKEN }}
-      SLACK_CHANNEL: "pmm-ci"
-      SLACK_USERNAME: "PR pipelines bot"
-      SLACK_ICON_EMOJI: ":chestnut:"
-      SLACK_COLOR: "#FF0000"
-      SLACK_TITLE: "Finished ${{ github.event.repository.name }} workflow"
-      SLACK_MESSAGE: "Workflow failed: ${{ github.event.inputs.repo || github.repository }}:${{ github.event.inputs.branch || github.head_ref }}"
-      SLACK_FOOTER: "Please check the Actions URL ^"
-
-    steps:
-      - uses: percona-platform/checkout@v2
-      - name: Slack Notification
-        uses: percona-platform/action-slack-notify@v2
+#  workflow_success:
+#    needs: [build]
+#    name: Slack Notification success
+#    runs-on: ubuntu-latest
+#    env:
+#      SLACK_WEBHOOK: ${{ secrets.SLACK_TOKEN }}
+#      SLACK_CHANNEL: "pmm-ci"
+#      SLACK_USERNAME: "PR pipelines bot"
+#      SLACK_ICON_EMOJI: ":chestnut:"
+#      SLACK_COLOR: "#00FF00"
+#      SLACK_TITLE: "Finished ${{ github.event.repository.name }} workflow"
+#      SLACK_MESSAGE: "${{ github.event.inputs.repo || github.repository }}:${{ github.event.inputs.branch || github.head_ref }}"
+#      SLACK_FOOTER: "Please check the Actions URL ^"
+#
+#    steps:
+#      - uses: percona-platform/checkout@v2
+#      - uses: percona-platform/setup-node@v2
+#      - name: Slack Notification
+#        uses: percona-platform/action-slack-notify@v2
+#
+#  workflow_failure:
+#    if: ${{ failure() }}
+#    needs: [build]
+#    name: Slack Notification failure
+#    runs-on: ubuntu-latest
+#    env:
+#      SLACK_WEBHOOK: ${{ secrets.SLACK_TOKEN }}
+#      SLACK_CHANNEL: "pmm-ci"
+#      SLACK_USERNAME: "PR pipelines bot"
+#      SLACK_ICON_EMOJI: ":chestnut:"
+#      SLACK_COLOR: "#FF0000"
+#      SLACK_TITLE: "Finished ${{ github.event.repository.name }} workflow"
+#      SLACK_MESSAGE: "Workflow failed: ${{ github.event.inputs.repo || github.repository }}:${{ github.event.inputs.branch || github.head_ref }}"
+#      SLACK_FOOTER: "Please check the Actions URL ^"
+#
+#    steps:
+#      - uses: percona-platform/checkout@v2
+#      - name: Slack Notification
+#        uses: percona-platform/action-slack-notify@v2
