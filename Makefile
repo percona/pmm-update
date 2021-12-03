@@ -89,8 +89,8 @@ env-down:                       ## Stop development environment.
 	docker-compose down --volumes --remove-orphans
 
 ci-reviewdog:                   ## Runs reviewdog checks.
-	$(BIN_PATH)/golangci-lint run -c=.golangci-required.yml --out-format=line-number | env REVIEWDOG_GITHUB_API_TOKEN=$(REVIEWDOG_GITHUB_API_TOKEN) $(BIN_PATH)/reviewdog -f=golangci-lint -level=error -reporter=github-pr-check
-	$(BIN_PATH)/golangci-lint run -c=.golangci.yml --out-format=line-number | env REVIEWDOG_GITHUB_API_TOKEN=$(REVIEWDOG_GITHUB_API_TOKEN) $(BIN_PATH)/reviewdog -f=golangci-lint -level=error -reporter=github-pr-review
+	$(BIN_PATH)/golangci-lint run -c=.golangci-required.yml --out-format=line-number | $(BIN_PATH)/reviewdog -f=golangci-lint -level=error -reporter=github-pr-check
+	$(BIN_PATH)/golangci-lint run -c=.golangci.yml --out-format=line-number | $(BIN_PATH)/reviewdog -f=golangci-lint -level=error -reporter=github-pr-review
 
 install-dev-tools:
 	docker exec pmm-update-server /root/go/src/github.com/percona/pmm-update/.devcontainer/install-dev-tools.sh

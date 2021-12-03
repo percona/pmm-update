@@ -37,6 +37,8 @@ jobs:
       GOPATH: ${{ github.workspace }}
       WORKING_DIR: ${{ github.workspace }}/src/github.com/percona/pmm-update
       REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }} # use GITHUB_TOKEN because only it has access to GitHub Checks API
+      CI_REPO_OWNER: percona
+      CI_REPO_NAME: pmm-update
 
     defaults:
       run:
