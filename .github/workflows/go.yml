@@ -24,9 +24,9 @@ jobs:
 #          - version: tip
 #            may-fail: true
         image:
-          - percona/pmm-server:2.0.0 # oldest production version
-          - percona/pmm-server:2.16.0 # version with enabled expirimental repo
-          - percona/pmm-server:2 # latest production version
+#          - percona/pmm-server:2.0.0 # oldest production version
+#          - percona/pmm-server:2.16.0 # version with enabled expirimental repo
+#          - percona/pmm-server:2 # latest production version
           - perconalab/pmm-server:dev-latest # latest development version
 
     continue-on-error: ${{ matrix.go.may-fail }}
