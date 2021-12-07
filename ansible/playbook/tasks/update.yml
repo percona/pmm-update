@@ -47,6 +47,7 @@
 
     - name: Upgrade grafana database (New schema)
       command: grafana-cli --homepath=/usr/share/grafana admin data-migration encrypt-datasource-passwords
+      changed_when: True
 
     - name: Create provisioning directory
       file:
