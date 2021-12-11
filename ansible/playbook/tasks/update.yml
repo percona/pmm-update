@@ -5,7 +5,6 @@
   gather_facts: yes
   vars:
     pmm_packages:
-      - percona-grafana
       - percona-victoriametrics
       - percona-qan-api2
       - percona-alertmanager
@@ -34,10 +33,21 @@
       when: is_docker is undefined
   tasks:
     # we need install this package here because it contain VERSION file
+    - name: Remove percona-dashboard without architecture
+      yum:
+        name: percona-dashboards.*noarch
+        state: absent
+
     - name: Update percona-dashboards package
       yum:
-        name: percona-dashboards
+        name:
+          - percona-dashboards
+          - percona-grafana
         state: latest
+
+    - name: Upgrade grafana database (New schema)
+      command: grafana-cli --homepath=/usr/share/grafana admin data-migration encrypt-datasource-passwords
+      changed_when: True
 
     - name: Create provisioning directory
       file:
@@ -60,25 +70,6 @@
         - datasources
         - plugins
         - dashboards
-
-    - name: Remove percona-dashboard without architecture
-      yum:
-        name: percona-dashboards.*noarch
-        state: absent
-
-    - name: Set home dashboard for Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: dashboards
-        option: default_home_dashboard_path
-        value: /usr/share/percona-dashboards/panels/pmm-app/dist/dashboards/Insight/Home_Dashboard.json
-
-    - name: Set home route for Grafana
-      ini_file:
-        dest: /etc/grafana/grafana.ini
-        section: users
-        option: home_page
-        value: d/pmm-home/home-dashboard
 
     # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF
@@ -234,6 +225,63 @@
         regexp: "set -o errexit"
         replace: ""
 
+<<<<<<< HEAD
+=======
+    - name: Set home dashboard for Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: dashboards
+        option: default_home_dashboard_path
+        value: /usr/share/percona-dashboards/panels/pmm-app/dist/dashboards/Insight/Home_Dashboard.json
+
+    - name: Set home route for Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: users
+        option: home_page
+        value: d/pmm-home/home-dashboard
+
+    - name: Enable external snapshots in Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: snapshots
+        option: external_enabled
+        value: "true"
+
+    - name: Set snapshot server URL in Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: snapshots
+        option: external_snapshot_url
+        value: https://snapshots-g710.percona.com
+
+    - name: Set name for snapshot server in Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: snapshots
+        option: external_snapshot_name
+        value: Share with Percona
+
+    - name: Set Grafana folder for plugins on /srv partition
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: paths
+        option: plugins
+        value: /srv/grafana/plugins
+
+    - name: Set Grafana folder for plugins on /srv partition for all users
+      lineinfile:
+        path: /etc/bashrc
+        line: 'export GF_PLUGIN_DIR=/srv/grafana/plugins'
+
+    - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
+      ini_file:
+        dest: /etc/grafana/grafana.ini
+        section: plugins
+        option: allow_loading_unsigned_plugins
+        value: vertamedia-clickhouse-datasource
+
+>>>>>>> a5e2bee73e074a69181584d1ba2991f1a7daa26d
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
     # https://jira.percona.com/browse/PMM-7024

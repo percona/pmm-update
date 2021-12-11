@@ -34,36 +34,10 @@
     name: dashboards_upgrade
   when: not pmm_current_version is version(pmm_image_version, '>=')
 
-- name: Wait until postgres socket is present before continuing
-  wait_for:
-    path: /var/run/postgresql/.s.PGSQL.5432
-
-- name: Get postgres encoding
-  postgresql_query:
-    db: pmm-managed
-    query: SHOW SERVER_ENCODING;
-  register: postgres_encoding
-  become: yes
-  become_user: postgres
-  become_method: su
-
-- debug:
-    var: postgres_encoding.query_result
-
-- name: Change encoding of pmm-managed database
-  include_role:
-    name: postgres-ascii-to-utf8
-  when: "'SQL_ASCII' == postgres_encoding.query_result[0].server_encoding"
-
 - name: Create backup directory
   file:
     path: /srv/backup
     state: directory
-
-- name: Check that the SQLite grafana database exists
-  stat:
-    path: /srv/grafana/grafana.db
-  register: sqlite_grafana_exists
 
 - name: Create grafana database
   postgresql_db:
@@ -71,7 +45,7 @@
     state: present
   register: database_exists
 
-- name: Migrate Grafana database from SQLite to Postgres
+- name: Migrate Grafana database from SQLite to Postgresql
   include_role:
     name: sqlite-to-postgres
   when: database_exists.changed
