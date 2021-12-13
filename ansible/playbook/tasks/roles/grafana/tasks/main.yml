@@ -1,4 +1,18 @@
 ---
+- name: Set home dashboard for Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: dashboards
+    option: default_home_dashboard_path
+    value: /usr/share/percona-dashboards/panels/pmm-app/dist/dashboards/Insight/Home_Dashboard.json
+
+- name: Set home route for Grafana
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: users
+    option: home_page
+    value: d/pmm-home/home-dashboard
+
 - name: Grafana                    | Disable Anonymous access
   ini_file:
     dest: /etc/grafana/grafana.ini
