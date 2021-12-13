@@ -62,6 +62,7 @@
   yum:
     name: "grafana-db-migrator"
     state: latest
+  ignore_errors: yes # TODO DELETE BEFORE RELEASE
 
 - name: Run grafana migrator
   command: grafana-db-migrator /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
