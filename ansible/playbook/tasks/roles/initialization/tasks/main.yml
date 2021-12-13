@@ -25,6 +25,15 @@
   set_fact:
     pmm_image_version: "{{ image_version_file['content'] | b64decode | trim }}"
 
+- name: Print current version
+  debug:
+    msg: "Current version: {{ pmm_current_version }} Image Version: {{ pmm_image_version }}"
+
+- name: Checking if we need an update or not
+  include_role:
+    name: dashboards_upgrade
+  when: not pmm_current_version is version(pmm_image_version, '>=')
+
 - name: Create backup directory
   file:
     path: /srv/backup
@@ -61,12 +70,3 @@
   include_role:
     name: sqlite-to-postgres
   when: database_exists.changed
-
-- name: Print current version
-  debug:
-    msg: "Current version: {{ pmm_current_version }} Image Version: {{ pmm_image_version }}"
-
-- name: Checking if we need an update or not
-  include_role:
-    name: dashboards_upgrade
-  when: not pmm_current_version is version(pmm_image_version, '>=')
