@@ -12,6 +12,8 @@
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
+      - pmm-managed
+      - pmm-server
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
@@ -41,8 +43,6 @@
         name:
           - percona-dashboards
           - percona-grafana
-          - pmm-managed
-          - pmm-server
         state: latest
 
     - name: Upgrade grafana database (Get the latest schema)
