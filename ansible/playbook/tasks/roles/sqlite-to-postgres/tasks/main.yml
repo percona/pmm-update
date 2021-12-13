@@ -30,6 +30,15 @@
   supervisorctl:
     name: grafana
     state: restarted
+  ignore_errors: yes
+
+- name: Display grafana.log content
+  command: cat /srv/logs/grafana.log
+  register: command_output
+
+- name: Print to console
+  debug:
+    msg: "{{command_output.stdout}}"
 
 - name: Check if initial data were created
   postgresql_query:
