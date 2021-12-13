@@ -29,7 +29,7 @@
 - name: Start grafana again
   supervisorctl:
     name: grafana
-    state: started
+    state: restarted
 
 - name: Check if initial data were created
   postgresql_query:
