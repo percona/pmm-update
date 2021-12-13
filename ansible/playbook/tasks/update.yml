@@ -88,13 +88,13 @@
       when: is_docker and not is_supervisor_running.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
 
-    - name: Run initialization playbook
-      include_role:
-        name: initialization
-
     - name: Create grafana config
       include_role:
         name: grafana
+
+    - name: Run initialization playbook
+      include_role:
+        name: initialization
 
     # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF

@@ -1,4 +1,15 @@
 ---
+- name: Create grafana directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: '0775'
+  loop:
+    - /srv/grafana
+    - /srv/grafana/plugins
+
 - name: Set home dashboard for Grafana
   ini_file:
     dest: /etc/grafana/grafana.ini
