@@ -45,17 +45,6 @@
           - pmm-server
         state: latest
 
-    # restart pmm-managed first as it may update supervisord configuration on start
-    - name: Restart pmm-managed
-      command: supervisorctl {{ item }} pmm-managed
-      changed_when: True
-      with_items: ["stop", "remove", "add"]
-
-    # give pmm-managed time to update supervisord configuration,
-    # and give update UI time to catch up after pmm-managed restart
-    - name: Wait for pmm-managed
-      pause: seconds=5
-
     - name: Upgrade grafana database (Get the latest schema)
       command: grafana-cli --homepath=/usr/share/grafana admin data-migration encrypt-datasource-passwords
       changed_when: True
@@ -99,6 +88,28 @@
       when: is_docker and not is_supervisor_running.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
 
+    # restart pmm-managed first as it may update supervisord configuration on start
+    - name: Restart pmm-managed
+      command: supervisorctl {{ item }} pmm-managed
+      changed_when: True
+      with_items: ["stop", "remove", "add"]
+
+    # give pmm-managed time to update supervisord configuration,
+    # and give update UI time to catch up after pmm-managed restart
+    - name: Wait for pmm-managed
+      pause: seconds=5
+
+    # See https://github.com/Supervisor/supervisor/issues/1264 for explanation
+    # why we do reread + stop/remove/add instead of using supervisorctl Ansible module.
+
+    - name: Reread supervisord configuration
+      command: supervisorctl reread
+      register: reread_result
+      changed_when: "'No config updates to processes' not in reread_result.stdout"
+
+    - name: Check reread results
+      debug: var=reread_result.stdout_lines
+
     - name: Create grafana config
       include_role:
         name: grafana
@@ -136,17 +147,6 @@
         section: supervisord
         option: minfds
         value: "800000"
-
-    # See https://github.com/Supervisor/supervisor/issues/1264 for explanation
-    # why we do reread + stop/remove/add instead of using supervisorctl Ansible module.
-
-    - name: Reread supervisord configuration
-      command: supervisorctl reread
-      register: reread_result
-      changed_when: "'No config updates to processes' not in reread_result.stdout"
-
-    - name: Check reread results
-      debug: var=reread_result.stdout_lines
 
     # see https://jira.percona.com/browse/PMM-8492 for details about a issue
     - name: Delete experimental repo file in 2.16 version
