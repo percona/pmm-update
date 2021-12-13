@@ -46,7 +46,7 @@
 
 - name: Stop grafana before upgrade
   supervisorctl:
-    name: 'grafana'
+    name: grafana
     state: stopped
 
 - name: Install grafana-migrate
@@ -62,7 +62,7 @@
 - name: Start grafana again
   supervisorctl:
     name: grafana
-    state: started
+    state: restarted
 
 - name: Create backup for SQLite Grafana database
   copy:
