@@ -24,14 +24,14 @@
     option: home_page
     value: d/pmm-home/home-dashboard
 
-- name: Grafana                    | Disable Anonymous access
+- name: Disable Anonymous access
   ini_file:
     dest: /etc/grafana/grafana.ini
     section: auth.anonymous
     option: enabled
     value: 'false'
 
-- name: Grafana                   | Enable gzip for grafana
+- name: Enable gzip for grafana
   ini_file:
     dest: /etc/grafana/grafana.ini
     section: server
