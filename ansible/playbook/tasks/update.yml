@@ -9,7 +9,6 @@
       - percona-qan-api2
       - percona-alertmanager
       - pmm-server
-      - pmm-managed
       - pmm-update
       - dbaas-controller
       - dbaas-tools
@@ -43,9 +42,21 @@
         name:
           - percona-dashboards
           - percona-grafana
+          - pmm-managed
         state: latest
 
-    - name: Upgrade grafana database (New schema)
+    # restart pmm-managed first as it may update supervisord configuration on start
+    - name: Restart pmm-managed
+      command: supervisorctl {{ item }} pmm-managed
+      changed_when: True
+      with_items: ["stop", "remove", "add"]
+
+    # give pmm-managed time to update supervisord configuration,
+    # and give update UI time to catch up after pmm-managed restart
+    - name: Wait for pmm-managed
+      pause: seconds=5
+
+    - name: Upgrade grafana database (Get the latest schema)
       command: grafana-cli --homepath=/usr/share/grafana admin data-migration encrypt-datasource-passwords
       changed_when: True
 
@@ -153,8 +164,6 @@
         - skip_ansible_lint # '503 Tasks that run when changed should likely be handlers'.
                             # The handler looks bad in this case
 
-
-
     # Split download and update to produce a bit more of progress output.
     - name: Download pmm2 packages
       yum:
@@ -166,17 +175,6 @@
       yum:
         name: "{{ pmm_packages }}"
         state: latest
-
-    # restart pmm-managed first as it may update supervisord configuration on start
-    - name: Restart pmm-managed
-      command: supervisorctl {{ item }} pmm-managed
-      changed_when: True
-      with_items: ["stop", "remove", "add"]
-
-    # give pmm-managed time to update supervisord configuration,
-    # and give update UI time to catch up after pmm-managed restart
-    - name: Wait for pmm-managed
-      pause: seconds=5
 
     - name: Update system packages
       yum:
