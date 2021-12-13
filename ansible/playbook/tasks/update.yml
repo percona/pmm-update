@@ -8,7 +8,6 @@
       - percona-victoriametrics
       - percona-qan-api2
       - percona-alertmanager
-      - pmm-server
       - pmm-update
       - dbaas-controller
       - dbaas-tools
@@ -43,6 +42,7 @@
           - percona-dashboards
           - percona-grafana
           - pmm-managed
+          - pmm-server
         state: latest
 
     # restart pmm-managed first as it may update supervisord configuration on start
