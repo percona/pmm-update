@@ -8,12 +8,12 @@
       - percona-victoriametrics
       - percona-qan-api2
       - percona-alertmanager
+      - pmm-managed
+      - pmm-server
       - pmm-update
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
-      - pmm-managed
-      - pmm-server
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
@@ -96,14 +96,6 @@
       include_role:
         name: initialization
 
-    # Start the services
-    - name: Supervisord start        | Start supervisord service for AMI/OVF
-      when: not is_docker
-      service:
-        name: supervisord
-        state: started
-        enabled: yes
-
     # Replace forking type with simple. New config will be applied after next reboot.
     - name: Configure systemd
       when: not is_docker
@@ -133,6 +125,9 @@
       command: supervisorctl reread
       register: reread_result
       changed_when: "'No config updates to processes' not in reread_result.stdout"
+
+    - name: Check reread results
+      debug: var=reread_result.stdout_lines
 
     # see https://jira.percona.com/browse/PMM-8492 for details about a issue
     - name: Delete experimental repo file in 2.16 version
