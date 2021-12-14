@@ -18,7 +18,7 @@
         state: absent
         path: /srv/
 
-    - name: Create Volume Group
+    - name: Create a Volume Group
       lvg:
         vg: DataVG
         pvs: "/dev/nvme1n1"
