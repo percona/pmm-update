@@ -53,7 +53,7 @@
         delete: yes
         recursive: yes
 
-    - name: Delete copy of /srv directory
+    - name: Delete the copy of /srv directory
       file:
         state: absent
         path: /srv-copy/
