@@ -7,7 +7,7 @@
         name: supervisord
         state: stopped
 
-    - name: "Copy /srv dir to safe location"
+    - name: "Copy /srv dir to a safe location"
       synchronize:
         src: "/srv/"
         dest: "/srv-copy"
