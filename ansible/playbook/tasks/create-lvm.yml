@@ -13,7 +13,7 @@
         dest: "/srv-copy"
         recursive: yes
 
-    - name: Delete old /srv directory
+    - name: Delete the old /srv directory
       file:
         state: absent
         path: /srv/
