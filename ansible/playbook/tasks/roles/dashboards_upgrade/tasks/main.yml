@@ -82,6 +82,11 @@
     changed_when: True
   when: sqlite_grafana.stat.exists
 
+- name: Change Home dashboard for default org
+  postgresql_query:
+    db: grafana
+    query: UPDATE preferences SET home_dashboard_id=0 WHERE org_id=1;
+
 - name: Restart grafana with new plugins
   supervisorctl:
     name: grafana
