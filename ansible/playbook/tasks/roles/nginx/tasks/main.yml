@@ -21,6 +21,12 @@
     name: nginx-1.20.1
     state: installed
 
+- name: Copy nginx run script
+  copy:
+    src: "nginx.sh"
+    dest: "/etc/nginx/nginx.sh"
+    mode: a+x
+
 - name: NGINX SSL Certificate      | Add script to generate ssl certificate
   copy:
     src: generate-ssl-certificate
