@@ -41,7 +41,7 @@
   loop:
     - "nginx.conf"
     - "conf.d/pmm-ssl.conf"
-    - "conf.d/pmm.conf"
+    - "conf.d/pmm.conf.template"
 
 - name: NGINX SSL Certificate      | Check certificate file
   stat:
