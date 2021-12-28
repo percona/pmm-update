@@ -118,7 +118,7 @@
 
     # VictoriaMetrics
     location /victoriametrics/ {
-      proxy_pass http://{VICTORIAMETRICS_HOST};
+      proxy_pass http://${VICTORIAMETRICS_HOST};
       proxy_read_timeout 600;
       client_body_buffer_size 10m;
     }
