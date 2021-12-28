@@ -5,7 +5,7 @@ datasources:
   orgId: 1
   type: prometheus
   access: proxy
-  url: http://127.0.0.1:9090/prometheus/
+  url: http://${VICTORIAMETRICS_HOST}/prometheus/
   isDefault: true
   jsonData:
     httpMethod: POST
@@ -16,8 +16,9 @@ datasources:
   orgId: 1
   type: postgres
   access: proxy
-  url: localhost:5432
-  user: postgres
+  url: ${PMM_POSTGRES_HOSTNAME}
+  user: ${PMM_POSTGRES_USER}
+  password: ${PMM_POSTGRES_PASS}
   database: pmm-managed
   jsonData:
     postgresVersion: "1100"

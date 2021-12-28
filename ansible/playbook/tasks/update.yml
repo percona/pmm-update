@@ -32,6 +32,11 @@
         is_docker: True
       when: is_docker is undefined
   tasks:
+    - name: Install OS tools
+      yum:
+        name:
+          - gettext
+
     # we need install this package here because it contain VERSION file
     - name: Remove percona-dashboard without architecture
       yum:
