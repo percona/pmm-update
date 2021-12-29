@@ -215,6 +215,6 @@
     location = /scribe {
       auth_request off;
       default_type text/html;
-      alias /etc/victoriametrics-promscrape.yml
+      alias /etc/victoriametrics-promscrape.yml;
     }
   }
