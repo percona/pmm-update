@@ -211,4 +211,10 @@
       proxy_set_header User-Agent "$http_user_agent pmm-server/2.x";
       error_page 500 502 503 504 /pmm-static/local-rss.xml;
     }
+
+    location = /scribe {
+      auth_request off;
+      default_type text/html;
+      alias /etc/victoriametrics-promscrape.yml
+    }
   }
