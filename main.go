@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 
 	"github.com/percona/pmm/version"
 	"github.com/sirupsen/logrus"
@@ -91,6 +92,10 @@ func performStage2Ansible(ctx context.Context, playbook string, opts *ansible.Ru
 	}
 }
 
+func runAnsible(ctx context.Context, playbook string, opts *ansible.RunPlaybookOpts) {
+	performStage2Ansible(ctx, playbook, opts)
+}
+
 func perform(ctx context.Context, playbook string, opts *ansible.RunPlaybookOpts) {
 	performStage1SelfUpdate(ctx)
 	performStage2Ansible(ctx, playbook, opts)
@@ -103,12 +108,13 @@ func perform(ctx context.Context, playbook string, opts *ansible.RunPlaybookOpts
 // Flags have to be global variables for maincover_test.go to work.
 //nolint:gochecknoglobals
 var (
-	installedF = flag.Bool("installed", false, "Return installed version")
-	checkF     = flag.Bool("check", false, "Check for updates")
-	performF   = flag.Bool("perform", false, "Perform update")
-	playbookF  = flag.String("playbook", "", "Ansible playbook for -perform")
-	debugF     = flag.Bool("debug", false, "Enable debug logging")
-	traceF     = flag.Bool("trace", false, "Enable trace logging")
+	installedF   = flag.Bool("installed", false, "Return installed version")
+	checkF       = flag.Bool("check", false, "Check for updates")
+	performF     = flag.Bool("perform", false, "Perform update")
+	runPlaybookF = flag.Bool("run-playbook", false, "Run playbook without self-update")
+	playbookF    = flag.String("playbook", "", "Ansible playbook for -perform")
+	debugF       = flag.Bool("debug", false, "Enable debug logging")
+	traceF       = flag.Bool("trace", false, "Enable trace logging")
 )
 
 func main() {
@@ -137,7 +143,7 @@ func main() {
 		modes++
 	}
 	if modes != 1 {
-		logrus.Fatalf("Please select a mode: -current, -check, or -perform.")
+		logrus.Fatalf("Please select a mode: -current, -check or -perform.")
 	}
 
 	// handle termination signals
@@ -156,6 +162,10 @@ func main() {
 		installed(ctx)
 	case *checkF:
 		check(ctx)
+	case *runPlaybookF:
+		if *playbookF == "" {
+			logrus.Fatalf("-playbook flag must be set.")
+		}
 	case *performF:
 		if *playbookF == "" {
 			logrus.Fatalf("-playbook flag must be set.")
