@@ -14,7 +14,6 @@ jobs:
     name: Build
 
     strategy:
-      fail-fast: true
       matrix:
         image:
           - percona/pmm-server:2.0.0 # oldest production version
