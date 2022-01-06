@@ -20,9 +20,11 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 
 	"github.com/percona/pmm/version"
 	"github.com/sirupsen/logrus"
@@ -48,6 +50,17 @@ func check(ctx context.Context) {
 	if err != nil {
 		logrus.Tracef("%+v", err)
 		logrus.Fatalf("Check failed: %s", err)
+	}
+
+	// https://jira.percona.com/browse/PMM-9416
+	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
+	if err != nil {
+		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
+	} else {
+		if strings.TrimSuffix(string(versionFile), "\n") == "2.25.0" {
+			v.Installed.Version = "2.25.0"
+			v.UpdateAvailable = true
+		}
 	}
 
 	if err = json.NewEncoder(os.Stdout).Encode(v); err != nil {

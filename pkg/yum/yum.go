@@ -60,17 +60,6 @@ func Installed(ctx context.Context, name string) (*version.UpdateInstalledResult
 		res.BuildTime = &buildTime
 	}
 
-	// https://jira.percona.com/browse/PMM-9416
-	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
-	if err != nil {
-		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
-	} else {
-		if strings.TrimSuffix(string(versionFile), "\n") == "2.25.0" {
-			res.Version = "2.25.0"
-			res.Repo = "local"
-		}
-	}
-
 	return &version.UpdateInstalledResult{
 		Installed: res,
 	}, nil
