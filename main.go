@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -51,7 +52,7 @@ func check(ctx context.Context) {
 	}
 
 	// https://jira.percona.com/browse/PMM-9416
-	versionFile, err := os.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
+	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
 	if err != nil {
 		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
 	} else {
