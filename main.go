@@ -49,6 +49,18 @@ func check(ctx context.Context) {
 		logrus.Tracef("%+v", err)
 		logrus.Fatalf("Check failed: %s", err)
 	}
+
+	// https://jira.percona.com/browse/PMM-9416
+	versionFile, err := os.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
+	if err != nil {
+		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
+	} else {
+		if string(versionFile) == "2.25.0" {
+			v.Installed.Version = "2.25.0"
+			v.Installed.Repo = "local"
+		}
+	}
+
 	if err = json.NewEncoder(os.Stdout).Encode(v); err != nil {
 		logrus.Fatal(err)
 	}
