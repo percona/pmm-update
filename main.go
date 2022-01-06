@@ -23,7 +23,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"strings"
 
 	"github.com/percona/pmm/version"
 	"github.com/sirupsen/logrus"
@@ -142,8 +141,11 @@ func main() {
 	if *performF {
 		modes++
 	}
+	if *runPlaybookF {
+		modes++
+	}
 	if modes != 1 {
-		logrus.Fatalf("Please select a mode: -current, -check or -perform.")
+		logrus.Fatalf("Please select a mode: -current, -check, -run-playbook or -perform.")
 	}
 
 	// handle termination signals
@@ -166,6 +168,10 @@ func main() {
 		if *playbookF == "" {
 			logrus.Fatalf("-playbook flag must be set.")
 		}
+		runAnsible(ctx, *playbookF, &ansible.RunPlaybookOpts{
+			Debug: *debugF,
+			Trace: *traceF,
+		})
 	case *performF:
 		if *playbookF == "" {
 			logrus.Fatalf("-playbook flag must be set.")
