@@ -65,7 +65,7 @@ func Installed(ctx context.Context, name string) (*version.UpdateInstalledResult
 	if err != nil {
 		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
 	} else {
-		if string(versionFile) == "2.25.0" {
+		if strings.TrimSuffix(string(versionFile), "\n") == "2.25.0" {
 			res.Version = "2.25.0"
 			res.Repo = "local"
 		}
