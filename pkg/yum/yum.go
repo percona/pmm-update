@@ -18,13 +18,11 @@ package yum
 
 import (
 	"context"
-	"io/ioutil"
 	"strings"
 	"time"
 
 	"github.com/percona/pmm/version"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 
 	"github.com/percona/pmm-update/pkg/run"
 )
@@ -59,7 +57,6 @@ func Installed(ctx context.Context, name string) (*version.UpdateInstalledResult
 	if err == nil {
 		res.BuildTime = &buildTime
 	}
-
 	return &version.UpdateInstalledResult{
 		Installed: res,
 	}, nil
