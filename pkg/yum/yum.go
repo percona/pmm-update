@@ -18,11 +18,13 @@ package yum
 
 import (
 	"context"
+	"io/ioutil"
 	"strings"
 	"time"
 
 	"github.com/percona/pmm/version"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/percona/pmm-update/pkg/run"
 )
@@ -57,6 +59,18 @@ func Installed(ctx context.Context, name string) (*version.UpdateInstalledResult
 	if err == nil {
 		res.BuildTime = &buildTime
 	}
+
+	// https://jira.percona.com/browse/PMM-9416
+	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
+	if err != nil {
+		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
+	} else {
+		if string(versionFile) == "2.25.0" {
+			res.Version = "2.25.0"
+			res.Repo = "local"
+		}
+	}
+
 	return &version.UpdateInstalledResult{
 		Installed: res,
 	}, nil

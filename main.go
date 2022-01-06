@@ -20,7 +20,6 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -49,17 +48,6 @@ func check(ctx context.Context) {
 	if err != nil {
 		logrus.Tracef("%+v", err)
 		logrus.Fatalf("Check failed: %s", err)
-	}
-
-	// https://jira.percona.com/browse/PMM-9416
-	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
-	if err != nil {
-		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
-	} else {
-		if string(versionFile) == "2.25.0" {
-			v.Installed.Version = "2.25.0"
-			v.Installed.Repo = "local"
-		}
 	}
 
 	if err = json.NewEncoder(os.Stdout).Encode(v); err != nil {
