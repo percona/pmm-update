@@ -56,11 +56,9 @@ func check(ctx context.Context) {
 	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
 	if err != nil {
 		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
-	} else {
-		if strings.TrimSuffix(string(versionFile), "\n") == "2.25.0" {
-			v.Installed.Version = "2.25.0"
-			v.UpdateAvailable = true
-		}
+	} else if strings.TrimSuffix(string(versionFile), "\n") == "2.25.0" {
+		v.Installed.Version = "2.25.0"
+		v.UpdateAvailable = true
 	}
 
 	if err = json.NewEncoder(os.Stdout).Encode(v); err != nil {
