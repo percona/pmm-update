@@ -20,11 +20,9 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
-	"strings"
 
 	"github.com/percona/pmm/version"
 	"github.com/sirupsen/logrus"
@@ -46,22 +44,24 @@ func installed(ctx context.Context) {
 }
 
 func check(ctx context.Context) {
-	v, err := yum.Check(ctx, "pmm-update")
+	pmmUpdatePackage, err := yum.Check(ctx, "pmm-update")
 	if err != nil {
 		logrus.Tracef("%+v", err)
 		logrus.Fatalf("Check failed: %s", err)
 	}
 
 	// https://jira.percona.com/browse/PMM-9416
-	versionFile, err := ioutil.ReadFile("/srv/grafana/PERCONA_DASHBOARDS_VERSION")
+	pmmManagedPackage, err := yum.Check(ctx, "pmm-managed")
 	if err != nil {
-		logrus.Info("Can't open PERCONA_DASHBOARDS_VERSION file. Skipping...")
-	} else if strings.TrimSuffix(string(versionFile), "\n") == "2.25.0" {
-		v.Installed.Version = "2.25.0"
-		v.UpdateAvailable = true
+		logrus.Tracef("%+v", err)
+		logrus.Fatalf("Check failed: %s", err)
+	}
+	// if we have pmm-managed version number less then pmm-update than update was non-finished
+	if pmmManagedPackage.Installed.Version != pmmUpdatePackage.Installed.Version {
+		pmmUpdatePackage.UpdateAvailable = true
 	}
 
-	if err = json.NewEncoder(os.Stdout).Encode(v); err != nil {
+	if err = json.NewEncoder(os.Stdout).Encode(pmmUpdatePackage); err != nil {
 		logrus.Fatal(err)
 	}
 }
