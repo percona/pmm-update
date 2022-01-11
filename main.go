@@ -33,7 +33,6 @@ import (
 )
 
 const (
-	pmmUpdatePackageName  = "pmm-update"
 	pmmManagedPackageName = "pmm-managed"
 )
 
