@@ -30,9 +30,7 @@ import (
 var gaReleaseDate = time.Date(2019, 9, 18, 0, 0, 0, 0, time.UTC) //nolint
 
 const (
-	pmmUpdatePackageName  = "pmm-update"
 	pmmManagedPackageName = "pmm-managed"
-	pmm9416BugVersion     = "2.25.0-17.2112130939.dc091ab.el7"
 )
 
 func TestInstalled(t *testing.T) {
@@ -49,16 +47,8 @@ func TestInstalled(t *testing.T) {
 }
 
 func TestCheck(t *testing.T) {
-	res, err := Check(context.Background(), pmmUpdatePackageName)
+	res, err := Check(context.Background(), pmmManagedPackageName)
 
-	require.NoError(t, err)
-
-	// https://jira.percona.com/browse/PMM-9416
-	pmmManagedPackage, err := Check(context.Background(), pmmManagedPackageName)
-	if pmmManagedPackage.Installed.FullVersion == pmm9416BugVersion {
-		res.Installed = pmmManagedPackage.Installed
-		res.UpdateAvailable = true
-	}
 	require.NoError(t, err)
 
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
