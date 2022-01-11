@@ -29,13 +29,19 @@ import (
 
 var gaReleaseDate = time.Date(2019, 9, 18, 0, 0, 0, 0, time.UTC) //nolint
 
+const (
+	pmmUpdatePackageName  = "pmm-update"
+	pmmManagedPackageName = "pmm-managed"
+	pmm9416BugVersion     = "2.25.0-17.2112130939.dc091ab.el7"
+)
+
 func TestInstalled(t *testing.T) {
-	res, err := Installed(context.Background(), "pmm-update")
+	res, err := Installed(context.Background(), pmmUpdatePackageName)
 	require.NoError(t, err)
 
 	// https://jira.percona.com/browse/PMM-9416
-	pmmManagedPackage, err := Check(context.Background(), "pmm-managed")
-	if pmmManagedPackage.Installed.FullVersion == "2.25.0-17.2112130939.dc091ab.el7" {
+	pmmManagedPackage, err := Check(context.Background(), pmmManagedPackageName)
+	if pmmManagedPackage.Installed.FullVersion == pmm9416BugVersion {
 		res.Installed = pmmManagedPackage.Installed
 	}
 	require.NoError(t, err)
@@ -49,13 +55,13 @@ func TestInstalled(t *testing.T) {
 }
 
 func TestCheck(t *testing.T) {
-	res, err := Check(context.Background(), "pmm-update")
+	res, err := Check(context.Background(), pmmUpdatePackageName)
 
 	require.NoError(t, err)
 
 	// https://jira.percona.com/browse/PMM-9416
-	pmmManagedPackage, err := Check(context.Background(), "pmm-managed")
-	if pmmManagedPackage.Installed.FullVersion == "2.25.0-17.2112130939.dc091ab.el7" {
+	pmmManagedPackage, err := Check(context.Background(), pmmManagedPackageName)
+	if pmmManagedPackage.Installed.FullVersion == pmm9416BugVersion {
 		res.Installed = pmmManagedPackage.Installed
 	}
 	require.NoError(t, err)
