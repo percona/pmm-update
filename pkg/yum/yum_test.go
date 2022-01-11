@@ -63,6 +63,7 @@ func TestCheck(t *testing.T) {
 	pmmManagedPackage, err := Check(context.Background(), pmmManagedPackageName)
 	if pmmManagedPackage.Installed.FullVersion == pmm9416BugVersion {
 		res.Installed = pmmManagedPackage.Installed
+		res.UpdateAvailable = true
 	}
 	require.NoError(t, err)
 
