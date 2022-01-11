@@ -37,8 +37,6 @@ func TestInstalled(t *testing.T) {
 	res, err := Installed(context.Background(), pmmManagedPackageName)
 	require.NoError(t, err)
 
-	require.NoError(t, err)
-
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
 	assert.True(t, strings.HasPrefix(res.Installed.FullVersion, "2."), "%s", res.Installed.FullVersion)
 	require.NotEmpty(t, res.Installed.BuildTime)
