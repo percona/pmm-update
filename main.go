@@ -173,6 +173,7 @@ func main() {
 		if *playbookF == "" {
 			logrus.Fatalf("-playbook flag must be set.")
 		}
+
 		runAnsible(ctx, *playbookF, &ansible.RunPlaybookOpts{
 			Debug: *debugF,
 			Trace: *traceF,
