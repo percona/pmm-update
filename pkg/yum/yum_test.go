@@ -36,15 +36,9 @@ const (
 )
 
 func TestInstalled(t *testing.T) {
-	res, err := Installed(context.Background(), pmmUpdatePackageName)
+	res, err := Installed(context.Background(), pmmManagedPackageName)
 	require.NoError(t, err)
 
-	// https://jira.percona.com/browse/PMM-9416
-	pmmManagedPackage, err := Check(context.Background(), pmmManagedPackageName)
-	if pmmManagedPackage.Installed.FullVersion == pmm9416BugVersion {
-		res.Installed = pmmManagedPackage.Installed
-	}
-	require.NoError(t, err)
 	require.NoError(t, err)
 
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)

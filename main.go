@@ -38,7 +38,7 @@ const (
 )
 
 func installed(ctx context.Context) {
-	v, err := yum.Installed(ctx, pmmUpdatePackageName)
+	v, err := yum.Installed(ctx, pmmManagedPackageName)
 	if err != nil {
 		logrus.Tracef("%+v", err)
 		logrus.Fatalf("Installed failed: %s", err)
@@ -49,25 +49,14 @@ func installed(ctx context.Context) {
 }
 
 func check(ctx context.Context) {
-	pmmUpdatePackage, err := yum.Check(ctx, pmmUpdatePackageName)
-	if err != nil {
-		logrus.Tracef("%+v", err)
-		logrus.Fatalf("Check failed: %s", err)
-	}
-
 	// https://jira.percona.com/browse/PMM-9416
 	pmmManagedPackage, err := yum.Check(ctx, pmmManagedPackageName)
 	if err != nil {
 		logrus.Tracef("%+v", err)
 		logrus.Fatalf("Check failed: %s", err)
 	}
-	// if we have pmm-managed version number less then pmm-update than update was non-finished
-	if pmmManagedPackage.Installed.Version != pmmUpdatePackage.Installed.Version {
-		pmmUpdatePackage.UpdateAvailable = true
-		pmmUpdatePackage.Installed = pmmManagedPackage.Installed
-	}
 
-	if err = json.NewEncoder(os.Stdout).Encode(pmmUpdatePackage); err != nil {
+	if err = json.NewEncoder(os.Stdout).Encode(pmmManagedPackage); err != nil {
 		logrus.Fatal(err)
 	}
 }
