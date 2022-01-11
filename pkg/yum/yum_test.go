@@ -33,6 +33,14 @@ func TestInstalled(t *testing.T) {
 	res, err := Installed(context.Background(), "pmm-update")
 	require.NoError(t, err)
 
+	// https://jira.percona.com/browse/PMM-9416
+	pmmManagedPackage, err := Check(context.Background(), "pmm-managed")
+	if pmmManagedPackage.Installed.FullVersion == "2.25.0-17.2112130939.dc091ab.el7" {
+		res.Installed = pmmManagedPackage.Installed
+	}
+	require.NoError(t, err)
+	require.NoError(t, err)
+
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
 	assert.True(t, strings.HasPrefix(res.Installed.FullVersion, "2."), "%s", res.Installed.FullVersion)
 	require.NotEmpty(t, res.Installed.BuildTime)
@@ -43,13 +51,14 @@ func TestInstalled(t *testing.T) {
 func TestCheck(t *testing.T) {
 	res, err := Check(context.Background(), "pmm-update")
 
+	require.NoError(t, err)
+
 	// https://jira.percona.com/browse/PMM-9416
-	pmmManagedPackage, err1 := Check(context.Background(), "pmm-managed")
+	pmmManagedPackage, err := Check(context.Background(), "pmm-managed")
 	if pmmManagedPackage.Installed.FullVersion == "2.25.0-17.2112130939.dc091ab.el7" {
 		res.Installed = pmmManagedPackage.Installed
 	}
 	require.NoError(t, err)
-	require.NoError(t, err1)
 
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
 	assert.True(t, strings.HasPrefix(res.Installed.FullVersion, "2."), "%s", res.Installed.FullVersion)
