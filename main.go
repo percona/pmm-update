@@ -49,7 +49,6 @@ func installed(ctx context.Context) {
 }
 
 func check(ctx context.Context) {
-	// https://jira.percona.com/browse/PMM-9416
 	pmmManagedPackage, err := yum.Check(ctx, pmmManagedPackageName)
 	if err != nil {
 		logrus.Tracef("%+v", err)
