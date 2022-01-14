@@ -217,6 +217,7 @@
     - name: Create change-password command
       file:
         src: change-password
+        state: touch
         dest: /usr/local/sbin/change-password
         mode: 0755
 
