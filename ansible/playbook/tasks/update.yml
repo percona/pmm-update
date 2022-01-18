@@ -215,9 +215,8 @@
       when: not is_docker
 
     - name: Create change-password command
-      file:
+      copy:
         src: change-password
-        state: touch
         dest: /usr/local/sbin/change-password
         mode: 0755
 
