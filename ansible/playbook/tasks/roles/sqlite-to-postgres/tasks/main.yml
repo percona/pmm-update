@@ -38,7 +38,7 @@
 
 - name: Print to console
   debug:
-    msg: "{{command_output.stdout}}"
+    msg: "{{psql_result}}"
   ignore_errors: yes
 
 - name: Check if initial data were created
@@ -49,6 +49,8 @@
   delay: 3
   register: psql_result
   until: psql_result.rowcount == 1
+  ignore_errors: yes
+
 
 - name: wait for grafana database initiazation
   pause:
