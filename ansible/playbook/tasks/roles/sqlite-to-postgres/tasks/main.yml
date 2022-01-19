@@ -65,7 +65,7 @@
   ignore_errors: yes # TODO DELETE BEFORE RELEASE
 
 - name: Run grafana migrator
-  command: grafana-db-migrator /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
+  command: grafana-db-migrator --change-char-to-text --reset-home-dashboard /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
   register: migrator_output
   changed_when: "'All done' in migrator_output.stdout"
 
@@ -91,8 +91,3 @@
   file:
     path: /srv/grafana/grafana.db
     state: absent
-
-- name: Change Home dashboard for default org
-  postgresql_query:
-    db: grafana
-    query: UPDATE preferences SET home_dashboard_id=0 WHERE org_id=1;
