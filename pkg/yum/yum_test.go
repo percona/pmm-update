@@ -29,8 +29,12 @@ import (
 
 var gaReleaseDate = time.Date(2019, 9, 18, 0, 0, 0, 0, time.UTC) //nolint
 
+const (
+	pmmManagedPackageName = "pmm-managed"
+)
+
 func TestInstalled(t *testing.T) {
-	res, err := Installed(context.Background(), "pmm-update")
+	res, err := Installed(context.Background(), pmmManagedPackageName)
 	require.NoError(t, err)
 
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
@@ -41,7 +45,8 @@ func TestInstalled(t *testing.T) {
 }
 
 func TestCheck(t *testing.T) {
-	res, err := Check(context.Background(), "pmm-update")
+	res, err := Check(context.Background(), pmmManagedPackageName)
+
 	require.NoError(t, err)
 
 	assert.True(t, strings.HasPrefix(res.Installed.Version, "2."), "%s", res.Installed.Version)
@@ -56,13 +61,13 @@ func TestCheck(t *testing.T) {
 	assert.True(t, res.Latest.BuildTime.After(gaReleaseDate), "Latest.BuildTime = %s", res.Latest.BuildTime)
 	assert.NotEmpty(t, res.Latest.Repo)
 
-	// We assume that the latest public.ecr.aws/e7j3v3n0/pmm-server:dev-latest image
+	// We assume that the latest perconalab/pmm-server:dev-latest image
 	// always contains the latest pmm-update package versions.
 	// If this test fails, re-pull them and recreate devcontainer.
 	var updateAvailable bool
 	image := os.Getenv("PMM_SERVER_IMAGE")
 	require.NotEmpty(t, image)
-	if image != "public.ecr.aws/e7j3v3n0/pmm-server:dev-latest" {
+	if image != "perconalab/pmm-server:dev-latest" {
 		updateAvailable = true
 	}
 
