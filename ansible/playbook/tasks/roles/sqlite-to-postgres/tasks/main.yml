@@ -39,7 +39,7 @@
 - name: Print to console
   debug:
     msg: "{{command_output.stdout}}"
-  check_mode: no
+  ignore_errors: yes
 
 - name: Check if initial data were created
   postgresql_query:
