@@ -64,7 +64,6 @@
   postgresql_db:
     name: grafana
     state: present
-  register: database_exists
 
 - name: Create grafana user
   postgresql_user:
@@ -74,6 +73,12 @@
     priv: 'ALL'
     expires: infinity
     state: present
+  when: not ansible_check_mode
+
+- name: Check that SQLite database exists
+  stat:
+    path: /srv/grafana/grafana.db
+  register: database_exists
 
 - name: Migrate Grafana database from SQLite to Postgresql
   include_role:
