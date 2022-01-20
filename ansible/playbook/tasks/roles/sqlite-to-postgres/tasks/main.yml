@@ -12,17 +12,7 @@
     name: 'grafana'
     state: stopped
 
-- name: Create grafana user
-  postgresql_user:
-    db: grafana
-    name: grafana
-    password: grafana
-    priv: 'ALL'
-    expires: infinity
-    state: present
-  when: not ansible_check_mode
-
-- name: Create actual grafana config
+- name: Create actual grafana config and grafana db
   include_role:
     name: grafana
 

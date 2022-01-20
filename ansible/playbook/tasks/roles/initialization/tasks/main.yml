@@ -66,6 +66,15 @@
     state: present
   register: database_exists
 
+- name: Create grafana user
+  postgresql_user:
+    db: grafana
+    name: grafana
+    password: grafana
+    priv: 'ALL'
+    expires: infinity
+    state: present
+
 - name: Migrate Grafana database from SQLite to Postgresql
   include_role:
     name: sqlite-to-postgres

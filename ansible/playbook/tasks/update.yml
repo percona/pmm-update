@@ -45,31 +45,9 @@
           - percona-grafana
         state: latest
 
-    - name: Upgrade grafana database (Get the latest schema)
-      command: grafana-cli --homepath=/usr/share/grafana admin data-migration encrypt-datasource-passwords
-      changed_when: True
-
-    - name: Create provisioning directory
-      file:
-        path: "/usr/share/grafana/conf/provisioning/{{ item }}"
-        owner: grafana
-        group: grafana
-        state: directory
-      loop:
-        - datasources
-        - plugins
-        - dashboards
-
-    - name: Copy grafana provisioning files
-      copy:
-        src: "{{ item }}.yml"
-        dest: "/usr/share/grafana/conf/provisioning/{{ item }}/default.yml"
-        owner: grafana
-        group: grafana
-      loop:
-        - datasources
-        - plugins
-        - dashboards
+    - name: Create grafana config
+      include_role:
+        name: grafana
 
     # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF
@@ -87,10 +65,6 @@
     - name: Supervisord start         | Start supervisord for docker
       when: is_docker and not is_supervisor_running.stat.exists
       shell: supervisord -c /etc/supervisord.conf &
-
-    - name: Create grafana config
-      include_role:
-        name: grafana
 
     - name: Run initialization playbook
       include_role:
