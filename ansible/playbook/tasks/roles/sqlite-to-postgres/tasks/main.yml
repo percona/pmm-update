@@ -32,15 +32,6 @@
     state: restarted
   ignore_errors: yes
 
-- name: Display grafana.log content
-  command: cat /srv/logs/grafana.log
-  register: command_output
-
-- name: Print to console
-  debug:
-    msg: "{{psql_result}}"
-  ignore_errors: yes
-
 - name: Check if initial data were created
   postgresql_query:
     db: grafana
@@ -49,8 +40,7 @@
   delay: 3
   register: psql_result
   until: psql_result.rowcount == 1
-  ignore_errors: yes
-
+  when: not ansible_check_mode
 
 - name: wait for grafana database initiazation
   pause:

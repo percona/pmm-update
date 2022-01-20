@@ -70,3 +70,5 @@
   include_role:
     name: sqlite-to-postgres
   when: database_exists.changed
+  tags:
+    - skip_ansible_lint # '503 Tasks that run when changed should likely be handlers'.
