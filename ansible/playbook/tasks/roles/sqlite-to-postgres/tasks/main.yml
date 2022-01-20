@@ -16,6 +16,13 @@
   include_role:
     name: grafana
 
+- name: Disable provisioning before change database
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: paths
+    option: provisioning
+    value: conf/provisioning_disable
+
 - name: Start grafana again
   supervisorctl:
     name: grafana
@@ -51,6 +58,13 @@
   command: grafana-db-migrator --change-char-to-text --reset-home-dashboard /srv/grafana/grafana.db "postgres://grafana:grafana@localhost:5432/grafana?sslmode=disable"
   register: migrator_output
   changed_when: "'All done' in migrator_output.stdout"
+
+- name: Enable provisioning after change database
+  ini_file:
+    dest: /etc/grafana/grafana.ini
+    section: paths
+    option: provisioning
+    value: conf/provisioning
 
 - name: Start grafana again
   supervisorctl:
