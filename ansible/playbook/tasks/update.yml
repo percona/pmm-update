@@ -269,12 +269,12 @@
         path: /etc/bashrc
         line: 'export GF_PLUGIN_DIR=/srv/grafana/plugins'
 
-    - name: Add ClickHouse datasource to the list of unsigned plugins in Grafana
+    - name: Add unsigned plugins to Grafana
       ini_file:
         dest: /etc/grafana/grafana.ini
         section: plugins
         option: allow_loading_unsigned_plugins
-        value: vertamedia-clickhouse-datasource
+        value: vertamedia-clickhouse-datasource,pmm-app,pmm-check-panel-home,pmm-update,pmm-qan-app-panel
 
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
