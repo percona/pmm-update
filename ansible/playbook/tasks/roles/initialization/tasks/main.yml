@@ -123,6 +123,7 @@
   supervisorctl:
     name: grafana
     state: restarted
+  ignore_errors: yes
 
 - name: Copy file with image version
   copy:
