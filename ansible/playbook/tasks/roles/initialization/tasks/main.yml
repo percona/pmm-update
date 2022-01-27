@@ -125,6 +125,14 @@
     state: restarted
   ignore_errors: True
 
+- name: Display grafana.log content
+  command: cat /srv/logs/grafana.log
+  register: command_output
+
+- name: Print to console
+  debug:
+    msg: "{{command_output.stdout}}"
+
 - name: Copy file with image version
   copy:
     src: /usr/share/percona-dashboards/VERSION
