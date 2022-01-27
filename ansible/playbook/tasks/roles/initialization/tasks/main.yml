@@ -91,7 +91,7 @@
   copy:
     src: /srv/grafana/plugins/pmm-app/dist/
     dest: /srv/grafana/plugins/pmm-app/
-  remote_src: yes
+    remote_src: yes
 
 - name: Check that the SQLite grafana database exists
   stat:
