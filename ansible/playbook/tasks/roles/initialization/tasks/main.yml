@@ -87,6 +87,12 @@
     dest: /srv/grafana/plugins/
   delegate_to: "{{ inventory_hostname }}"
 
+- name: Move pmm-app/dist to pmm-app/
+  copy:
+    src: /srv/grafana/plugins/pmm-app/dist/
+    dest: /srv/grafana/plugins/pmm-app/
+  remote_src: yes
+
 - name: Check that the SQLite grafana database exists
   stat:
     path: /srv/grafana/grafana.db
