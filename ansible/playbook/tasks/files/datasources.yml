@@ -25,7 +25,7 @@ datasources:
 - name: ClickHouse
   version: 2
   orgId: 1
-  type: grafana-clickhouse-datasource
+  type: vertamedia-clickhouse-datasource
   access: proxy
   url: http://localhost:8123
   jsonData:

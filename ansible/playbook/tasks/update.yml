@@ -274,7 +274,7 @@
         dest: /etc/grafana/grafana.ini
         section: plugins
         option: allow_loading_unsigned_plugins
-        value: pmm-app,pmm-check-panel-home,pmm-update,pmm-qan-app-panel,pmm-pt-summary-panel,pmm-pt-summary-datasource
+        value: vertamedia-clickhouse-datasource,pmm-app,pmm-check-panel-home,pmm-update,pmm-qan-app-panel,pmm-pt-summary-panel,pmm-pt-summary-datasource
 
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
