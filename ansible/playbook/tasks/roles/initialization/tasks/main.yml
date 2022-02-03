@@ -87,12 +87,6 @@
     dest: /srv/grafana/plugins/
   delegate_to: "{{ inventory_hostname }}"
 
-- name: Move pmm-app/dist to pmm-app/
-  copy:
-    src: /srv/grafana/plugins/pmm-app/dist/
-    dest: /srv/grafana/plugins/pmm-app/
-    remote_src: yes
-
 - name: Check that the SQLite grafana database exists
   stat:
     path: /srv/grafana/grafana.db
@@ -136,15 +130,6 @@
   supervisorctl:
     name: grafana
     state: restarted
-  ignore_errors: True
-
-- name: Display grafana.log content
-  command: cat /srv/logs/grafana.log
-  register: command_output
-
-- name: Print to console
-  debug:
-    msg: "{{command_output.stdout}}"
 
 - name: Copy file with image version
   copy:
