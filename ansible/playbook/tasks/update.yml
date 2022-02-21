@@ -195,6 +195,12 @@
         mode: 0755
       when: not is_docker
 
+    - name: Create change-admin-password command
+      copy:
+        src: change-admin-password
+        dest: /usr/local/sbin/change-admin-password
+        mode: 0755
+
     # https://jira.percona.com/browse/PMM-5271
     - name: Check volume size
       when: not is_docker
@@ -211,6 +217,8 @@
         - ALTER TABLE tag ALTER COLUMN key TYPE text;
         - ALTER TABLE tag ALTER COLUMN value TYPE text;
       when: not ansible_check_mode
+
+
 
     # TODO: Create /srv/alertmanager/data and /srv/victoriametrics/data in pmm-managed
     # to support Docker-way (swap image) updates.
@@ -244,12 +252,13 @@
           - pmm-agent
         - ["stop", "remove", "add"]
 
-    - name: Delete old folder for grafana plugins
+    - name: Delete old grafana plugin folders and old grafana database
       file:
         state: absent
         path: "{{ item }}"
       loop:
         - /var/lib/grafana/plugins/
+        - /usr/share/grafana/data/grafana.db
 
     - name: Enable pmm-update-perform-init after build
       ini_file:
