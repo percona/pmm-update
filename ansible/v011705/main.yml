@@ -100,18 +100,18 @@
         - pmm-update
         - percona-toolkit-3.0.10
         - percona-dashboards-1.17.4
-        - pmm-server-1.17.4
-        - pmm-client-1.17.4
+        - pmm-server-1.17.5
+        - pmm-client-1.17.5
         - percona-orchestrator-3.0.6
         - percona-prometheus1-1.8.2
         - percona-prometheus-2.3.2
-        - percona-qan-api-1.17.4
+        - percona-qan-api-1.17.5
         - percona-grafana-5.4.5
-        - percona-qan-app-1.17.4
-        - pmm-manage-1.17.4
-        - pmm-managed-1.17.4
+        - percona-qan-app-1.17.5
+        - pmm-manage-1.17.5
+        - pmm-managed-1.17.5
         - percona-consul-0.8.5
-        - rds_exporter-1.17.4
+        - rds_exporter-1.17.5
 
     - name: PMM                        | Restore unmanaged configs
       copy: src={{ item.src }} dest={{ item.dest }}
