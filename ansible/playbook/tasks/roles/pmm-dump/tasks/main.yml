@@ -5,6 +5,10 @@
   get_url:
     url: https://github.com/percona/pmm-dump/releases/download/0.5.1-beta/pmm-transferer
     dest: /tmp/pmm-transferer
+    tmp_dest: /tmp/
+    force: yes
+    headers:
+      Accept: "application/octet-stream"
 
 - name: Install the binary and rename to pmm-dump
   copy:
