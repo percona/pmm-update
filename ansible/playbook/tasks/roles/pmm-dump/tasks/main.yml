@@ -13,6 +13,7 @@
     owner: root
     group: root
     mode: "0755"
+    remote_src: yes
   become: true
 
 - name: Remove the file from /tmp
