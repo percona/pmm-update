@@ -122,7 +122,7 @@
       when: experimetal_repo_existed.changed
       tags:
         - skip_ansible_lint # '503 Tasks that run when changed should likely be handlers'.
-                            # The handler looks bad in this case
+          # The handler looks bad in this case
 
     # Split download and update to produce a bit more of progress output.
     - name: Download pmm2 packages
@@ -169,6 +169,10 @@
     - name: Install clickhouse
       include_role:
         name: clickhouse
+
+    - name: Install pmm-dump
+      include_role:
+        name: pmm-dump
 
     # Fix things that should be fixed before restarts.
 

@@ -1,0 +1,14 @@
+---
+# Install pmm-dump, always overwrite the version before with latest
+
+- name: Download pmm-dump binary (tech preview)
+  get_url:
+    url: https://github.com/percona/pmm-dump/releases/download/0.5.1-beta/pmm-transferer
+    dest: /tmp
+
+- name: Install the binary and rename to pmm-dump
+  copy:
+    src: /tmp/pmm-transferer
+    dest: "/usr/local/bin/pmm-dump"
+    mode: a+x
+  become: true
