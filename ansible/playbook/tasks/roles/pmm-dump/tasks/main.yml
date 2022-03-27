@@ -4,11 +4,18 @@
 - name: Download pmm-dump binary (tech preview)
   get_url:
     url: https://github.com/percona/pmm-dump/releases/download/0.5.1-beta/pmm-transferer
-    dest: /tmp
+    dest: /tmp/pmm-transferer
 
 - name: Install the binary and rename to pmm-dump
   copy:
     src: /tmp/pmm-transferer
     dest: "/usr/local/bin/pmm-dump"
-    mode: a+x
+    owner: root
+    group: root
+    mode: "0755"
   become: true
+
+- name: Remove the file from /tmp
+  file:
+    path: /tmp/pmm-transferer
+    state: absent
