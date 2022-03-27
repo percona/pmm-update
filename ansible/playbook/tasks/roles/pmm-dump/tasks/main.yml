@@ -10,10 +10,17 @@
     headers:
       Accept: "application/octet-stream"
 
+- name: Display the File contents
+  shell: ls -laH /tmp/
+  register: shellout
+
+- name: "Display directory contents"
+  debug: var=shellout.stdout_lines
+
 - name: Install the binary and rename to pmm-dump
   copy:
     src: /tmp/pmm-transferer
-    dest: "/usr/local/bin/pmm-dump"
+    dest: /usr/local/bin/pmm-dump
     owner: root
     group: root
     mode: "0755"
