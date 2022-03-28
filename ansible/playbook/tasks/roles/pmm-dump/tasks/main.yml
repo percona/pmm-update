@@ -4,30 +4,19 @@
 - name: Download pmm-dump binary (tech preview)
   get_url:
     url: https://github.com/percona/pmm-dump/releases/download/0.5.1-beta/pmm-transferer
-    dest: /tmp/pmm-transferer
-    tmp_dest: /tmp/
+    dest: /usr/local/bin/pmm-dump
+    checksum: "sha1:e431359d0c4d6f0b4a54b71ec9766b0e5ff45287"
     force: yes
+    owner: root
+    group: root
+    mode: "0755"
     headers:
       Accept: "application/octet-stream"
+  become: true
 
-- name: Display the File contents
-  shell: ls -laH /tmp/
+- name: Display the directory contents
+  shell: ls -laH //usr/local/bin
   register: shellout
 
 - name: "Display directory contents"
   debug: var=shellout.stdout_lines
-
-- name: Install the binary and rename to pmm-dump
-  copy:
-    src: /tmp/pmm-transferer
-    dest: /usr/local/bin/pmm-dump
-    owner: root
-    group: root
-    mode: "0755"
-    remote_src: yes
-  become: true
-
-- name: Remove the file from /tmp
-  file:
-    path: /tmp/pmm-transferer
-    state: absent
