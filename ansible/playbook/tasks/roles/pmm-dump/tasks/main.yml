@@ -1,5 +1,6 @@
 ---
 # Install pmm-dump, always overwrite the version before with latest
+# Percona tool, see https://github.com/percona/pmm-dump/releases/download/0.5.1-beta/pmm-transferer
 
 - name: Download pmm-dump binary (tech preview)
   get_url:
@@ -13,10 +14,3 @@
     headers:
       Accept: "application/octet-stream"
   become: true
-
-- name: Display the directory contents
-  shell: ls -laH //usr/local/bin
-  register: shellout
-
-- name: "Display directory contents"
-  debug: var=shellout.stdout_lines
