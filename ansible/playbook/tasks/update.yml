@@ -14,6 +14,7 @@
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
+      - pmm-dump
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
@@ -169,10 +170,6 @@
     - name: Install clickhouse
       include_role:
         name: clickhouse
-
-    - name: Install pmm-dump
-      include_role:
-        name: pmm-dump
 
     # Fix things that should be fixed before restarts.
 
