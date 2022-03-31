@@ -295,6 +295,7 @@
       debug: var=maintail_result.stdout_lines
 
     - name: Cleanup yum cache
-      command: yum clean all
-      register: yum_clean_result
-      changed_when: "'Cleaning repos' in yum_clean_result.stdout"
+      command: rm -rf /var/cache/yum
+      changed_when: True
+
+ 
