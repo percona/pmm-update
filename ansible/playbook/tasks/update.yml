@@ -14,6 +14,7 @@
       - dbaas-controller
       - dbaas-tools
       - pmm2-client
+      - pmm-dump
   pre_tasks:
     - name: detect /srv/pmm-distribution
       stat:
@@ -122,7 +123,7 @@
       when: experimetal_repo_existed.changed
       tags:
         - skip_ansible_lint # '503 Tasks that run when changed should likely be handlers'.
-                            # The handler looks bad in this case
+          # The handler looks bad in this case
 
     # Split download and update to produce a bit more of progress output.
     - name: Download pmm2 packages
@@ -294,7 +295,7 @@
     - name: Check supervisord log
       debug: var=maintail_result.stdout_lines
 
-    - name: Cleanup yum cache
-      command: yum clean all
-      register: yum_clean_result
-      changed_when: "'Cleaning repos' in yum_clean_result.stdout"
+    - name: Delete content & directory
+      file:
+        state: absent
+        path: /var/cache/yum
