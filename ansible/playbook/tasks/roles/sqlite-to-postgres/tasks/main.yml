@@ -116,4 +116,4 @@
 - name: Start nginx again
   supervisorctl:
     name: nginx
-    state: start
+    state: started
