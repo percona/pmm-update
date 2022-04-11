@@ -71,6 +71,7 @@
     db: grafana
     query: "DELETE FROM dashboard WHERE slug = '{{ item }}';"
   loop: "{{ dashboards_list }}"
+  ignore_errors: yes # it's okey if we don't have some entries or even dashboard table (during provisioning)
   when: not sqlite_grafana.stat.exists
 
 - name: Restart grafana with new plugins
