@@ -29,15 +29,6 @@
   debug:
     msg: "Current version: {{ pmm_current_version }} Image Version: {{ pmm_image_version }}"
 
-- name: Wait until postgres socket is present before continuing
-  wait_for:
-    path: /var/run/postgresql/.s.PGSQL.5432
-
-- name: Create grafana database
-  postgresql_db:
-    name: grafana
-    state: present
-
 - name: Checking if we need an update or not
   include_role:
     name: dashboards_upgrade
@@ -47,6 +38,10 @@
   file:
     path: /srv/backup
     state: directory
+
+- name: Wait until postgres socket is present before continuing
+  wait_for:
+    path: /var/run/postgresql/.s.PGSQL.5432
 
 - name: Get postgres encoding
   postgresql_query:
@@ -64,6 +59,11 @@
   include_role:
     name: postgres-ascii-to-utf8
   when: "'SQL_ASCII' == postgres_encoding.query_result[0].server_encoding"
+
+- name: Create grafana database
+  postgresql_db:
+    name: grafana
+    state: present
 
 - name: Create grafana user
   postgresql_user:
