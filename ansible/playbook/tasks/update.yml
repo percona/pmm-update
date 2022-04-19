@@ -50,14 +50,6 @@
       include_role:
         name: grafana
 
-    - name: Enable cron autostart in non-docker distros
-      when: not is_docker
-      ini_file:
-        path: /etc/supervisord.d/pmm.ini
-        section: program:cron
-        option: autostart
-        value: "true"
-
     # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF
       when: not is_docker
