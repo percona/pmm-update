@@ -85,6 +85,13 @@
         path: /etc/systemd/system/supervisord.service
         state: absent
 
+    - name: Enable crond service
+      when: not is_docker
+      service:
+        name: crond
+        state: started
+        enabled: yes
+
     - name: Increase number of open files for jobs
       when: not is_docker
       ini_file:
