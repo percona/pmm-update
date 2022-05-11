@@ -20,6 +20,7 @@
   yum:
     name: nginx-1.20.2
     state: installed
+    update_cache: yes
 
 - name: NGINX SSL Certificate      | Add script to generate ssl certificate
   copy:
