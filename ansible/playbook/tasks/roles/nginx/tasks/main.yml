@@ -18,9 +18,8 @@
 
 - name: Install nginx rpm          | Install nginx rpm
   yum:
-    name: nginx-1.20.2
+    name: nginx-1.20.1
     state: installed
-    update_cache: yes
 
 - name: NGINX SSL Certificate      | Add script to generate ssl certificate
   copy:
@@ -69,11 +68,3 @@
     - "stop"
     - "remove"
     - "add"
-
-- name: Disable nginx repository
-  yum_repository:
-    name: nginx
-    description: nginx repo
-    baseurl: http://nginx.org/packages/centos/7/$basearch/
-    gpgcheck: no
-    enabled: no
