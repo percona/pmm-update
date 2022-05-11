@@ -1,12 +1,12 @@
 ---
 # We already have nginx package in epel repo
-- name: Packages                   | Add Nginx repository
+- name: Add Nginx repository
   yum_repository:
     name: nginx
     description: nginx repo
     baseurl: http://nginx.org/packages/centos/7/$basearch/
     gpgcheck: no
-    enabled: no
+    enabled: yes
 
 - name: Create directories for nginx
   file:
@@ -68,3 +68,11 @@
     - "stop"
     - "remove"
     - "add"
+
+- name: Disable nginx repository
+  yum_repository:
+    name: nginx
+    description: nginx repo
+    baseurl: http://nginx.org/packages/centos/7/$basearch/
+    gpgcheck: no
+    enabled: no
