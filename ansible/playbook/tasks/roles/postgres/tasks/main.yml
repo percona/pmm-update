@@ -11,7 +11,7 @@
   yum_repository:
     name: percona-ppg-14
     description: PostgreSQL YUM repository - x86_64
-    baseurl: http://repo.percona.com/ppg-14/yum/{{ ppg_repo_name }}/7/RPMS/x86_64
+    baseurl: http://repo.percona.com/ppg-14/yum/release/7/RPMS/x86_64
     gpgcheck: yes
     enabled: yes
     gpgkey: file:///etc/pki/rpm-gpg/PERCONA-PACKAGING-KEY
