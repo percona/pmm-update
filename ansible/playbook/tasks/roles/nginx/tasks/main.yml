@@ -18,7 +18,7 @@
 
 - name: Install nginx rpm          | Install nginx rpm
   yum:
-    name: nginx-1.20.1
+    name: nginx-1.20.3
     state: installed
 
 - name: NGINX SSL Certificate      | Add script to generate ssl certificate
