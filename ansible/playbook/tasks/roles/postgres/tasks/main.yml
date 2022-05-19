@@ -137,3 +137,4 @@
     path: /srv/postgres14/postgresql.conf
     regexp: '^logging_collector'
     line: 'logging_collector = off'
+  when: not ansible_check_mode
