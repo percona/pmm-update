@@ -62,7 +62,9 @@
 - name: Upgrade postgres from 11 to 14
   block:
     - name: Create Postgres data cluster
-      command: su postgres -c "/usr/pgsql-14/bin/initdb -D /srv/postgres14"
+      command: /usr/pgsql-14/bin/initdb -D /srv/postgres14
+      become_user: postgres
+      become_method: su
 
     - name: Stop pmm-managed and postgres before changing encoding
       supervisorctl:
@@ -75,6 +77,7 @@
     - name: Run Postgres database without supervisor
       command: /usr/pgsql-11/bin/pg_ctl start -D /srv/postgres
       become_user: postgres
+      become_method: su
 
     - name: Dump pmm-managed database
       postgresql_db:
@@ -103,6 +106,11 @@
         state: restore
         target: /tmp/pmm-managed-upgrade.sql
 
+    - name: Stop Postgres 14 database without supervisor
+      command: /usr/pgsql-14/bin/pg_ctl stop -D /srv/postgres14
+      become_user: postgres
+      become_method: su
+
     - name: Remove old postgres packages
       yum:
         name:
@@ -121,7 +129,7 @@
       copy:
         remote_src: true
         src: /srv/postgres
-        dest: /srv/postgres_old
+        dest: /srv/postgres11
   when: is_postgres_11.stat.exists
 
 - name: Disable logging_collector
