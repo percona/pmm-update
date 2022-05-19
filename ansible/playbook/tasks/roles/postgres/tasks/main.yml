@@ -25,9 +25,7 @@
     enabled: yes
     gpgkey: file:///etc/pki/rpm-gpg/PERCONA-PACKAGING-KEY
 
-- name: Clean yum cache
-  command: yum clean all
-
+# we need old postgres binary for upgrade process
 - name: Install Postgres
   yum:
     name:
@@ -38,6 +36,8 @@
       - percona-postgresql11-contrib
       - percona-postgresql11
     state: installed
+  when: not ansible_check_mode
+
 
 - name: Create Postgres log file
   file:
