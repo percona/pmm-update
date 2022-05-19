@@ -70,7 +70,7 @@
         state: stopped
       loop:
         - pmm-managed
-        - postgres
+        - postgresql
 
     - name: Run Postgres database without supervisor
       command: /usr/pgsql-11/bin/pg_ctl start -D /srv/postgres
