@@ -85,10 +85,12 @@
     - name: Stop Postgres database without supervisor
       command: /usr/pgsql-11/bin/pg_ctl stop -D /srv/postgres
       become_user: postgres
+      become_method: su
 
     - name: Start Postgres 14 database without supervisor
       command: /usr/pgsql-14/bin/pg_ctl stop -D /srv/postgres14
       become_user: postgres
+      become_method: su
 
     - name: Create pmm-managed database
       postgresql_db:
