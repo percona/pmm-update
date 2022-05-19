@@ -16,12 +16,27 @@
     enabled: yes
     gpgkey: file:///etc/pki/rpm-gpg/PERCONA-PACKAGING-KEY
 
+- name: Add PostgreSQL YUM repository
+  yum_repository:
+    name: percona-ppg-11
+    description: PostgreSQL YUM repository - x86_64
+    baseurl: http://repo.percona.com/ppg-11/yum/release/7/RPMS/x86_64
+    gpgcheck: yes
+    enabled: yes
+    gpgkey: file:///etc/pki/rpm-gpg/PERCONA-PACKAGING-KEY
+
+- name: Clean yum cache
+  command: yum clean all
+
 - name: Install Postgres
   yum:
     name:
       - percona-postgresql14-server
       - percona-postgresql14-contrib
       - percona-postgresql14
+      - percona-postgresql11-server
+      - percona-postgresql11-contrib
+      - percona-postgresql11
     state: installed
 
 - name: Create Postgres log file
