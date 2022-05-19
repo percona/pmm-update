@@ -61,7 +61,7 @@
 
 - name: Upgrade postgres from 11 to 14
   block:
-    - name: Create Postgres data cluster
+    - name: Initialize Postgres database
       command: /usr/pgsql-14/bin/initdb -D /srv/postgres14
       become: yes
       become_user: postgres
