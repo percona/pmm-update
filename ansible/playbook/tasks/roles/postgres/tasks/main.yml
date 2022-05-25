@@ -16,7 +16,7 @@
     enabled: yes
     gpgkey: file:///etc/pki/rpm-gpg/PERCONA-PACKAGING-KEY
 
-- name: Add PostgreSQL YUM repository
+- name: Add PostgreSQL 11 YUM repository
   yum_repository:
     name: percona-ppg-11
     description: PostgreSQL YUM repository - x86_64
