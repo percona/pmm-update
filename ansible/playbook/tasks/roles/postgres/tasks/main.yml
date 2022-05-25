@@ -7,7 +7,7 @@
     owner: postgres
     group: postgres
 
-- name: Add PostgreSQL YUM repository
+- name: Add PostgreSQL 14 YUM repository
   yum_repository:
     name: percona-ppg-14
     description: PostgreSQL YUM repository - x86_64
