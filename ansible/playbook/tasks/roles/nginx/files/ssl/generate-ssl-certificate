@@ -5,7 +5,7 @@ set -o errexit
 mkdir -p /srv/nginx
 
 if [ ! -e /srv/nginx/dhparam.pem ]; then
-    cp /etc/nginx/ssl/dhparam.pem srv/nginx/dhparam.pem
+    cp /etc/nginx/ssl/dhparam.pem /srv/nginx/dhparam.pem
 fi
 
 if [ ! -e /srv/nginx/ca-certs.pem ]; then
