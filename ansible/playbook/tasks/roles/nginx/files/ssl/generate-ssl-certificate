@@ -25,5 +25,5 @@ if [ ! -e /srv/nginx/certificate.key -o ! -e /srv/nginx/certificate.crt ]; then
             -config /etc/nginx/ssl/certificate.conf
     fi
     cp /etc/nginx/ssl/certificate.key /srv/nginx/certificate.key
-    cp /etc/nginx/ssl/certificate.crt
+    cp /etc/nginx/ssl/certificate.crt /srv/nginx/certificate.crt
 fi
