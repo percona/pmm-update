@@ -1,12 +1,5 @@
 ---
 # Install Postgres
-- name: Create Postgres data dir
-  file:
-    path: "/srv/postgres14"
-    state: directory
-    owner: postgres
-    group: postgres
-
 - name: Add PostgreSQL 14 YUM repository
   yum_repository:
     name: percona-ppg-14
