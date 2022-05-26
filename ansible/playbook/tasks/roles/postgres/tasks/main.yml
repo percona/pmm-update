@@ -1,12 +1,5 @@
 ---
 # Install Postgres
-- name: Create Postgres data dir
-  file:
-    path: "/srv/postgres14"
-    state: directory
-    owner: postgres
-    group: postgres
-
 - name: Add PostgreSQL YUM repository
   yum_repository:
     name: percona-ppg-14
@@ -38,6 +31,12 @@
     state: installed
   when: not ansible_check_mode
 
+- name: Create Postgres data dir
+  file:
+    path: "/srv/postgres14"
+    state: directory
+    owner: postgres
+    group: postgres
 
 - name: Create Postgres log file
   file:
