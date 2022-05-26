@@ -39,7 +39,7 @@
     path: /srv/backup
     state: directory
 
-- name: Check if Postgres 11 exist
+- name: Check if Postgres 11 exists
   stat:
     path: /srv/postgres
   register: is_postgres_11
