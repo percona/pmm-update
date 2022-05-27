@@ -28,6 +28,7 @@
       - percona-postgresql11-server
       - percona-postgresql11-contrib
       - percona-postgresql11
+      - python-psycopg2
     state: installed
   when: not ansible_check_mode
 
