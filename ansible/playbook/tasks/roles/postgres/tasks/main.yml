@@ -135,10 +135,3 @@
         src: /srv/postgres
         dest: /srv/postgres11
   when: is_postgres_11.stat.exists
-
-- name: Disable logging_collector
-  lineinfile:
-    path: /srv/postgres14/postgresql.conf
-    regexp: '^logging_collector'
-    line: 'logging_collector = off'
-  when: not ansible_check_mode
