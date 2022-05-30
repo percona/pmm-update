@@ -142,13 +142,12 @@
         state: started
 
     - name: Restart Postgres
-      command: supervisorctl {{ item.1 }} postgresql
+      command: supervisorctl {{ item }} postgresql
       changed_when: True
       loop:
         - stop
         - remove
         - add
-
   when: is_postgres_11.stat.exists
 
 - name: Check pg_stat_statements extension
