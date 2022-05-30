@@ -136,15 +136,20 @@
         src: /srv/postgres
         dest: /srv/postgres11
 
-  when: is_postgres_11.stat.exists
+    - name: Start postgres again
+      supervisorctl:
+        name: "postgresql"
+        state: started
 
-- name: Restart Postgres with a new service file
-  command: supervisorctl {{ item }}
-  changed_when: True
-  with_nested:
-    - "stop"
-    - "remove"
-    - "add"
+    - name: Restart Postgres
+      command: supervisorctl {{ item.1 }} postgresql
+      changed_when: True
+      loop:
+        - stop
+        - remove
+        - add
+
+  when: is_postgres_11.stat.exists
 
 - name: Check pg_stat_statements extension
   postgresql_ext:

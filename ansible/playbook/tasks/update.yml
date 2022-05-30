@@ -46,6 +46,15 @@
           - percona-grafana
         state: latest
 
+    - name: Create supervisor dir
+      file:
+        path: /etc/supervisord.d/
+
+    - name: Upgrade supervisor config
+      file:
+        src: pmm.ini
+        dest: /etc/supervisord.d/pmm.ini
+
     - name: Create grafana config
       include_role:
         name: grafana
