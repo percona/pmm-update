@@ -94,7 +94,7 @@
       become_method: su
 
     - name: Start Postgres 14 database without supervisor
-      command: /usr/pgsql-14/bin/pg_ctl stop -D /srv/postgres14
+      command: /usr/pgsql-14/bin/pg_ctl start -D /srv/postgres14
       become: yes
       become_user: postgres
       become_method: su
@@ -150,8 +150,8 @@
         - add
   when: is_postgres_11.stat.exists
 
-- name: Check pg_stat_statements extension
-  postgresql_ext:
-    db: postgres
-    name: pg_stat_statements
+# - name: Check pg_stat_statements extension
+#   postgresql_ext:
+#     db: postgres
+#     name: pg_stat_statements
 
