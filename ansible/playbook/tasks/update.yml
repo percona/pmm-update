@@ -196,11 +196,6 @@
           - screen
           - yum-cron
 
-    - name: Check pg_stat_statements extension
-      postgresql_ext:
-        db: postgres
-        name: pg_stat_statements
-
     # https://jira.percona.com/browse/PMM-9298
     - name: Copy rezise-xfs file for lvm
       file:
@@ -248,7 +243,6 @@
       command: supervisorctl {{ item.1 }} {{ item.0 }}
       changed_when: True
       with_nested:
-        - - postgresql
           - alertmanager
           - grafana
           - qan-api2

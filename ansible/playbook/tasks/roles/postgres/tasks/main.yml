@@ -135,4 +135,19 @@
         remote_src: true
         src: /srv/postgres
         dest: /srv/postgres11
+
   when: is_postgres_11.stat.exists
+
+- name: Restart Postgres with a new service file
+  command: supervisorctl {{ item }}
+  changed_when: True
+  with_nested:
+    - "stop"
+    - "remove"
+    - "add"
+
+- name: Check pg_stat_statements extension
+  postgresql_ext:
+    db: postgres
+    name: pg_stat_statements
+
