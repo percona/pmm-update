@@ -55,6 +55,13 @@
         src: pmm.ini
         dest: /etc/supervisord.d/pmm.ini
 
+    - name: Remove supervisord block from pmm.ini
+      ini_file:
+        path: /etc/supervisord.d/pmm.ini
+        section: supervisord
+        state: absent
+      when: not is_docker
+
     - name: Create grafana config
       include_role:
         name: grafana
