@@ -49,6 +49,7 @@
     - name: Create supervisor dir
       file:
         path: /etc/supervisord.d/
+        state: directory
 
     - name: Upgrade supervisor config
       file:
