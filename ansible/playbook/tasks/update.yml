@@ -52,7 +52,7 @@
         state: directory
 
     - name: Upgrade supervisor config
-      file:
+      copy:
         src: pmm.ini
         dest: /etc/supervisord.d/pmm.ini
 
