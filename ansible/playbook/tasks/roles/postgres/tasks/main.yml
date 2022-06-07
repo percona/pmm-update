@@ -81,24 +81,26 @@
         - postgresql
       when: is_upgrade.stat.exists
 
-
     - name: Run Postgres database without supervisor
       command: /usr/pgsql-11/bin/pg_ctl start -D /srv/postgres
       become: yes
       become_user: postgres
       become_method: su
+      when: is_upgrade.stat.exists
 
     - name: Dump pmm-managed database
       postgresql_db:
         name: pmm-managed
         state: dump
         target: /tmp/pmm-managed-upgrade.sql
+      when: is_upgrade.stat.exists
 
     - name: Stop Postgres database without supervisor
       command: /usr/pgsql-11/bin/pg_ctl stop -D /srv/postgres
       become: yes
       become_user: postgres
       become_method: su
+      when: is_upgrade.stat.exists
 
     - name: Start Postgres 14 database without supervisor
       command: /usr/pgsql-14/bin/pg_ctl start -D /srv/postgres14
@@ -110,12 +112,14 @@
       postgresql_db:
         name: pmm-managed
         state: present
+      when: is_upgrade.stat.exists
 
     - name: Restore pmm-managed database
       postgresql_db:
         name: pmm-managed
         state: restore
         target: /tmp/pmm-managed-upgrade.sql
+      when: is_upgrade.stat.exists
 
     - name: Check pg_stat_statements extension
       postgresql_ext:
@@ -128,20 +132,6 @@
       become_user: postgres
       become_method: su
 
-    - name: Remove old postgres packages
-      yum:
-        name:
-          - percona-postgresql11-server
-          - percona-postgresql11-contrib
-          - percona-postgresql11
-          - percona-postgresql11-libs
-        state: absent
-
-    - name: Delete old repo file
-      file:
-        state: absent
-        path: "/etc/yum.repos.d/percona-ppg-11.repo"
-
     - name: Rename old Postgres directory
       copy:
         remote_src: true
@@ -152,7 +142,7 @@
       supervisorctl:
         name: "postgresql"
         state: started
-      when: is_supervisor_run.stat.exists
+      when: is_upgrade.stat.exists
 
     - name: Restart Postgres
       command: supervisorctl {{ item }} postgresql
@@ -161,6 +151,6 @@
         - stop
         - remove
         - add
-      when: is_supervisor_run.stat.exists
+      when: is_upgrade.stat.exists
   when: not is_postgres_14.stat.exists
 
