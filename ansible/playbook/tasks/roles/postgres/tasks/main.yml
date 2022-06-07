@@ -49,7 +49,7 @@
 
 - name: Check if Postgres 14 directory exists
   stat:
-    path: /srv/postgres
+    path: /srv/postgres14
   register: is_postgres_14
 
 - name: Upgrade (or init) postgres
