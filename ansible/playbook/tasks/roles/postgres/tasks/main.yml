@@ -137,6 +137,7 @@
         remote_src: true
         src: /srv/postgres
         dest: /srv/postgres11
+      when: is_upgrade.stat.exists
 
     - name: Start postgres again
       supervisorctl:
