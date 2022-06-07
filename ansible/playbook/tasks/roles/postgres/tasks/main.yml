@@ -59,13 +59,18 @@
     path: /srv/postgres
   register: is_postgres_14
 
-- name: Upgrade postgres from 11 to 14
+- name: Upgrade (or init) postgres
   block:
     - name: Initialize Postgres database
       command: /usr/pgsql-14/bin/initdb -D /srv/postgres14
       become: yes
       become_user: postgres
       become_method: su
+
+    - name: Check that supervisor socket exists (Upgrade or init)
+      stat:
+        path: /var/run/supervisor/supervisor.sock
+      register: is_upgrade
 
     - name: Stop pmm-managed and postgres before changing encoding
       supervisorctl:
@@ -74,6 +79,8 @@
       loop:
         - pmm-managed
         - postgresql
+      when: is_upgrade.stat.exists
+
 
     - name: Run Postgres database without supervisor
       command: /usr/pgsql-11/bin/pg_ctl start -D /srv/postgres
@@ -110,6 +117,11 @@
         state: restore
         target: /tmp/pmm-managed-upgrade.sql
 
+    - name: Check pg_stat_statements extension
+      postgresql_ext:
+        db: postgres
+        name: pg_stat_statements
+
     - name: Stop Postgres 14 database without supervisor
       command: /usr/pgsql-14/bin/pg_ctl stop -D /srv/postgres14
       become: yes
@@ -140,6 +152,7 @@
       supervisorctl:
         name: "postgresql"
         state: started
+      when: is_supervisor_run.stat.exists
 
     - name: Restart Postgres
       command: supervisorctl {{ item }} postgresql
@@ -148,10 +161,6 @@
         - stop
         - remove
         - add
+      when: is_supervisor_run.stat.exists
   when: not is_postgres_14.stat.exists
-
-- name: Check pg_stat_statements extension
-  postgresql_ext:
-    db: postgres
-    name: pg_stat_statements
 
