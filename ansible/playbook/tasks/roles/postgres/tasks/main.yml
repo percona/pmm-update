@@ -72,7 +72,7 @@
         path: /var/run/supervisor/supervisor.sock
       register: is_upgrade
 
-    - name: Stop pmm-managed and postgres before changing encoding
+    - name: Stop pmm-managed and postgres before backup database
       supervisorctl:
         name: "{{ item }}"
         state: stopped
@@ -139,6 +139,12 @@
         dest: /srv/postgres11
       when: is_upgrade.stat.exists
 
+    - name: Remove old Postgres direcroty
+      file:
+        path: /srv/postgres
+        state: absent
+      when: is_upgrade.stat.exists
+
     - name: Restart Postgres
       command: supervisorctl {{ item }} postgresql
       changed_when: True
@@ -146,6 +152,11 @@
         - stop
         - remove
         - add
+
+    - name: Run pmm-managed again
+      supervisorctl:
+        name: pmm-managed
+        state: started
       when: is_upgrade.stat.exists
   when: not is_postgres_14.stat.exists
 
