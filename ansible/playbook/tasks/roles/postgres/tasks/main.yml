@@ -54,10 +54,10 @@
     groups: pmm
     append: yes
 
-- name: Check if Postgres 11 exists
+- name: Check if Postgres 14 directory exists
   stat:
     path: /srv/postgres
-  register: is_postgres_11
+  register: is_postgres_14
 
 - name: Upgrade postgres from 11 to 14
   block:
@@ -148,10 +148,10 @@
         - stop
         - remove
         - add
-  when: is_postgres_11.stat.exists
+  when: not is_postgres_14.stat.exists
 
-# - name: Check pg_stat_statements extension
-#   postgresql_ext:
-#     db: postgres
-#     name: pg_stat_statements
+- name: Check pg_stat_statements extension
+  postgresql_ext:
+    db: postgres
+    name: pg_stat_statements
 
