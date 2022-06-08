@@ -152,6 +152,7 @@
         - stop
         - remove
         - add
+      when: is_upgrade.stat.exists
 
     - name: Run pmm-managed again
       supervisorctl:
