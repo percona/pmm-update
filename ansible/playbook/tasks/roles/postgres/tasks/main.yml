@@ -122,6 +122,7 @@
         priv: 'ALL'
         expires: infinity
         state: present
+      when: is_upgrade.stat.exists
 
     - name: Restore pmm-managed database
       postgresql_db:
