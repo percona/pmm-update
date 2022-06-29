@@ -9,7 +9,6 @@
       - percona-qan-api2
       - percona-alertmanager
       - pmm-managed
-      - pmm-server
       - pmm-update
       - dbaas-controller
       - dbaas-tools
@@ -44,6 +43,7 @@
         name:
           - percona-dashboards
           - percona-grafana
+          - pmm-server
         state: latest
 
     - name: Create grafana config

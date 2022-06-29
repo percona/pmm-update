@@ -61,6 +61,7 @@
     supervisorctl:
       name: grafana
       state: stopped
+
   - name: Remove old DBaaS dashboard (Before provisioning times)
     command: sqlite3 /srv/grafana/grafana.db -cmd ".timeout 60000" "DELETE FROM dashboard WHERE title = 'DBaaS' AND slug = 'dbaas';"
     changed_when: True
