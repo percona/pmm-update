@@ -161,7 +161,7 @@
       become_user: root
       become_method: su
       register: supervisor_result
-      changed_when: "'No config updates to processes' not in supervisor_result.stdout"
+      # changed_when: "'No config updates to processes' not in supervisor_result.stdout"
       when: is_upgrade.stat.exists
 
     - name: Restart Postgres
