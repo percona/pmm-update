@@ -118,8 +118,8 @@
       postgresql_user:
         db: pmm-managed
         name: pmm-managed
-        password: 'md5da757ec3e22c6d86a2bb8e70307fa937'
-        priv: 'ALL'
+        password: "md5da757ec3e22c6d86a2bb8e70307fa937"
+        priv: "ALL"
         expires: infinity
         state: present
       when: is_upgrade.stat.exists
@@ -155,6 +155,10 @@
         state: absent
       when: is_upgrade.stat.exists
 
+    - name: Reread supervisord configuration
+      command: supervisorctl reread
+      when: is_upgrade.stat.exists
+
     - name: Restart Postgres
       command: supervisorctl {{ item }} postgresql
       changed_when: True
@@ -170,4 +174,3 @@
         state: started
       when: is_upgrade.stat.exists
   when: not is_postgres_14.stat.exists
-
