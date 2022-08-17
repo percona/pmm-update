@@ -9,7 +9,6 @@
       - percona-qan-api2
       - percona-alertmanager
       - pmm-managed
-      - pmm-server
       - pmm-update
       - dbaas-controller
       - dbaas-tools
@@ -46,9 +45,30 @@
           - percona-grafana
         state: latest
 
+    - name: Create supervisor dir
+      file:
+        path: /etc/supervisord.d/
+        state: directory
+
+    - name: Upgrade supervisor config
+      copy:
+        src: pmm.ini
+        dest: /etc/supervisord.d/pmm.ini
+
+    - name: Remove supervisord block from pmm.ini
+      ini_file:
+        path: /etc/supervisord.d/pmm.ini
+        section: supervisord
+        state: absent
+      when: not is_docker
+
     - name: Create grafana config
       include_role:
         name: grafana
+
+    - name: Install postgres
+      include_role:
+        name: postgres
 
     # Start the services
     - name: Supervisord start        | Start supervisord service for AMI/OVF
@@ -192,11 +212,6 @@
           - screen
           - yum-cron
 
-    - name: Check pg_stat_statements extension
-      postgresql_ext:
-        db: postgres
-        name: pg_stat_statements
-
     # https://jira.percona.com/browse/PMM-9298
     - name: Copy rezise-xfs file for lvm
       file:
@@ -244,8 +259,7 @@
       command: supervisorctl {{ item.1 }} {{ item.0 }}
       changed_when: True
       with_nested:
-        - - postgresql
-          - alertmanager
+        - - alertmanager
           - grafana
           - qan-api2
           - pmm-agent
@@ -281,7 +295,7 @@
     - name: Check other services
       debug: var=update_result.stdout_lines
 
-    # SIGUSR2 is sent to supervisord by pmm-managed right before the update to for logging to work correctly.
+    # SIGUSR2 is sent to supervisord by pmm-managed right before the update for logging to work correctly.
     # We use that fact to show what was restarted during the update.
     - name: Get supervisord log
       shell: supervisorctl maintail -100000 | tac | awk '!flag; /received SIGUSR2/{flag = 1};' | tac
