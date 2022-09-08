@@ -15,11 +15,6 @@
     path: /etc/bashrc
     line: 'export GF_PLUGIN_DIR=/srv/grafana/plugins'
 
-- name: Set needed Grafana plugins with fixed versions
-  lineinfile:
-    path: /etc/bashrc
-    line: 'export GF_INSTALL_PLUGINS="camptocamp-prometheus-alertmanager-datasource 1.0.0,grafana-piechart-panel 1.6.2,grafana-polystat-panel 1.2.11,grafana-worldmap-panel 0.3.3,jdbranham-diagram-panel 1.7.3,natel-discrete-panel 0.1.1,petrslavotinek-carpetplot-panel 0.1.2,vertamedia-clickhouse-datasource 2.4.4,yesoreyeram-boomtable-panel 1.4.1"'
-
 - name: Copy new version of grafana.ini
   copy:
     src: grafana.ini
