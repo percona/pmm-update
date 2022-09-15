@@ -1,6 +1,6 @@
 #!/bin/sh
 
-expire_limit=14 # days
+expire_limit=30 # days
 
 expire_data=`openssl x509 -enddate -noout -in /srv/nginx/certificate.crt | sed -e 's#notAfter=##'`
 expire_date=`date -d "${expire_data}" '+%s'`
