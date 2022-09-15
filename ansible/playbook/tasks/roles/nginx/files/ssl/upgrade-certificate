@@ -15,5 +15,5 @@ if test "${diff}" -lt "$((${expire_limit}*24*3600))"; then
         -out    /etc/nginx/ssl/certificate.crt \
         -config /etc/nginx/ssl/certificate.conf
     cp /etc/nginx/ssl/certificate.key /srv/nginx/certificate.key
-    cp /etc/nginx/ssl/certificate.crt
+    cp /etc/nginx/ssl/certificate.crt /srv/nginx/certificate.crt
 fi
