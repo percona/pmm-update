@@ -85,11 +85,17 @@
         state: absent
 
     # Start the services
+    - name: Enable supervisord        | Make the service persist between reboots
+      when: not is_docker
+      systemd:
+        name: supervisord
+        enabled: yes
+
     - name: Supervisord start        | Start supervisord service for AMI/OVF
       when: not is_docker
       systemd:
         name: supervisord
-        state: restarted # supervisord may already be running
+        state: started # supervisord may already be running
         daemon_reload: yes
 
     - name: Check that supervisor socket exists
