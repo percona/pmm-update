@@ -1,5 +1,10 @@
 ---
 # This role contains tasks executed during initialization of PMM Server
+- name: Update repositories
+  command: yum repolist
+  args:
+    warn: false
+
 - name: Get current version
   slurp:
     src: /srv/grafana/PERCONA_DASHBOARDS_VERSION
