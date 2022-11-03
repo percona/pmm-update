@@ -2,7 +2,7 @@
 # This role contains tasks executed during initialization of PMM Server
 - name: Update repository settings
   command: yum-config-manager --setopt=epel.timeout=1 --save
-  ignore_errors: True
+  changed_when: True
 
 - name: Get current version
   slurp:
