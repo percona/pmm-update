@@ -6,8 +6,8 @@ require (
 	github.com/percona/pmm v2.18.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.0
-	github.com/stretchr/testify v1.8.0
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8
+	github.com/stretchr/testify v1.8.1
+	golang.org/x/sys v0.2.0
 )
 
 require (
