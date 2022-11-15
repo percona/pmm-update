@@ -4,9 +4,9 @@ go 1.18
 
 require (
 	github.com/daixiang0/gci v0.8.1
-	github.com/golangci/golangci-lint v1.50.1
+	github.com/golangci/golangci-lint v1.49.0
 	github.com/reviewdog/reviewdog v0.14.1
-	golang.org/x/tools v0.3.0
+	golang.org/x/tools v0.1.12
 	mvdan.cc/gofumpt v0.4.0
 )
 
